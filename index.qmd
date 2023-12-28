@@ -1,0 +1,30 @@
+---
+#title: "Frameshift Homepage"
+#author: "Patrick Cherry"
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+title-block-banner: true
+# output-file: _index.md
+---
+
+A blog from a molecular biologist shifting into bioinformatics and data science.
+
+Hello, world.
+
+<!-- https://www.paulrjohnson.net/2022/09/setting-up-a-hugo-website-with-quarto/ -->
+
+```{r}
+print("Hello, world.")
+```
+
+```{python}
+print('Hello, world.')
+```
+
+

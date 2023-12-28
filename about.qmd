@@ -1,0 +1,32 @@
+---
+title: "About"
+image: profile.jpg
+about:
+  template: solana
+  links:
+    - icon: github
+      href: https://github.com/pdcherry
+    - icon: mastodon
+      href: https://genomic.social/@pcherry
+    - icon: instagram
+      href: https://pixelfed.social/pcherry
+    - icon: linkedin
+      href: https://www.linkedin.com/p-cherry
+
+---
+
+## Bio
+Patrick invents products and procedures for manipulating DNA, RNA, and their sequence information in novel and helpful ways. He focuses on writing reproducible bioinformatic analysis pipelines that cater to users of all levels. Patrick is known for inventing the Twist Pan-cancer Reference Standards (v1 & v2), the Fragmentome Calibration Control, and the RNA Fusion Positive Control.
+
+#### Résumé and CV
+[Resume and CV git repo](https://github.com/pdcherry/cherry-cv-public)
+
+## Education
+PhD in Molecular Biology | University of Colorado Anschutz Medical Campus
+
+B.A. in Biochemistry and Molecular Biology | Hendrix College
+
+## Experience
+Twist Bioscience | Senior R&D Scientist | Jan. 2021 - Present
+
+Zymergen | NGS Scientist | May 2019 - Dec. 2020

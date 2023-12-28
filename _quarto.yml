@@ -1,0 +1,24 @@
+project:
+  type: website
+#output-dir: public
+url: https://pdcherry.github.io
+website:
+  title: "Frameshift"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/pdcherry
+      - icon: mastodon
+        href: https://genomic.social/@pcherry
+      - icon: instagram
+        href: https://pixelfed.social/pcherry
+      - icon: linkedin
+        href: https://www.linkedin.com/p-cherry
+format:
+  html:
+    theme: minty
+    css: styles.css
+
+
+
