@@ -27,7 +27,8 @@ jobs:
   render-deploy:
     env:
       name: github-pages
-      url: https://pdcherry.github.io/
+      url: ${{ steps.step_name.outputs.url_output }}
+      #url: https://pdcherry.github.io/
       #url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
