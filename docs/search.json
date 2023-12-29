@@ -35,8 +35,8 @@
     "text": "Experience\nTwist Bioscience | Senior R&D Scientist | Jan. 2021 - Present\nZymergen | NGS Scientist | May 2019 - Dec. 2020"
   },
   {
-    "objectID": "_index.md.html",
-    "href": "_index.md.html",
+    "objectID": "index.md.html",
+    "href": "index.md.html",
     "title": "Frameshift",
     "section": "",
     "text": "A blog from a molecular biologist shifting into bioinformatics and data science.\nHello, world.\n\n\nprint(\"Hello, world.\")\n\n[1] \"Hello, world.\"\n\n\n\nprint('Hello, world.')\n\nHello, world.\n\n\n\n\n\n\n\n\n\n\n\nNo matching items"
