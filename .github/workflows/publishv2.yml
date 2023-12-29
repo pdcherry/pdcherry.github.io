@@ -24,7 +24,7 @@ concurrency:
 
 jobs:
   # Single deploy job since we're just deploying
-  render:
+  render-deploy:
     env:
       name: github-pages
       url: https://pdcherry.github.io
@@ -48,18 +48,7 @@ jobs:
         with:
           # Upload quarto render output directory
           path: '_site'
-
-  deploy:
-    name: deploy / github-pages
-    needs: render
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.output.page_url }}
-    runs-on: ubuntu-latest
-    steps:
+          
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
