@@ -17,35 +17,6 @@ execute:
 
 
 
-A blog from a molecular biologist shifting into bioinformatics and data science.
+A blog of indeterminate subject matter and publication frequency from a molecular biologist shifting into bioinformatics and data science.
 
-Hello, world.
-
-<!-- https://www.paulrjohnson.net/2022/09/setting-up-a-hugo-website-with-quarto/ -->
-
-
-::: {.cell}
-
-```{.r .cell-code}
-print("Hello, world.")
-```
-
-::: {.cell-output .cell-output-stdout}
-```
-[1] "Hello, world."
-```
-:::
-:::
-
-::: {.cell}
-
-```{.python .cell-code}
-print('Hello, world.')
-```
-
-::: {.cell-output .cell-output-stdout}
-```
-Hello, world.
-```
-:::
-:::
+Likely topics are molecular biology, biological data science, economics, policy, California ballot measure discussion, and outdoor adventures.

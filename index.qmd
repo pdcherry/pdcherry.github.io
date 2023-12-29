@@ -15,18 +15,6 @@ execute:
   keep-md: true
 ---
 
-A blog from a molecular biologist shifting into bioinformatics and data science.
+A blog of indeterminate subject matter and publication frequency from a molecular biologist shifting into bioinformatics and data science.
 
-Hello, world.
-
-<!-- https://www.paulrjohnson.net/2022/09/setting-up-a-hugo-website-with-quarto/ -->
-
-```{r}
-print("Hello, world.")
-```
-
-```{python}
-print('Hello, world.')
-```
-
-
+Likely topics are molecular biology, biological data science, economics, policy, California ballot measure discussion, and outdoor adventures.
