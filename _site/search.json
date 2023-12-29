@@ -4,14 +4,21 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "Patrick invents products and procedures for manipulating DNA, RNA, and their sequence information in novel and helpful ways. He focuses on writing reproducible bioinformatic analysis pipelines that cater to users of all levels. Patrick is known for inventing the Twist Pan-cancer Reference Standards (v1 & v2), the Fragmentome Calibration Control, and the RNA Fusion Positive Control.\n\n\nResume and CV git repo"
+    "text": "Patrick invents products and procedures for manipulating DNA, RNA, and their sequence information in novel and helpful ways. He focuses on writing reproducible bioinformatic analysis pipelines that cater to users of all levels. Patrick is known for inventing the Twist Pan-cancer Reference Standards (v1 & v2), the Fragmentome Calibration Control, and the RNA Fusion Positive Control."
   },
   {
     "objectID": "about.html#bio",
     "href": "about.html#bio",
     "title": "About",
     "section": "",
-    "text": "Patrick invents products and procedures for manipulating DNA, RNA, and their sequence information in novel and helpful ways. He focuses on writing reproducible bioinformatic analysis pipelines that cater to users of all levels. Patrick is known for inventing the Twist Pan-cancer Reference Standards (v1 & v2), the Fragmentome Calibration Control, and the RNA Fusion Positive Control.\n\n\nResume and CV git repo"
+    "text": "Patrick invents products and procedures for manipulating DNA, RNA, and their sequence information in novel and helpful ways. He focuses on writing reproducible bioinformatic analysis pipelines that cater to users of all levels. Patrick is known for inventing the Twist Pan-cancer Reference Standards (v1 & v2), the Fragmentome Calibration Control, and the RNA Fusion Positive Control."
+  },
+  {
+    "objectID": "about.html#interests",
+    "href": "about.html#interests",
+    "title": "About",
+    "section": "Interests",
+    "text": "Interests\nPatrick is a PhD scientist skilled in bioinformatics, biological data science, data visualization, statistical modeling, next-generation sequencing (NGS), and tool-building. Patrick has coded reproducible and rigorous pipelines for high-throughput experimental designs and genomic analyses, launched best-in-class oncology reference standards, and invented new molecular methods for DNA and microbe manipulation. Originally trained in Molecular Biology, Patrick is interested in taking his knowledge and practice of data science / bioinformatics to the next level.\n\nRésumé and CV\nResume and CV git repo"
   },
   {
     "objectID": "about.html#education",
