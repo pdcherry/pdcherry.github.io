@@ -15,18 +15,37 @@ execute:
   keep-md: true
 ---
 
+
+
 A blog from a molecular biologist shifting into bioinformatics and data science.
 
 Hello, world.
 
 <!-- https://www.paulrjohnson.net/2022/09/setting-up-a-hugo-website-with-quarto/ -->
 
-```{r}
+
+::: {.cell}
+
+```{.r .cell-code}
 print("Hello, world.")
 ```
 
-```{python}
+::: {.cell-output .cell-output-stdout}
+```
+[1] "Hello, world."
+```
+:::
+:::
+
+::: {.cell}
+
+```{.python .cell-code}
 print('Hello, world.')
 ```
 
-
+::: {.cell-output .cell-output-stdout}
+```
+Hello, world.
+```
+:::
+:::
