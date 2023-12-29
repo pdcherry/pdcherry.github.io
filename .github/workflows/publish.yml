@@ -1,9 +1,8 @@
-name: Deploy Quarto site to Pages
-
 # Workflow for rendering and deploying quarto site to GitHub Pages
 # Based on the GitHub example static content deploy action
 # https://www.ianmtaylor.net/posts/2022/deploy-quarto-to-github-pages/
 
+name: Deploy Quarto site to Pages
 on:
   # Runs on pushes targeting the default branch
   push:
@@ -13,7 +12,7 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -24,11 +23,10 @@ concurrency:
 
 jobs:
   # Single deploy job since we're just deploying
-  render:
-    env:
+  render-deploy:
+    environment:
       name: github-pages
-      #url: https://pdcherry.github.io
-      #url: ${{ jobs.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -48,18 +46,7 @@ jobs:
         with:
           # Upload quarto render output directory
           path: '_site'
-
-  deploy:
-    name: deploy-github-pages
-    needs: render
-    permissions:
-      pages: write
-      id-token: write
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.output.page_url }}
-    runs-on: ubuntu-latest
-    steps:
+          
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v1
