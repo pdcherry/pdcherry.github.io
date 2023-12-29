@@ -1,6 +1,5 @@
 project:
   type: website
-output-dir: public
 url: https://pdcherry.github.io
 website:
   title: "Frameshift"
