@@ -1,7 +1,7 @@
 project:
   type: website
+  output-dir: docs
 url: https://pdcherry.github.io
-output-dir: docs
 website:
   title: "Frameshift"
   navbar:
