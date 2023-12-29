@@ -12,7 +12,8 @@ about:
       href: https://pixelfed.social/pcherry
     - icon: linkedin
       href: https://www.linkedin.com/p-cherry
-
+execute:
+  freeze: true
 ---
 
 ## Bio
