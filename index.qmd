@@ -10,7 +10,7 @@ listing:
   filter-ui: false
 page-layout: full
 title-block-banner: true
-# output-file: _index.md
+output-file: _index.md
 ---
 
 A blog from a molecular biologist shifting into bioinformatics and data science.
