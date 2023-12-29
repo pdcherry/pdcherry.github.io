@@ -28,7 +28,7 @@ jobs:
     env:
       name: github-pages
       #url: https://pdcherry.github.io
-      url: ${{ steps.deployment.outputs.page_url }}
+      #url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -41,7 +41,6 @@ jobs:
         uses: quarto-dev/quarto-actions/render@v2
         
       - name: Setup Pages
-        id: deployment
         uses: actions/configure-pages@v2
         
       - name: Upload artifact
