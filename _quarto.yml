@@ -1,6 +1,6 @@
 project:
   type: website
-url: https://pdcherry.github.io
+url: https://pdcherry.github.io/
 website:
   title: "Frameshift"
   navbar:
@@ -20,6 +20,3 @@ format:
     css: styles.css
 execute:
   freeze: auto
-
-
-
