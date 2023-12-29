@@ -28,7 +28,7 @@ jobs:
     env:
       name: github-pages
       #url: https://pdcherry.github.io
-      #url: ${{ steps.deployment.outputs.page_url }}
+      #url: ${{ jobs.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -50,7 +50,7 @@ jobs:
           path: '_site'
 
   deploy:
-    name: deploy / github-pages
+    name: deploy-github-pages
     needs: render
     permissions:
       pages: write
