@@ -35,6 +35,11 @@ jobs:
             any::knitr
             any::rmarkdown
         
+      - name: Setup dependencies
+        run: |
+          R -e 'install.packages("renv")' 
+          R -e 'renv::restore()'
+        
       # NOTE: If Publishing to GitHub Pages, set the permissions correctly (see top of this yaml)
       - name: Publish to GitHub Pages (and render)
         uses: quarto-dev/quarto-actions/publish@v2
