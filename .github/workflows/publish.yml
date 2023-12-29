@@ -13,7 +13,7 @@ on:
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -25,10 +25,10 @@ concurrency:
 jobs:
   # Single deploy job since we're just deploying
   render-deploy:
-    env:
+    environment:
       name: github-pages
-      url: https://pdcherry.github.io
-      #url: ${{ steps.deployment.outputs.page_url }}
+      #url: https://pdcherry.github.io
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
