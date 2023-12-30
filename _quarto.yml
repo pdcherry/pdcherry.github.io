@@ -8,6 +8,8 @@ website:
   navbar:
     right:
       - about.qmd
+      - text: CV
+        href: Patrick-Cherry-resume.md
       - icon: github
         href: https://github.com/pdcherry
       - icon: mastodon
