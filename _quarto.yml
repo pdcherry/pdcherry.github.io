@@ -1,6 +1,7 @@
 project:
   type: website
   output-dir: docs
+  pre-render: knit_resume_to_md.r
 url: https://pdcherry.github.io
 website:
   title: "Frameshift"
@@ -15,6 +16,8 @@ website:
         href: https://pixelfed.social/pcherry
       - icon: linkedin
         href: https://www.linkedin.com/in/p-cherry/
+  page-footer: 
+    left: Copyright 2023, Patrick Cherry
 format:
   html:
     theme: minty

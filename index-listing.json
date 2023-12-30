@@ -1,4 +1,6 @@
 {
   "listing": "/index.html",
-  "items": []
+  "items": [
+    "/posts/2023_12_29-How_I_host_quarto_blog.html"
+  ]
 }

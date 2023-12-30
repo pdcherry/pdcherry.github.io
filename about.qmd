@@ -23,6 +23,8 @@ Patrick invents products and procedures for manipulating DNA, RNA, and their seq
 Patrick is a PhD scientist skilled in bioinformatics, biological data science, data visualization, statistical modeling, next-generation sequencing (NGS), and tool-building. Patrick has coded reproducible and rigorous pipelines for high-throughput experimental designs and genomic analyses, launched best-in-class oncology reference standards, and invented new molecular methods for DNA and microbe manipulation. Originally trained in Molecular Biology, Patrick is interested in taking his knowledge and practice of data science / bioinformatics to the next level.
 
 #### Résumé and CV
+[View resume in browser](Patrick-Cherry-resume.md)
+
 [Resume and CV git repo](https://github.com/pdcherry/cherry-cv-public)
 
 ### Education
@@ -36,7 +38,7 @@ Twist Bioscience | Senior R&D Scientist | Jan. 2021 - Present
 Zymergen | NGS Scientist | May 2019 - Dec. 2020
 
 ### Miscellaneous
-Patrick is an avid outdoorsman and indoorsman. Outdoor pursuits include rock climbing, skiing, train running, and landscape photography. Indoor hobbies include table top games, cooking, baking, photographic printing / framing / design.
+Patrick is an avid outdoorsman and indoorsman. Outdoor pursuits include rock climbing, skiing, trail running, and landscape photography. Indoor hobbies include table top games, cooking, baking, photographic printing / framing / design.
 
 ```{=html}
  <a rel="me" href="https://genomic.social/@pcherry"> </a>
