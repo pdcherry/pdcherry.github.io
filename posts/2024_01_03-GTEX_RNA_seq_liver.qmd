@@ -3,9 +3,9 @@ title: "GTEX RNA-seq Liver-specific Process and TF Identification"
 author: "Patrick Cherry"
 date: "2024-01-03"
 categories:
-  - finance
-  - healthcare
-image: "2024_01_02-misunderstood_HSA_spider.png"
+  - code
+  - RNAseq
+image: "2024_01_03-liver_creative_commons.jpg"
 execute:
   freeze: true
 ---
@@ -27,7 +27,6 @@ Given this is liver RNA-seq, I expect to see genes implicated in the liver main 
  - amino acid conversion and catabolism
 
 ```{r, setup, echo = TRUE, message = FALSE}
-knitr::opts_chunk$set(echo = TRUE)  # set default chunk option to not print the code that generated that output
 library(usethis)
 library(readr)                  # for reading and writing csvs
 library(fs)                     # for filesystem navigation in R
@@ -57,7 +56,7 @@ theme_set(theme_bw())           # set the default ggplot theme to be clear & car
 Samples come from https://github.com/broadinstitute/gtex-v8/blob/master/data/GTEx_Analysis_v8_RNAseq_samples.txt, and have to be manually downloaded.
 
 ```{r}
-gtex_samples <- read.delim("../GTEx_Analysis_v8_RNAseq_samples.txt", sep = "\t") %>%
+gtex_samples <- read.delim("../../GTEx_Analysis_v8_RNAseq_samples.txt", sep = "\t") %>%
   mutate("sample_id" = str_replace_all(sample_id, "-", "\\."))
 ```
 
@@ -107,7 +106,7 @@ gunzip *.gz
 ```
 
 ```{r}
-rna_counts <- read.delim("../bulk-gex_v8_rna-seq_GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct",
+rna_counts <- read.delim("../../bulk-gex_v8_rna-seq_GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct",
                          sep = "\t", skip = 2) %>%
   tibble::column_to_rownames(var = "Name")
 ```
@@ -223,11 +222,8 @@ rm(gtex_samples, gtex_samples_filtered, rna_counts_filtered, rna_counts)
 tissue_DE <- DESeq(tissue_DE)
 ```
 
-```{r alternate out, include = FALSE, eval = TRUE}
-saveRDS(tissue_DE, "../tissue_DEseq_liver.rds")
-```
-
 ```{r alternate in, include = FALSE}
+#saveRDS(tissue_DE, "../tissue_DEseq_liver.rds")
 #tissue_DE <- readRDS("../tissue_DEseq_liver.rds")
 #tissue_DE_results <- readRDS("../tissue_DE_results_liver.rds")
 ```
@@ -236,6 +232,7 @@ saveRDS(tissue_DE, "../tissue_DEseq_liver.rds")
 contrasts_no_intercept <- resultsNames(tissue_DE)[2:length(resultsNames(tissue_DE))]
 contrasts_no_intercept
 ```
+
 ### Extract all contrast data from DEseq
 ```{r}
 combine_contrast_results <- function(deseq_obj){
@@ -258,13 +255,7 @@ tissue_DE_results_long <- combine_contrast_results(tissue_DE) %>%
 dplyr::count(tissue_DE_results_long, contrast)
 ```
 
-
-```{r alternate out 2, include = FALSE, eval = TRUE}
-saveRDS(tissue_DE_results_long, "../tissue_DE_results_liver.rds")
-```
-
 ## Prepare data with additional annotations
-
 #### Check if ENSG string manipulation prodcuces unique values
 ```{r, message = FALSE}
 dplyr::count(as_tibble(str_remove(row.names(tissue_DE_results_long),
@@ -310,8 +301,8 @@ top_10_hits_summary %>% dplyr::select("contrast", "symbol", "name", "log2FoldCha
 
 This is looking promising. When sorted by statistic and the top ten genes are displayed from each tissue, there are many common genes that are relatively up-regulated (in mRNA expression) in liver compared to each of the other tissues. SLC27A5 is very commonly (and very strongly) up-regulated in liver; RDH16 and CPS1 are as well.
 
-```{r}
-write_csv(top_10_hits_summary, "top_10_hits_summary.csv")
+```{r, include = FALSE, eval = FALSE}
+# write_csv(top_10_hits_summary, "top_10_hits_summary.csv")
 ```
 
 ### MA Plot (analysis QC)
@@ -368,15 +359,15 @@ While the test statistic outputted by DEseq2 is less "clipped" to zero than the 
 
 As long as we `group_by()` when ranking, sorting, and otherwise comparing (in long format), this should be okay. Once pivoted into wide format, this can present a problem because not every column of values will be able to react similarly to the same ranking, sorting, or cut-offs.
 
-```{r}
-ggsave("ma_plot_contour.png", ma_plot,
-       width = 7, height = 4.5, dpi = 320)
-
-ggsave("ma_hist.png", ma_hist,
-       width = 7, height = 4.5, dpi = 320)
-
-ggsave("stat_hist.png", stat_hist,
-       width = 7, height = 4.5, dpi = 320)
+```{r include = FALSE, eval = FALSE}
+# ggsave("ma_plot_contour.png", ma_plot,
+#        width = 7, height = 4.5, dpi = 320)
+# 
+# ggsave("ma_hist.png", ma_hist,
+#        width = 7, height = 4.5, dpi = 320)
+# 
+# ggsave("stat_hist.png", stat_hist,
+#        width = 7, height = 4.5, dpi = 320)
 ```
 
 # Cross-contrast analysis
@@ -417,8 +408,8 @@ tissue_DE_results_wide <- tissue_DE_results_long %>%
   arrange(mean_padj, mean_log2FoldChange)
 ```
 
-```{r}
-write_csv(tissue_DE_results_wide, "tissue_DE_results_wide.csv")
+```{r, include = FALSE, eval = FALSE}
+# write_csv(tissue_DE_results_wide, "tissue_DE_results_wide.csv")
 ```
 
 # Pathway / Gene Ontology (GO) Enrichment Analysis
@@ -680,8 +671,8 @@ The above table counts the number of line items for each TF; despite CTCF (a pra
 
 What this result shows is that the number of ChIP datasets under consideration in this package is not evenly distributed across all potential transcription factors, and so the number of times a transcription factor is identified as a hit is not a good measure of significance or salience.
 
-```{r, eval = FALSE}
-write_csv(TF_ranking$TF_ranking, "TF_ranking_table.csv")
-write_csv(GSEA.result[["Enrichment.table"]] %>% dplyr::arrange(desc(ES)),
-          "gsea_result_table.csv")
+```{r, include = FALSE, eval = FALSE}
+# write_csv(TF_ranking$TF_ranking, "TF_ranking_table.csv")
+# write_csv(GSEA.result[["Enrichment.table"]] %>% dplyr::arrange(desc(ES)),
+#           "gsea_result_table.csv")
 ```
