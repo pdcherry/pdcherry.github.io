@@ -5,7 +5,6 @@ project:
   render:
     - "*.qmd"
     - "!*xxxx_xx_xx*"
-    - "!*2024_01_03*"
 url: https://pdcherry.github.io
 website:
   title: "Frameshift"

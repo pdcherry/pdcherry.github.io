@@ -1,7 +1,7 @@
 ---
 title: "Why you should elect a high-deductible health plan"
 author: "Patrick Cherry"
-date: "2023/01/02"
+date: "2024/01/02"
 categories:
   - finance
   - healthcare

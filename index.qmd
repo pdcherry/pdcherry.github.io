@@ -3,7 +3,7 @@
 #author: "Patrick Cherry"
 listing:
   contents: posts
-  sort: "date"
+  sort: "date desc"
   type: default
   categories: true
   sort-ui: true
