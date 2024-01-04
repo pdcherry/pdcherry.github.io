@@ -100,9 +100,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Frameshift - GTEX RNA-seq Liver-specific Process and TF Identification">
+<meta property="og:description" content="">
+<meta property="og:image" content="2024_01_03-liver_creative_commons.jpg">
+<meta property="og:site-name" content="Frameshift">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -124,7 +128,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../Patrick-Cherry-resume.md" rel="" target="">
+    <a class="nav-link" href="../Patrick-Cherry-resume.html" rel="" target="">
  <span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item compact">
@@ -191,7 +195,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#notes-on-approach" id="toc-notes-on-approach" class="nav-link" data-scroll-target="#notes-on-approach">Notes on approach</a></li>
+  <li><a href="#patricks-hypothesis" id="toc-patricks-hypothesis" class="nav-link" data-scroll-target="#patricks-hypothesis">Patrick’s hypothesis</a></li>
+  </ul></li>
+  <li><a href="#metadata-sample-annotations" id="toc-metadata-sample-annotations" class="nav-link" data-scroll-target="#metadata-sample-annotations">Metadata (sample annotations)</a>
+  <ul class="collapse">
+  <li><a href="#filter-sample-table-to-our-scoped-tissue-types" id="toc-filter-sample-table-to-our-scoped-tissue-types" class="nav-link" data-scroll-target="#filter-sample-table-to-our-scoped-tissue-types">Filter sample table to our scoped tissue types</a></li>
+  <li><a href="#import-the-related-bulk-rnaseq-counts" id="toc-import-the-related-bulk-rnaseq-counts" class="nav-link" data-scroll-target="#import-the-related-bulk-rnaseq-counts">Import the related bulk RNAseq counts</a>
+  <ul class="collapse">
+  <li><a href="#troubleshoot-filtering-samplesmatrix-columns" id="toc-troubleshoot-filtering-samplesmatrix-columns" class="nav-link" data-scroll-target="#troubleshoot-filtering-samplesmatrix-columns">Troubleshoot filtering samples/matrix columns</a></li>
+  </ul></li>
+  <li><a href="#filter-features-to-protein-coding-genes" id="toc-filter-features-to-protein-coding-genes" class="nav-link" data-scroll-target="#filter-features-to-protein-coding-genes">Filter features to protein-coding genes</a>
+  <ul class="collapse">
+  <li><a href="#number-of-features" id="toc-number-of-features" class="nav-link" data-scroll-target="#number-of-features">Number of features</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#run-deseq2-analysis" id="toc-run-deseq2-analysis" class="nav-link" data-scroll-target="#run-deseq2-analysis">Run DEseq2 analysis</a>
+  <ul class="collapse">
+  <li><a href="#prepare-data-object-for-deseq2" id="toc-prepare-data-object-for-deseq2" class="nav-link" data-scroll-target="#prepare-data-object-for-deseq2">Prepare data object for DEseq2</a>
+  <ul class="collapse">
+  <li><a href="#filter-for-minimum-counts" id="toc-filter-for-minimum-counts" class="nav-link" data-scroll-target="#filter-for-minimum-counts">Filter for minimum counts</a></li>
+  </ul></li>
+  <li><a href="#run-deseq2-analysis-1" id="toc-run-deseq2-analysis-1" class="nav-link" data-scroll-target="#run-deseq2-analysis-1">Run DEseq2 analysis</a>
+  <ul class="collapse">
+  <li><a href="#extract-all-contrast-data-from-deseq" id="toc-extract-all-contrast-data-from-deseq" class="nav-link" data-scroll-target="#extract-all-contrast-data-from-deseq">Extract all contrast data from DEseq</a></li>
+  </ul></li>
+  <li><a href="#prepare-data-with-additional-annotations" id="toc-prepare-data-with-additional-annotations" class="nav-link" data-scroll-target="#prepare-data-with-additional-annotations">Prepare data with additional annotations</a>
+  <ul class="collapse">
+  <li><a href="#further-explore-the-contrasts" id="toc-further-explore-the-contrasts" class="nav-link" data-scroll-target="#further-explore-the-contrasts">Further explore the contrasts</a></li>
+  <li><a href="#ma-plot-analysis-qc" id="toc-ma-plot-analysis-qc" class="nav-link" data-scroll-target="#ma-plot-analysis-qc">MA Plot (analysis QC)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#cross-contrast-analysis" id="toc-cross-contrast-analysis" class="nav-link" data-scroll-target="#cross-contrast-analysis">Cross-contrast analysis</a>
+  <ul class="collapse">
+  <li><a href="#summarize-by-feature" id="toc-summarize-by-feature" class="nav-link" data-scroll-target="#summarize-by-feature">Summarize by feature</a></li>
+  <li><a href="#pivot-to-wide" id="toc-pivot-to-wide" class="nav-link" data-scroll-target="#pivot-to-wide">Pivot to wide</a></li>
+  </ul></li>
+  <li><a href="#pathway-gene-ontology-go-enrichment-analysis" id="toc-pathway-gene-ontology-go-enrichment-analysis" class="nav-link" data-scroll-target="#pathway-gene-ontology-go-enrichment-analysis">Pathway / Gene Ontology (GO) Enrichment Analysis</a>
+  <ul class="collapse">
+  <li><a href="#pathway-analysis" id="toc-pathway-analysis" class="nav-link" data-scroll-target="#pathway-analysis">Pathway analysis</a>
+  <ul class="collapse">
+  <li><a href="#prepare-gages-needed-data" id="toc-prepare-gages-needed-data" class="nav-link" data-scroll-target="#prepare-gages-needed-data">Prepare GAGE’s needed data</a></li>
+  <li><a href="#perpare-deseq2-result-for-gage" id="toc-perpare-deseq2-result-for-gage" class="nav-link" data-scroll-target="#perpare-deseq2-result-for-gage">Perpare DEseq2 result for GAGE</a></li>
+  </ul></li>
+  <li><a href="#run-gage" id="toc-run-gage" class="nav-link" data-scroll-target="#run-gage">Run GAGE</a>
+  <ul class="collapse">
+  <li><a href="#view-results" id="toc-view-results" class="nav-link" data-scroll-target="#view-results">View Results</a></li>
+  <li><a href="#pathway-plots" id="toc-pathway-plots" class="nav-link" data-scroll-target="#pathway-plots">Pathway plots</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#transcription-factor-enrichment-analysis" id="toc-transcription-factor-enrichment-analysis" class="nav-link" data-scroll-target="#transcription-factor-enrichment-analysis">Transcription Factor Enrichment Analysis</a>
+  <ul class="collapse">
+  <li><a href="#chip-transcription-factor-data" id="toc-chip-transcription-factor-data" class="nav-link" data-scroll-target="#chip-transcription-factor-data">ChIP Transcription Factor data</a>
+  <ul class="collapse">
+  <li><a href="#run-gsea-on-tfea.chip" id="toc-run-gsea-on-tfea.chip" class="nav-link" data-scroll-target="#run-gsea-on-tfea.chip">Run GSEA on TFEA.ChIP</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -1729,6 +1798,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
+</script>
+<script src="https://utteranc.es/client.js" repo="pdcherry/blogComments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 <footer class="footer">

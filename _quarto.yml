@@ -4,6 +4,7 @@ project:
   pre-render: knit_resume_to_md.r
   render:
     - "*.qmd"
+    - "*.md"
     - "!*xxxx_xx_xx*"
 url: https://pdcherry.github.io
 website:
@@ -23,6 +24,7 @@ website:
         href: https://www.linkedin.com/in/p-cherry/
   page-footer: 
     left: Copyright 2023, Patrick Cherry <a rel="me" href="https://genomic.social/@pcherry">@pcherry@genomic.social</a>
+  open-graph: true
 format:
   html:
     theme:

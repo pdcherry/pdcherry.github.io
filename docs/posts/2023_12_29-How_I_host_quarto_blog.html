@@ -100,9 +100,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Frameshift - How I run and deploy this Quarto blog">
+<meta property="og:description" content="">
+<meta property="og:image" content="2023_12_29-How_I_host_quarto_blog.jpg">
+<meta property="og:site-name" content="Frameshift">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -124,7 +128,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../Patrick-Cherry-resume.md" rel="" target="">
+    <a class="nav-link" href="../Patrick-Cherry-resume.html" rel="" target="">
  <span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item compact">
@@ -192,7 +196,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#why-do-i-want-to-blog" id="toc-why-do-i-want-to-blog" class="nav-link active" data-scroll-target="#why-do-i-want-to-blog">Why do I want to blog?</a></li>
+  <li><a href="#introduction-to-self-hosted-blogging" id="toc-introduction-to-self-hosted-blogging" class="nav-link" data-scroll-target="#introduction-to-self-hosted-blogging">Introduction to self-hosted blogging</a></li>
+  <li><a href="#why-quarto" id="toc-why-quarto" class="nav-link" data-scroll-target="#why-quarto">Why Quarto</a></li>
+  <li><a href="#deploying-without-weirdness-the-road-less-trodden" id="toc-deploying-without-weirdness-the-road-less-trodden" class="nav-link" data-scroll-target="#deploying-without-weirdness-the-road-less-trodden">Deploying without weirdness (The road less trodden)</a>
+  <ul class="collapse">
+  <li><a href="#rolling-your-own" id="toc-rolling-your-own" class="nav-link" data-scroll-target="#rolling-your-own">Rolling your own</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
 <!-- main -->
 <main class="content quarto-banner-title-block" id="quarto-document-content">
 
@@ -612,6 +630,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
+</script>
+<script src="https://utteranc.es/client.js" repo="pdcherry/blogComments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
 </script>
 </div> <!-- /content -->
 <footer class="footer">

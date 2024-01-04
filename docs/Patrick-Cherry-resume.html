@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Frameshift</title>
+<title>Frameshift – patrick-cherry-resume</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -63,47 +61,12 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description','listing-categories',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description","listing-categories"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="">
-<meta property="og:description" content="">
-<meta property="og:image" content="./posts/2024_01_03-liver_creative_commons.jpg">
-<meta property="og:site-name" content="Frameshift">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -125,7 +88,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./Patrick-Cherry-resume.html" rel="" target="">
+    <a class="nav-link active" href="./Patrick-Cherry-resume.html" rel="" target="" aria-current="page">
  <span class="menu-text">CV</span></a>
   </li>  
   <li class="nav-item compact">
@@ -157,173 +120,279 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
-    <h5 class="quarto-listing-category-title">Categories</h5><div class="quarto-listing-category category-default"><div class="category" data-category="">All <span class="quarto-category-count">(3)</span></div><div class="category" data-category="RNAseq">RNAseq <span class="quarto-category-count">(1)</span></div><div class="category" data-category="code">code <span class="quarto-category-count">(2)</span></div><div class="category" data-category="community">community <span class="quarto-category-count">(1)</span></div><div class="category" data-category="finance">finance <span class="quarto-category-count">(1)</span></div><div class="category" data-category="healthcare">healthcare <span class="quarto-category-count">(1)</span></div><div class="category" data-category="news">news <span class="quarto-category-count">(1)</span></div></div></div>
+    
 <!-- main -->
-<main class="content column-page-left" id="quarto-document-content">
+<main class="content" id="quarto-document-content">
 
 
 
-<p>A blog of indeterminate subject matter and publication frequency from a molecular biologist shifting into bioinformatics and data science.</p>
-<p>Likely topics are molecular biology, biological data science, economics, policy, California ballot measure discussion, and outdoor adventures.</p>
-<a rel="me" href="https://genomic.social/@pcherry"> </a>
+<!-- Note to self: if the error shows up: -->
+<!-- In grepl("^\\s*$", x) : unable to translate to a wide string -->
+<!-- re-type the sptring to avoid non-ASCII characters -->
+<!-- see https://stackoverflow.com/questions/76680882/unable-to-translate-to-a-wide-string -->
+<section id="aside" class="level1">
+<h1>Aside</h1>
+<!-- ```{r} -->
+<!-- if(params$pdf_mode){ -->
+<!--   cat("View this CV online with links at __") -->
+<!-- } else { -->
+<!--   cat("[<i class='fas fa-download'></i> Download a PDF of this CV]()") -->
+<!-- } -->
+<!-- ``` -->
+<section id="contact" class="level2">
+<h2 class="anchored" data-anchor-id="contact">Contact</h2>
+<ul>
+<li><i class="fa fa-envelope"></i> pcherry [at] pm [dot] me</li>
+<li><i class="fa fa-phone"></i> upon request</li>
+<li><i class="fa fa-suitcase"></i> Senior Scientist | Genomics</li>
+<li><i class="fa fa-building"></i> Twist Bioscience</li>
+<li><i class="fa fa-map"></i> San Francisco, California</li>
+<li><i class="fa fa-globe"></i> <a href="https://pdcherry.github.io">pdcherry.github.io</a></li>
+<li><i class="fa fa-github"></i> <a href="https://github.com/pdcherry">github.com/pdcherry</a></li>
+<li><i class="fa fa-linkedin"></i> <a href="https://www.linkedin.com/in/p-cherry">linkedin.com/in/p-cherry</a></li>
+</ul>
+<!-- Language Skills {#skills} -->
+<!-- -------------------------------------------------------------------------------- -->
+<!-- ```{r skills graph} -->
+<!-- CV %>% print_skill_bars() -->
+<!-- ``` -->
+</section>
+<section id="disclaimer" class="level2">
+<h2 class="anchored" data-anchor-id="disclaimer">Disclaimer</h2>
+<p>Last updated on 2024-01-03.</p>
+<p>Data-driven résumé made in R using pagedown.</p>
+</section>
+</section>
+<section id="main" class="level1">
+<h1>Main</h1>
+<section id="patrick-cherry" class="level2">
+<h2 class="anchored" data-anchor-id="patrick-cherry">Patrick Cherry</h2>
+<p>PhD scientist skilled in bioinformatics, biological data science, data visualization, statistical modeling, next-generation sequencing (NGS), and tool-building. I’ve coded reproducible and rigorous pipelines for high-throughput experimental designs and genomic analyses, launched best-in-class oncology reference standards, and invented new molecular methods for DNA and microbe manipulation. Originally trained in Molecular Biology, I’m interested in taking my knowledge and practice of data science / bioinformatics to the next level, especially on spatial and single cell data analysis.</p>
+</section>
+<section id="education" class="level2">
+<h2 class="anchored" data-anchor-id="education">Education</h2>
+<section id="phd" class="level3">
+<h3 class="anchored" data-anchor-id="phd">PhD</h3>
+<p>University of Colorado School of Medicine</p>
+<p>Aurora/Denver, Colorado</p>
+<p>2019 - 2013</p>
+<ul>
+<li>Ph.D.&nbsp;in Molecular Biology</li>
+<li>Advisor: Jay Hesselberth, PhD.</li>
+<li>Thesis: RNA Terminus chemistry affects the decay events that target HAC1 mRNA during the Unfolded Protein Response</li>
+</ul>
+</section>
+<section id="ba" class="level3">
+<h3 class="anchored" data-anchor-id="ba">BA</h3>
+<p>Hendrix College</p>
+<p>Conway, Arkansas</p>
+<p>2013 - 2009</p>
+<ul>
+<li>Biochemistry and Molecular Biology, with Distinction</li>
+<li>Advisor: Andres Caro, PhD.</li>
+<li>Senior Capstone Project showing key stress response gene expression changes to oxidative stress in liver cells</li>
+<li>Minor in Mathematics; PI: Lars Seme; Project: Newton’s method as a fractal chaotic dynamical system</li>
+</ul>
+</section>
+</section>
+<section id="industry-experience" class="level2">
+<h2 class="anchored" data-anchor-id="industry-experience">Industry Experience</h2>
+<p>I currently split my time between wet lab and computational activities. I have worked in a variety of roles ranging from HTP strain onboarding to genomics scientist. I like collaborative environments where I can learn from my peers and in turn teach others.</p>
+<section id="senior-scientist" class="level3">
+<h3 class="anchored" data-anchor-id="senior-scientist">Senior Scientist</h3>
+<p>Twist Bioscience</p>
+<p>South San Francisco, California</p>
+<p>Current - 2022</p>
+<ul>
+<li>Tech Lead of multiple reference control NPIs, custom OEMs, and commercial releases. Includes the <em>Pan-cancer RNA Fusion Controls</em>, <em>Fragmentome Calibration Controls</em>, <em>CNV Controls</em>, <em>Pan-cancer cfDNA v2</em>, and RNA-seq.</li>
+<li>Mentored a direct report from Senior Research Associate to Scientist to serving as a Tech Lead on new product introductions</li>
+<li>Original research led to multiple outside presentations and applications for patent protection of product configuration and biochemical methods.</li>
+<li>Custom data analysis pipeline in R and Python demonstrated proof-of-concept design and QC success of the Pan-cancer RNA Fusion Controls; designed and implemented the production approach; used public databases and feedback from alpha testers to design configuration of fusions RNAs</li>
+<li>Led new technology evaluation of a new NGS platform with custom experiments and bioinformatic analyses in Python, R, and SQL to enable faster gene QC in Production. Also led ancillary experiments to speed up synthetic gene production. Coded, implemented, and distributed on company GitHub an internal package, <em><code>twistcolorpal</code></em>, that automatically adds Twist-brand colors to <code>ggplot2</code> plots and sets up database connectors to <code>SQL</code> / Snowflake for parameterized <code>dbplyr</code> querying. Regularly use R, tidyverse, Python, Polars, AWS <code>s3</code>, <code>Spark</code>, <code>PySpark</code>, and <code>Sparklyr</code>, locally and on Databricks. Regularly implements and runs automated code tests with <code>pytest</code> and <code>testthat</code>.</li>
+</ul>
+</section>
+<section id="scientist" class="level3">
+<h3 class="anchored" data-anchor-id="scientist">Scientist</h3>
+<p>Twist Bioscience</p>
+<p>South San Francisco, California</p>
+<p>Current - 2021</p>
+<ul>
+<li>Tech Lead of <em>Pan-Cancer Reference Standard</em>, an ISO-13485 synthetic positive control with 458 unique variants among 84 cancer-associated genes at six QC’d VAFs, plus a WT control, which launched in Nov of 2021</li>
+<li>Designed, implemented, &amp; validated primer removal procedure for DNA standards <em>that is compatible with methylation</em></li>
+<li>Devised and validated precise high-throughput DNA quantification process for accurate pooling. On-boarded droplet digital PCR (ddPCR) system into production; designed custom assays and evaluated pre-designed assays for use in production.</li>
+<li>Led multiple iterations of custom NGS analysis refined the QC approach and thresholds for ensuring a contamination-free production process; extensively used data visualization to communicate complex data to cross-functional collaboration teams.</li>
+<li>Made extensive use of UMI sequencing and created novel method to rigorously quantify library conversion efficiency to evaluate product and potential secondary sources</li>
+</ul>
+</section>
+<section id="scientist-i" class="level3">
+<h3 class="anchored" data-anchor-id="scientist-i">Scientist I</h3>
+<p>Zymergen, Inc.</p>
+<p>Emeryville, California</p>
+<p>2021 - 2019</p>
+<ul>
+<li>Designed and implemented an automated high-throughput genotyping assay</li>
+<li>Designed &amp; carried out complex experiments on automation with and without LIMS sample tracking</li>
+<li>Supported a company-wide NGS core under high demand from diverse groups with complex needs using data-driven decision making and teaching</li>
+<li>Used statistical methods to screen and optimize a genetic engineering protocol for newly-on-boarded microbe; delivered robust process while working on New Product Introduction team</li>
+<li>Built hundreds of plasmids using modern molecular cloning techniques like Gibson and Golden Gate</li>
+</ul>
+</section>
+</section>
+<section id="research-experience" class="level2">
+<h2 class="anchored" data-anchor-id="research-experience">Research Experience</h2>
+<p>I worked on a few projects during my PhD, and the RNA repair project led me to custom 5´-OH RNA-seq libraries, which inspired my fascination with transcriptomics and bioinformatics.</p>
+<section id="doctoral-research" class="level3">
+<h3 class="anchored" data-anchor-id="doctoral-research">Doctoral Research</h3>
+<p>University of Colorado School of Medicine</p>
+<p>Aurora/Denver, Colorado</p>
+<p>2019 - 2014</p>
+<ul>
+<li>Wrote, revised, &amp; published two academic papers on RNA repair &amp; yeast genetics</li>
+<li>Engineered and characterized genetic bypass of essential genes in budding yeast; on-boarded CRISPR/Cas9 for efficient and precise gene knock-in</li>
+<li>Expressed, purified, and used wild-type and mutant recombinant protein in <em>E. coli</em> to carry out an RNA modification enzymatic assay</li>
+<li>Optimized custom RNA-seq library protocol; independently planned, executed, troubleshooted RNA modification detection</li>
+<li>Routinely conducted northern blotting, targeted depletion, primer extension, splinted ligation, and other esoteric DNA and RNA experiments</li>
+</ul>
+</section>
+</section>
+<section id="intellectual-property" class="level2">
+<h2 class="anchored" data-anchor-id="intellectual-property">Intellectual Property</h2>
+<p>Working at Twist and Zymergen on new product research requires confidentiality, but public evidence of accomplishments often comes in patent applications. The Legal teams know me well for being a helpful expert in the process.</p>
+<section id="methylation-mediated-adapter-removal-on-nucleic-acid-sequences" class="level3">
+<h3 class="anchored" data-anchor-id="methylation-mediated-adapter-removal-on-nucleic-acid-sequences">Methylation-mediated adapter removal on nucleic acid sequences</h3>
+<p>Twist Bioscience</p>
+<p>South San Francisco, California</p>
+<p>3/7/23</p>
+<ul>
+<li>US 63/317,466</li>
+</ul>
+</section>
+<section id="expansion-of-cfdna-for-libraries" class="level3">
+<h3 class="anchored" data-anchor-id="expansion-of-cfdna-for-libraries">Expansion of cfDNA for Libraries</h3>
+<p>Twist Bioscience</p>
+<p>South San Francisco, California</p>
+<p>11/12/21</p>
+<ul>
+<li>US Prov. Pat. Ref No 823.102</li>
+</ul>
+</section>
+<section id="libraries-for-mutational-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="libraries-for-mutational-analysis">Libraries for mutational analysis</h3>
+<p>Twist Bioscience</p>
+<p>South San Francisco, California</p>
+<p>4/9/21</p>
+<ul>
+<li>US Prov. Pat. Ref No 823.101</li>
+</ul>
+</section>
+<section id="method-for-counterselection-in-microorganisms" class="level3">
+<h3 class="anchored" data-anchor-id="method-for-counterselection-in-microorganisms">Method for counterselection in microorganisms</h3>
+<p>Zymergen, Inc.</p>
+<p>Emeryville, California</p>
+<p>3/25/21</p>
+<ul>
+<li>US 2021_0087586 A1</li>
+</ul>
+</section>
+</section>
+<section id="selected-publications" class="level2">
+<h2 class="anchored" data-anchor-id="selected-publications">Selected Publications</h2>
+<p>I communicate my results clearly, both in writing and in live presentations. I enjoy writing research papers, but my career has required more tech notes and app notes recently.</p>
+<section id="twist-pan-cancer-synthetic-reference-materials-technical-guide" class="level3">
+<h3 class="anchored" data-anchor-id="twist-pan-cancer-synthetic-reference-materials-technical-guide">Twist Pan-cancer synthetic reference materials technical guide</h3>
+<p><a href="https://www.twistbioscience.com/resources/guideguideline/twist-cfdna-pan-cancer-reference-standard-technical-guide">Twist Bioscience</a></p>
+<p>South San Francisco, California</p>
+<p>12/21/21</p>
+<ul>
+<li>Patrick Cherry &amp; Mike Bocek</li>
+</ul>
+</section>
+<section id="multiple-decay-events-target-hac1-mrna-during-splicing-to-regulate-the-unfolded-protein-response" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-decay-events-target-hac1-mrna-during-splicing-to-regulate-the-unfolded-protein-response">Multiple decay events target HAC1 mRNA during splicing to regulate the unfolded protein response</h3>
+<p><a href="https://doi.org/10.7554/eLife.42262">eLife</a></p>
+<p>N/A</p>
+<p>2019</p>
+<ul>
+<li>Cherry, P., Peach, S., &amp; Hesselberth, J.</li>
+</ul>
+</section>
+<section id="genetic-bypass-of-essential-rna-repair-enzymes-in-budding-yeast" class="level3">
+<h3 class="anchored" data-anchor-id="genetic-bypass-of-essential-rna-repair-enzymes-in-budding-yeast">Genetic bypass of essential RNA repair enzymes in budding yeast</h3>
+<p><a href="https://doi.org/10.1261/rna.061788.117">RNA</a></p>
+<p>N/A</p>
+<p>2018</p>
+<ul>
+<li>Cherry, P., White, L., York, K., &amp; Hesselberth, J.</li>
+</ul>
+</section>
+</section>
+<section id="selected-presentations-talks" class="level2">
+<h2 class="anchored" data-anchor-id="selected-presentations-talks">Selected Presentations &amp; Talks</h2>
+<p>I give audience-centered presentations by adapting on the fly and over time to the venue and occasion. I like to <em>transfer knowledge</em> by giving methods/best practices talks whose slides can also serve as documentation.</p>
+<section id="high-sensitivity-detection-of-specific-ultra-low-frequency-somatic-mutations-for-minimal-residual-disease-mrd-monitoring" class="level3">
+<h3 class="anchored" data-anchor-id="high-sensitivity-detection-of-specific-ultra-low-frequency-somatic-mutations-for-minimal-residual-disease-mrd-monitoring">High sensitivity detection of specific ultra low-frequency somatic mutations for minimal residual disease (MRD) monitoring</h3>
+<p>International Society of Liquid Biopsy Annual Congress</p>
+<p>Madrid, Spain</p>
+<p>11/19/23</p>
+</section>
+<section id="twist-pan-cancer-synthetic-rna-fusion-control-for-assay-development" class="level3">
+<h3 class="anchored" data-anchor-id="twist-pan-cancer-synthetic-rna-fusion-control-for-assay-development">Twist pan-cancer synthetic RNA fusion control for assay development</h3>
+<p><a href="https://www.twistbioscience.com/resources/poster/twist-pan-cancer-synthetic-rna-fusion-control-assay-development">American Association for Cancer Researchers</a></p>
+<p>Orlando, Florida</p>
+<p>4/16/23</p>
+</section>
+<section id="use-of-synthetic-cnv-fragments-to-mimic-copy-number-alterations-for-ctdna-reference-standards" class="level3">
+<h3 class="anchored" data-anchor-id="use-of-synthetic-cnv-fragments-to-mimic-copy-number-alterations-for-ctdna-reference-standards">Use of synthetic CNV fragments to mimic copy number alterations for ctDNA reference standards</h3>
+<p><a href="https://www.twistbioscience.com/resources/poster/use-synthetic-cnv-fragments-mimic-copy-number-alterations-ctdna-reference">Advances in Genome Biology and Technology</a></p>
+<p>Hollywood, Florida</p>
+<p>2/7/23</p>
+</section>
+<section id="twist-pan-cancer-synthetic-reference-materials-for-cell-free-dna-cfdna-assay-development" class="level3">
+<h3 class="anchored" data-anchor-id="twist-pan-cancer-synthetic-reference-materials-for-cell-free-dna-cfdna-assay-development">Twist pan-cancer synthetic reference materials for cell-free DNA (cfDNA) assay development</h3>
+<p><a href="https://www.twistbioscience.com/resources/poster/twist-pan-cancer-synthetic-reference-materials-cell-free-dna-cfdna-assay">American Association for Cancer Researchers</a></p>
+<p>New Orleans, Louisiana</p>
+<p>4/12/22</p>
+</section>
+<section id="molecular-methods-meet-the-standards-or-how-i-learned-to-stop-worrying-and-love-uv-quantification" class="level3">
+<h3 class="anchored" data-anchor-id="molecular-methods-meet-the-standards-or-how-i-learned-to-stop-worrying-and-love-uv-quantification">Molecular Methods Meet the Standards: Or how I learned to stop worrying and love UV-quantification</h3>
+<p>Twist R&amp;D Meeting</p>
+<p>South San Francisco, CA</p>
+<p>7/13/21</p>
+</section>
+<section id="r-use-at-zymergen" class="level3">
+<h3 class="anchored" data-anchor-id="r-use-at-zymergen">R use at Zymergen</h3>
+<p>Z-Tech Talk</p>
+<p>Emeryville, CA</p>
+<p>6/16/20</p>
+</section>
+<section id="data-driven-troubleshooting-of-ngs-experiments" class="level3">
+<h3 class="anchored" data-anchor-id="data-driven-troubleshooting-of-ngs-experiments">Data-driven troubleshooting of NGS experiments</h3>
+<p>Data Science Talk</p>
+<p>Emeryville, CA</p>
+<p>4/20/20</p>
+<!-- Trainees & Direct Reports {data-icon=leaf} -->
+<!-- -------------------------------------------------------------------------------- -->
+<!-- ::: aside -->
+<!-- ```{r} -->
+<!-- CV %<>% print_text_block('trainees_reports_aside') -->
+<!-- ``` -->
+<!-- ::: -->
+<!-- ```{r} -->
+<!-- CV %<>% print_section('trainees_reports') -->
+<!-- ``` -->
+<!-- ```{r} -->
+<!-- CV %<>% print_links() -->
+<!-- ``` -->
 
 
+</section>
+</section>
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="listing-actions-group">
-   <div class="input-group input-group-sm quarto-listing-sort">
-     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
-     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
-       <option value="" disabled="" selected="" hidden="">Order By</option>
-       <option value="index" data-direction="asc">Default</option>
-         <option value="listing-title" data-direction="asc">
-          Title
-        </option>
-         <option value="listing-date-sort" data-direction="asc">
-          Date - Oldest
-        </option>
-         <option value="listing-date-sort" data-direction="desc">
-          Date - Newest
-        </option>
-         <option value="listing-author" data-direction="asc">
-          Author
-        </option>
-     </select>
-  </div>
-    <div class="input-group input-group-sm quarto-listing-filter">
-      <span class="input-group-text"><i class="bi bi-search"></i></span>
-      <input type="text" class="search form-control" placeholder="Filter">
-    </div>
-</div>
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="code,RNAseq" data-listing-date-sort="1704268800000" data-listing-file-modified-sort="1704346639731" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="26">
-<div class="thumbnail">
-<p><a href="./posts/2024_01_03-GTEX_RNA_seq_liver.html"> <img src="./posts/2024_01_03-liver_creative_commons.jpg" class="thumbnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/2024_01_03-GTEX_RNA_seq_liver.html">
-<h3 class="no-anchor listing-title">
-GTEX RNA-seq Liver-specific Process and TF Identification
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('RNAseq'); return false;">
-RNAseq
-</div>
-</div>
-<a href="./posts/2024_01_03-GTEX_RNA_seq_liver.html">
-<div class="listing-description">
-I use the publicly available bulk RNA-Seq data from GTEX (v8) identify biological pathways and processes specific to the liver. I also identify putative transcriptional regulators of these pathways and processes. To ensure that…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/2024_01_03-GTEX_RNA_seq_liver.html">
-<div class="listing-date">
-Jan 3, 2024
-</div>
-<div class="listing-author">
-Patrick Cherry
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="finance,healthcare" data-listing-date-sort="1704182400000" data-listing-file-modified-sort="1704346774103" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="10">
-<div class="thumbnail">
-<p><a href="./posts/2024_01_02-why_you_should_elect_a_HDHP.html"> <img src="./posts/2024_01_02-misunderstood_HSA_spider.png" class="thumbnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/2024_01_02-why_you_should_elect_a_HDHP.html">
-<h3 class="no-anchor listing-title">
-Why you should elect a high-deductible health plan
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('finance'); return false;">
-finance
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('healthcare'); return false;">
-healthcare
-</div>
-</div>
-<a href="./posts/2024_01_02-why_you_should_elect_a_HDHP.html">
-<div class="listing-description">
-This is employee-to-employee advice. I do not work for or represent the Human Resources, Benefits, Finance, or Legal teams. I have no stake in the health plan you elect. I…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/2024_01_02-why_you_should_elect_a_HDHP.html">
-<div class="listing-date">
-Jan 2, 2024
-</div>
-<div class="listing-author">
-Patrick Cherry
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="news,code,community" data-listing-date-sort="1703836800000" data-listing-file-modified-sort="1703913400032" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7">
-<div class="thumbnail">
-<p><a href="./posts/2023_12_29-How_I_host_quarto_blog.html"> <img src="./posts/2023_12_29-How_I_host_quarto_blog.jpg" class="thumbnail-image"> </a></p>
-</div>
-<div class="body">
-<a href="./posts/2023_12_29-How_I_host_quarto_blog.html">
-<h3 class="no-anchor listing-title">
-How I run and deploy this Quarto blog
-</h3>
-<div class="listing-subtitle">
-
-</div>
-</a>
-<div class="listing-categories">
-<div class="listing-category" onclick="window.quartoListingCategory('news'); return false;">
-news
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('code'); return false;">
-code
-</div>
-<div class="listing-category" onclick="window.quartoListingCategory('community'); return false;">
-community
-</div>
-</div>
-<a href="./posts/2023_12_29-How_I_host_quarto_blog.html">
-<div class="listing-description">
-I started a blog! Isn’t that grand!?
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/2023_12_29-How_I_host_quarto_blog.html">
-<div class="listing-date">
-Dec 29, 2023
-</div>
-<div class="listing-author">
-Patrick Cherry
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
