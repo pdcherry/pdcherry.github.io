@@ -1,0 +1,100 @@
+---
+title: "A non-linearity-assuming correlation coefficient: XICOR"
+author: "Patrick Cherry"
+date: "2023/12/30"
+categories:
+  - code
+  - statistics
+image: ""
+execute:
+  freeze: true
+---
+## Introduction and motivaation
+
+
+## Load library
+```{r setup, message = FALSE}
+library(tidyverse)
+library(XICOR)
+library(psych)
+library(nls2)
+theme_set(theme_light())
+```
+
+## Load data
+```{r}
+data("pressure")
+penguins <- palmerpenguins::penguins_raw
+data("peas")
+```
+
+### Vapor Pressure of mercury
+Data on the relation between temperature in degrees Celsius and vapor pressure of mercury in millimeters (of mercury).
+```{r}
+glimpse(pressure)
+```
+
+```{r}
+pressure_point_plot <- pressure %>%
+  ggplot(aes(y = pressure, x = temperature)) +
+  geom_point() +
+  stat_smooth(method = "lm", formula = "y ~ x", color = "orange") +
+  stat_smooth(method = "glm", formula = "y ~ I(x^7)", color = "blue") +
+  # stat_smooth(method = "nls", formula = "log10(y) ~ A - (B / (C + x))", color = "green",
+  #              method.args = list(start = c(A = 7, B = 3000, C = 262)), se = FALSE) +
+  labs(title = "Plot of non-linar data, vapor pressure of mercury vs. temperature",
+       subtitle = "Vapor pressure is know a priori as a non-linear function of temperature.",
+       caption = "Linear regression in orange, x^7 glm in blue.")
+pressure_point_plot
+```
+```{r}
+nls(log10(pressure) ~ A - (B / (C + temperature)), pressure,
+    start = c(A = 7, B = 3000, C = 262))
+```
+
+Let's compare the model fit outputs from these two.
+```{r}
+pressure_lm <- lm(formula = "pressure ~ temperature", data = pressure)
+pressure_glm <- glm(formula = "pressure ~ I(temperature^7)", data = pressure)
+```
+
+#### linear model summary
+```{r}
+summary(pressure_lm); summary(pressure_lm)[["r.squared"]]^0.5
+```
+
+#### glm model summary
+```{r}
+summary(pressure_glm)
+```
+
+We can see that the linear summary shows the linear fit is poor: the standard error is high relative to the estimate. Another metric that statistical model practitioners will note is the R-squared, or the correlation coefficient, is low (for data from the physical science): `R^2 = 0.574`. If we square root the R^2, we get a correlation coefficient of `R = 0.758`. But we can see visually from the plot that the data do follow a clear trend.
+
+Meanwhile, the generalized linear model with a `pressure^7` term shows a very low error compared to the estimate. (The error is 34.7 times lower than the estimate.) However, this model summary output lacks a correlation coefficient. __Even though we can get many measures of the fit of a model, if we use anything other than a simple linear model, a correlation coefficient doesn't exist.__ At least a correlation coefficient we are used to: a Pearson r. This is a fact of statistics, and is a consequence of the assumption of Pearson r that the data are linearly related.
+
+### XICOR correlation coefficient
+
+```{r}
+xicor(pressure$pressure, pressure$temperature)
+```
+
+Ah, but if 
+
+### Palmer Penguins data
+```{r}
+glimpse(penguins)
+```
+
+```{r}
+penguin_point_plot <- penguins %>%
+  ggplot(aes(y = `Delta 13 C (o/oo)`, x = `Date Egg`)) +
+  geom_point() +
+  stat_smooth(method = "lm", formula = "y ~ x", color = "orange")
+  # stat_smooth(method = "glm", formula = "y ~ x + exp(x)", color = "green",
+  #             method.args = list("family" = "inverse.gaussian")) +
+  # labs(title = "Plot of non-linar data, vapor pressure of mercury vs. temperature",
+  #      subtitle = "Vapor pressure is know a priori as a non-linear function of temperature.",
+  #      caption = "Linear regression in orange, x^5 glm in blue.")
+penguin_point_plot
+```
+

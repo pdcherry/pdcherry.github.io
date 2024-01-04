@@ -1,5 +1,96 @@
 [
   {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "",
+    "text": "The Misunderstood Spider of the annual enrollment process just wants to cuddle."
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#background-basics-medical-benefit-plan-definitions",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#background-basics-medical-benefit-plan-definitions",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "Background: Basics medical benefit plan definitions",
+    "text": "Background: Basics medical benefit plan definitions\n\nPremium: the amount you pay for your plan from your paycheck\nDeductible: a fixed amount that you must pay out-of-pocket before your plan begins paying for expenses\nCo-pay/co-insurance: a flat (percentage) rate that you pay for each medical event\nOut-of-pocket maximum: an upper bound on what you pay from your personal accounts in a given plan year; after this is hit, plan will cover everything at 100% (no co-pay/co-insurance)\nMedical Spending Account: account for pre-tax money diverted from your paycheck to be used for qualifying medical expenses:\n\nFlexible Spending Account (FSA): traditional “use it or lose it” annual account for PPOs\nHealth Savings Account (HSA): only available to high-deductible plan participants"
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#so-why-are-we-instinctively-afraid-of-high-deductible-plans",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#so-why-are-we-instinctively-afraid-of-high-deductible-plans",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "So why are we instinctively afraid of high-deductible plans?",
+    "text": "So why are we instinctively afraid of high-deductible plans?\nOver the years, we’ve been conditioned to think about healthcare in certain ways. For example, we think that Premiums work like: “you pay more for more doctor options”, or “deductible: smaller is better”. But we lose sight of our sunk costs, like premiums and taxes. FSA example: if you put $1,000 in an FSA, and lose $200 because you can’t spend it, that feels terrible and you are likely to put in less next year, because you’ve lost sight of what would have happened if that money were taxed— if your tax bracket is 30%, you are still $100 ahead!\nWe also tend to think in annual cycles for health care. But if there were the ability save or ‘carry over’ unspent dollars from year to year, that situation would open up to budgeting healthcare over multiple years. And one thing actuaries know about budgeting for unpredictable events with a high spread of potential costs: averaging over time makes the ending outcome more predictable. (See the central limit theorem).\nWhat we haven’t been conditioned to think about is: premiums as a function of deductibles; costs summed / averaged over multiple years; tax & retirement benefits of healthcare budgeting."
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#the-case-for-hgih-deductible-health-plans-the-health-savings-account-hsa",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#the-case-for-hgih-deductible-health-plans-the-health-savings-account-hsa",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "The case for hgih-deductible health plans: the health savings account (HSA)",
+    "text": "The case for hgih-deductible health plans: the health savings account (HSA)\n\nThe high deductible sounds scary, but it’s covered by the combination of your employer’s contribution to your HSA and the money you save on monthly premiums. You are paying it with “house money,” and if you don’t spend all of that, you keep it.\nThe HSA is the very best supplemental retirement savings vehicle there is; in some ways, it’s even better than your 401K, which every financial planner tells you is the first thing you should max out.\nThe upper bound (out-of-pocket max) on HDHPs means the scenarios in which you could end up paying more than you would on a PPO or EPO/HMO are probably pretty narrow even in a single year, and across multiple years the risk is very low.\nHDHP plans are generally the same plan network as that insurer’s PPO or EPO/HMO. Everything about it is the same, except for how you pay for it. Your doctor doesn’t care. Switch, switch back, no issue."
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#but-what-if-i-have-an-expensive-year",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#but-what-if-i-have-an-expensive-year",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "But what if I have an expensive year?",
+    "text": "But what if I have an expensive year?\nMy 2020, among other ongoing medical events:  \nYou can have a bad year, but it won’t be as bad as it may seem at first: - $28k billed - $12k allowed by insurance - $3.5k is what I had to pay"
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#an-example-2023-comparative-cost-model",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#an-example-2023-comparative-cost-model",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "An example 2023 comparative cost model",
+    "text": "An example 2023 comparative cost model\nThese numbers are purely hypothetical and in no way related to my or any specific employer.\n\nMake cost model data frame\n\nppo_deductible &lt;- 250\nppo_oop_max &lt;- 2250\nppo_employer_contributes &lt;- 0\nppo_premium &lt;- 0\nppo_co_insurance &lt;- .9\n\nhdhp_deductible &lt;- 1600\nhdhp_oop_max &lt;- 3500\nhdhp_employer_contributes &lt;- -3850\nhdhp_premium &lt;- 0\nhdhp_co_insurance &lt;- .9\n\nhealth_spending_model &lt;- function(raw_expenditure, deductible, co_insurance, oop_max, emp_contribution, premium){\n  \n  actual_expenditure &lt;- if_else(\n    raw_expenditure &lt;= deductible, raw_expenditure, if_else(\n      (deductible + ((raw_expenditure - deductible) * co_insurance) ) &gt;= oop_max, oop_max,\n        (deductible + ((raw_expenditure - deductible) * co_insurance) )\n      )\n    )  + emp_contribution + premium\n  \n  return(actual_expenditure)\n}\n\ncostsdf &lt;- seq(0, 10000, 50) %&gt;%\n  as_tibble() %&gt;%\n  rename(\"raw_expenditure\" = 1) %&gt;%\n  mutate(\"PPO\" = health_spending_model(raw_expenditure, ppo_deductible, ppo_co_insurance, ppo_oop_max,\n                                       ppo_employer_contributes, ppo_premium),\n         \"HDHP\" = health_spending_model(raw_expenditure, hdhp_deductible, hdhp_co_insurance, hdhp_oop_max,\n                                       hdhp_employer_contributes, hdhp_premium)) %&gt;%\n  pivot_longer(cols = c(\"PPO\", \"HDHP\"), values_to = \"your_cost\", names_to = \"plan_type\")\n\n\n\nPlot cost model\n\ncostsdf %&gt;%\n  ggplot(aes(x = raw_expenditure, y = your_cost, color = plan_type)) +\n  geom_line() +\n  scale_color_viridis_d(option = \"D\", begin = 0.3, end = 0.75) +\n  geom_hline(yintercept = 0, linetype = \"dotdash\", color = \"red\") +\n  scale_x_continuous(label = scales::label_currency()) +\n  scale_y_continuous(label = scales::label_currency()) +\n  labs(title = \"Plot of personal cost versus raw allowed health expenditure\",\n       x = \"Raw allowed healthcare expenditure ($)\",\n       y = \"Your cost ($)\",\n       color = \"Plan type\")\n\n\n\n\nAssumes 100% in-network providers, co-insurances are 90% of total accepted expenditure.\nThe HDHP is actually less expensive than PPO until &gt;$11,000 of raw expense. Because both plans have 90% co-insurance1, the amount paid by each is similar when under the OOP Max.\nHDHP costs 11.1% more than PPO until reaching the deductible.\nBecause the OOP Max for the HDHP is lower than the HSA contribution (from the employer), there is no medical expense scenario when this model keeps less than $350 at the end of the year."
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#the-hsa-a-very-different-medical-spending-account",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#the-hsa-a-very-different-medical-spending-account",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "The HSA: a very different medical spending account",
+    "text": "The HSA: a very different medical spending account\n\n“From a tax standpoint, an HSA is the best thing out there because it has a triple tax advantage,” Fronstin says. “The money goes in tax free, it builds up tax free and it comes out tax free” if withdrawn for qualified medical expenses.\nNYT The Triple Tax Break You May Be Missing: A Health Savings Account\n\nCA, NJ, and AL tax HSA contributions; NH and TN tax earnings.\n\nNo “use it or lose it”— it’s your money.\nTreated like a 401K account: pre-tax1, interest-earning, investable.\nNot tied to your employer: your HSA goes with you, can be rolled over into another HSA (like 401K)\n\n$4,150 individual contribution limit; $8,300 contribution family limit (2024 IRS limits)\nEmployer may contribute some or most of that, as a benefit\nIf 55 or over, extra $1,000/year “catch-up”\n\nInterest/investment growth is tax-free.\n\nCA, NJ, and AL tax HSA contributions; NH and TN tax earnings.\n\nAt retirement age, can withdraw and use for any reason, but taxed as income (like IRA).\nIf used for qualifying medical expenses, neither the principal nor the growth is ever taxed!1"
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#multi-year-thinking",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#multi-year-thinking",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "Multi-Year Thinking",
+    "text": "Multi-Year Thinking\nWe’ve been taught to think in annual cycles, and to over-value downside risk. Think about the upside benefit of a light year: one year in which I spend only half of my premium savings + employer contribution “stake” can cover the downside risk of years when I spend more. PPO premiums are sunk costs—you’ll never see that money again.\nMultiply your contribution (not your employer’s contribution) by your tax bracket—that’s free money. Your employer’s contribution is free money.\n1CA, NJ, and AL tax HSA contributions; NH and TN tax earnings. IRS Publication 969\nIf you meet your deductible in 2024, pack all your annual checkups into the end of 2024 and the beginning of 2026, and look to have a light year in 2025.\nBanking your receipts: you can claim your HSA reimbursements at any time, so you can “bank up” your reimbursable expenses across years, allowing your money to grow tax-free in the HSA, but leaving you the option to reimburse yourself tax-free for multiple years worth of expenses at any time.\nIRS Publication 969"
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#qualifying-to-contribute-to-an-hsa",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#qualifying-to-contribute-to-an-hsa",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "Qualifying to contribute to an HSA",
+    "text": "Qualifying to contribute to an HSA\n\nRequirements\n\nYou are enrolled in a high-deductible health insurance plan.\n\nIRS Publication 969\n\n\nDisqualifications\n\nYou must NOT be covered by a disqualifying health plan (like another plan) (except for dental, vision, and other specific exceptions).\nYou must NOT be enrolled in medicare.\nYou must NOT be claimed as a dependent on someone else’s tax filing."
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#the-fine-print-things-to-watch-out-for",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#the-fine-print-things-to-watch-out-for",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "The fine print: things to watch out for",
+    "text": "The fine print: things to watch out for\n\nYou are responsible for record-keeping—IRS can audit, so you need records for at least 3 years, probably 6\n\ntaxes + 20% penalty due for any money withdrawn that you can’t prove was “qualified”\ncount years from when you withdrew from the HSA, not when the medical expense happened\n\nThe State of California (among others) taxes contributions, interest, and capital gains of HSAs. (Employers document this on W-2; state vs. federal taxable incomes will be different.)\nHSA contributions are taxable to California residents; use Schedule CA (540) “other earned income.”\nYou will need to file an extra schedule with your taxes (IRS form 8889).\nYou will become a savvier medical consumer—it’s your money! Watch for mis-billing, look at service costs up front.\nDon’t underestimate the possibility you will end up going out-of-network when you do your calculations.\nIf you invest your HSA money in index funds, it may grow faster, but not be FDIC-insured."
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#in-summary-what-have-we-learned",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#in-summary-what-have-we-learned",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "In summary: what have we learned?",
+    "text": "In summary: what have we learned?\nPlaying with house money: with your employer’s contribution, your premium savings, and the money you would have put in an FSA, you’re already better than break-even on the deductible; if you don’t meet your deductible in a given a year, you get that benefit instead of the insurance company.\nThink multi-year when assessing risk: it’s possible you might pay a little more in a really expensive year, but you will pay a lot less in a good year; across years, it’s hard to lose.\nHSAs are awesome: max out your contribution of pre-tax money to the HSA and get even better tax advantages than your 401(k); avoid taxes on it completely if you continue to use it for medical expenses after you retire."
+  },
+  {
+    "objectID": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#resources-further-reading",
+    "href": "posts/2024_01_02-why_you_should_elect_a_HDHP.html#resources-further-reading",
+    "title": "Why you should elect a high-deductible health plan",
+    "section": "Resources & Further Reading",
+    "text": "Resources & Further Reading\n\nIRS Publication 969\nFidelity HSA contribution limits and eligibility rules\nInstructions for California Franchise Tax Board Schedule CA (540)\nBogleheads Health Savings Account"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Frameshift",
+    "section": "",
+    "text": "A blog of indeterminate subject matter and publication frequency from a molecular biologist shifting into bioinformatics and data science.\nLikely topics are molecular biology, biological data science, economics, policy, California ballot measure discussion, and outdoor adventures.\n \n\n\n\n\n\n\n\n\n  \n\n\n\n\nHow I run and deploy this Quarto blog\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\ncommunity\n\n\n\n\n\n\n\n\n\n\n\nDec 29, 2023\n\n\nPatrick Cherry\n\n\n\n\n\n\n  \n\n\n\n\nWhy you should elect a high-deductible health plan\n\n\n\n\n\n\n\nfinance\n\n\nhealthcare\n\n\n\n\n\n\n\n\n\n\n\nJan 2, 2023\n\n\nPatrick Cherry\n\n\n\n\n\n\nNo matching items"
+  },
+  {
     "objectID": "about.html",
     "href": "about.html",
     "title": "About",
@@ -40,82 +131,5 @@
     "title": "How I run and deploy this Quarto blog",
     "section": "Deploying without weirdness (The road less trodden)",
     "text": "Deploying without weirdness (The road less trodden)\nBut, it turns out, Quarto’s own recommended implementation of a “Quarto Blog” involves some weird git and deploy mechanics. Quarto recommends either rendering the HTML locally and pushing it to git, using the quarto publish shell command, or setting up a GitHub action.\n\nThe “render HTML locally and push” option is not optimal, because it makes for a very large git repo with large changes for even small updates, all of which are generated programmatically from the Quarto code.\nThe quarto publish shell command creates a new branch of the repo to contain the HTML pages (still checking HTML into git), but this branch is never supposed to be merged with the main/HEAD branch. (Furthermore, it cannot be merged, because it is not descended from the main branch, and contains no copies of files in it main branch.)\nThe last option, which is Quarto’s recommended Github Action, still carries out code execution in the Action, requiring a fully copy of the R environment that solves for all possible code/projects run. I got many failures on installing reticulate to the docker image just so I could say print('Hello, world') using Python. Even more annoyingly, Rmarkdown was required to evaluate some code chunks. Both reticulate and Rmarkdown are notoriously difficult and long to install to a new environment.\n\nIan Taylor notes this in his blog post about GitHub actions. So, similarly to Ian, I added execute: freeze: auto lines to this blogs _quarto.yml so that 100% of Quarto would be pre-executed locally on my machine, and only if it changed. And those pre-rendered results are committed to git. Thus, this allows for the Github Action to be very sparse, only requiring an installation of Quarto on the shell PATH. From there, Quarto renders the HTML from the frozen quarto documents, and deploys it to Github Pages with an artifact transfer. The GitHub action takes ~ 45 seconds to deploy the page, and my locally run render takes less than 10 seconds. Nice!\n\nRolling your own\nI learned a lot from this adventure. From troubleshooting those malfunctioning Github Action deploys for so long, it really struck me that for this blog, as is so often the case in life, in the outdoors, and in data science, the road less traveled is sometimes a road more suitable. And with good documentation, it’s not too bad to implement.\n\nprint(\"Hello, world\")\n\n[1] \"Hello, world\"\n\n\n\nprint('Hello, world')\n\nHello, world"
-  },
-  {
-    "objectID": "Patrick-Cherry-resume.html",
-    "href": "Patrick-Cherry-resume.html",
-    "title": "Aside",
-    "section": "",
-    "text": "pcherry [at] pm [dot] me\n upon request\n Senior Scientist | Genomics\n Twist Bioscience\n San Francisco, California\n pdcherry.github.io\n github.com/pdcherry\n linkedin.com/in/p-cherry\n\n\n\n\n\n\n\n\n\nLast updated on 2023-12-29.\nData-driven résumé made in R using pagedown."
-  },
-  {
-    "objectID": "Patrick-Cherry-resume.html#contact",
-    "href": "Patrick-Cherry-resume.html#contact",
-    "title": "Aside",
-    "section": "",
-    "text": "pcherry [at] pm [dot] me\n upon request\n Senior Scientist | Genomics\n Twist Bioscience\n San Francisco, California\n pdcherry.github.io\n github.com/pdcherry\n linkedin.com/in/p-cherry"
-  },
-  {
-    "objectID": "Patrick-Cherry-resume.html#disclaimer",
-    "href": "Patrick-Cherry-resume.html#disclaimer",
-    "title": "Aside",
-    "section": "",
-    "text": "Last updated on 2023-12-29.\nData-driven résumé made in R using pagedown."
-  },
-  {
-    "objectID": "Patrick-Cherry-resume.html#patrick-cherry",
-    "href": "Patrick-Cherry-resume.html#patrick-cherry",
-    "title": "Aside",
-    "section": "Patrick Cherry",
-    "text": "Patrick Cherry\nPhD scientist skilled in bioinformatics, biological data science, data visualization, statistical modeling, next-generation sequencing (NGS), and tool-building. I’ve coded reproducible and rigorous pipelines for high-throughput experimental designs and genomic analyses, launched best-in-class oncology reference standards, and invented new molecular methods for DNA and microbe manipulation. Originally trained in Molecular Biology, I’m interested in taking my knowledge and practice of data science / bioinformatics to the next level, especially on spatial and single cell data analysis."
-  },
-  {
-    "objectID": "Patrick-Cherry-resume.html#education",
-    "href": "Patrick-Cherry-resume.html#education",
-    "title": "Aside",
-    "section": "Education",
-    "text": "Education\n\nPhD\nUniversity of Colorado School of Medicine\nAurora/Denver, Colorado\n2019 - 2013\n\nPh.D. in Molecular Biology\nAdvisor: Jay Hesselberth, PhD.\nThesis: RNA Terminus chemistry affects the decay events that target HAC1 mRNA during the Unfolded Protein Response\n\n\n\nBA\nHendrix College\nConway, Arkansas\n2013 - 2009\n\nBiochemistry and Molecular Biology, with Distinction\nAdvisor: Andres Caro, PhD.\nSenior Capstone Project showing key stress response gene expression changes to oxidative stress in liver cells\nMinor in Mathematics; PI: Lars Seme; Project: Newton’s method as a fractal chaotic dynamical system"
-  },
-  {
-    "objectID": "Patrick-Cherry-resume.html#industry-experience",
-    "href": "Patrick-Cherry-resume.html#industry-experience",
-    "title": "Aside",
-    "section": "Industry Experience",
-    "text": "Industry Experience\nI currently split my time between wet lab and computational activities. I have worked in a variety of roles ranging from HTP strain onboarding to genomics scientist. I like collaborative environments where I can learn from my peers and in turn teach others.\n\nSenior Scientist\nTwist Bioscience\nSouth San Francisco, California\nCurrent - 2022\n\nTech Lead of multiple reference control NPIs, custom OEMs, and commercial releases. Includes the Pan-cancer RNA Fusion Controls, Fragmentome Calibration Controls, CNV Controls, Pan-cancer cfDNA v2, and RNA-seq.\nMentored a direct report from Senior Research Associate to Scientist to serving as a Tech Lead on new product introductions\nOriginal research led to multiple outside presentations and applications for patent protection of product configuration and biochemical methods.\nCustom data analysis pipeline in R and Python demonstrated proof-of-concept design and QC success of the Pan-cancer RNA Fusion Controls; designed and implemented the production approach; used public databases and feedback from alpha testers to design configuration of fusions RNAs\nLed new technology evaluation of a new NGS platform with custom experiments and bioinformatic analyses in Python, R, and SQL to enable faster gene QC in Production. Also led ancillary experiments to speed up synthetic gene production. Coded, implemented, and distributed on company GitHub an internal package, twistcolorpal, that automatically adds Twist-brand colors to ggplot2 plots and sets up database connectors to SQL / Snowflake for parameterized dbplyr querying. Regularly use R, tidyverse, Python, Polars, AWS s3, Spark, PySpark, and Sparklyr, locally and on Databricks.\n\n\n\nScientist\nTwist Bioscience\nSouth San Francisco, California\nCurrent - 2021\n\nTech Lead of Pan-Cancer Reference Standard, an ISO-13485 synthetic positive control with 458 unique variants among 84 cancer-associated genes at six QC’d VAFs, plus a WT control, which launched in Nov of 2021\nDesigned, implemented, & validated primer removal procedure for DNA standards that is compatible with methylation\nDevised and validated precise high-throughput DNA quantification process for accurate pooling\nLed multiple iterations of custom NGS analysis refined the QC approach and thresholds for ensuring a contamination-free production process; extensively used data visualization to communicate complex data to cross-functional collaboration teams.\nMade extensive use of UMI sequencing and created novel method to rigorously quantify library conversion efficiency to evaluate product and potential secondary sources\n\n\n\nScientist I\nZymergen, Inc.\nEmeryville, California\n2021 - 2019\n\nDesigned and implemented an automated high-throughput genotyping assay\nDesigned & carried out complex experiments on automation with and without LIMS sample tracking\nSupported a company-wide NGS core under high demand from diverse groups with complex needs using data-driven decision making and teaching\nUsed statistical methods to screen and optimize a genetic engineering protocol for newly-on-boarded microbe; delivered robust process while working on New Product Introduction team\nBuilt hundreds of plasmids using modern molecular cloning techniques like Gibson and Golden Gate"
-  },
-  {
-    "objectID": "Patrick-Cherry-resume.html#research-experience",
-    "href": "Patrick-Cherry-resume.html#research-experience",
-    "title": "Aside",
-    "section": "Research Experience",
-    "text": "Research Experience\nI worked on a few projects during my PhD, and the RNA repair project led me to custom 5´-OH RNA-seq libraries, which inspired my fascination with transcriptomics and bioinformatics.\n\nDoctoral Research\nUniversity of Colorado School of Medicine\nAurora/Denver, Colorado\n2019 - 2014\n\nWrote, revised, & published two academic papers on RNA repair & yeast genetics\nEngineered and characterized genetic bypass of essential genes in budding yeast; on-boarded CRISPR/Cas9 for efficient and precise gene knock-in\nExpressed, purified, and used wild-type and mutant recombinant protein in E. coli to carry out an RNA modification enzymatic assay\nOptimized custom RNA-seq library protocol; independently planned, executed, troubleshooted RNA modification detection\nRoutinely conducted northern blotting, targeted depletion, primer extension, splinted ligation, and other esoteric DNA and RNA experiments"
-  },
-  {
-    "objectID": "Patrick-Cherry-resume.html#intellectual-property",
-    "href": "Patrick-Cherry-resume.html#intellectual-property",
-    "title": "Aside",
-    "section": "Intellectual Property",
-    "text": "Intellectual Property\nWorking at Twist and Zymergen on new product research requires confidentiality, but public evidence of accomplishments often comes in patent applications. The Legal teams know me well for being a helpful expert in the process.\n\nMethylation-mediated adapter removal on nucleic acid sequences\nTwist Bioscience\nSouth San Francisco, California\n3/7/23\n\nUS 63/317,466\n\n\n\nExpansion of cfDNA for Libraries\nTwist Bioscience\nSouth San Francisco, California\n11/12/21\n\nUS Prov. Pat. Ref No 823.102\n\n\n\nLibraries for mutational analysis\nTwist Bioscience\nSouth San Francisco, California\n4/9/21\n\nUS Prov. Pat. Ref No 823.101\n\n\n\nMethod for counterselection in microorganisms\nZymergen, Inc.\nEmeryville, California\n3/25/21\n\nUS 2021_0087586 A1"
-  },
-  {
-    "objectID": "Patrick-Cherry-resume.html#selected-publications",
-    "href": "Patrick-Cherry-resume.html#selected-publications",
-    "title": "Aside",
-    "section": "Selected Publications",
-    "text": "Selected Publications\nI communicate my results clearly, both in writing and in live presentations. I enjoy writing research papers, but my career has required more tech notes and app notes recently.\n\nTwist Pan-cancer synthetic reference materials technical guide\nTwist Bioscience\nSouth San Francisco, California\n12/21/21\n\nPatrick Cherry & Mike Bocek\n\n\n\nMultiple decay events target HAC1 mRNA during splicing to regulate the unfolded protein response\neLife\nN/A\n2019\n\nCherry, P., Peach, S., & Hesselberth, J.\n\n\n\nGenetic bypass of essential RNA repair enzymes in budding yeast\nRNA\nN/A\n2018\n\nCherry, P., White, L., York, K., & Hesselberth, J."
-  },
-  {
-    "objectID": "Patrick-Cherry-resume.html#selected-presentations-talks",
-    "href": "Patrick-Cherry-resume.html#selected-presentations-talks",
-    "title": "Aside",
-    "section": "Selected Presentations & Talks",
-    "text": "Selected Presentations & Talks\nI give audience-centered presentations by adapting on the fly and over time to the venue and occasion. I like to transfer knowledge by giving methods/best practices talks whose slides can also serve as documentation.\n\nHigh sensitivity detection of specific ultra low-frequency somatic mutations for minimal residual disease (MRD) monitoring\nInternational Society of Liquid Biopsy Annual Congress\nMadrid, Spain\n11/19/23\n\n\nTwist pan-cancer synthetic RNA fusion control for assay development\nAmerican Association for Cancer Researchers\nOrlando, Florida\n4/16/23\n\n\nUse of synthetic CNV fragments to mimic copy number alterations for ctDNA reference standards\nAdvances in Genome Biology and Technology\nHollywood, Florida\n2/7/23\n\n\nTwist pan-cancer synthetic reference materials for cell-free DNA (cfDNA) assay development\nAmerican Association for Cancer Researchers\nNew Orleans, Louisiana\n4/12/22\n\n\nMolecular Methods Meet the Standards: Or how I learned to stop worrying and love UV-quantification\nTwist R&D Meeting\nSouth San Francisco, CA\n7/13/21\n\n\nR use at Zymergen\nZ-Tech Talk\nEmeryville, CA\n6/16/20\n\n\nData-driven troubleshooting of NGS experiments\nData Science Talk\nEmeryville, CA\n4/20/20"
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Frameshift",
-    "section": "",
-    "text": "A blog of indeterminate subject matter and publication frequency from a molecular biologist shifting into bioinformatics and data science.\nLikely topics are molecular biology, biological data science, economics, policy, California ballot measure discussion, and outdoor adventures.\n \n\n\n\n\n\n\n\n\n  \n\n\n\n\nHow I run and deploy this Quarto blog\n\n\n\n\n\n\n\nnews\n\n\ncode\n\n\ncommunity\n\n\n\n\n\n\n\n\n\n\n\nDec 29, 2023\n\n\nPatrick Cherry\n\n\n\n\n\n\nNo matching items"
   }
 ]
