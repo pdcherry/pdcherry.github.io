@@ -3,11 +3,11 @@
 #author: "Patrick Cherry"
 listing:
   contents: posts
-  sort: "date desc"
+  sort: "date"
   type: default
   categories: true
-  sort-ui: false
-  filter-ui: false
+  sort-ui: true
+  filter-ui: true
 page-layout: full
 #title-block-banner: true
 execute:

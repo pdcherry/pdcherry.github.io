@@ -5,6 +5,7 @@ project:
   render:
     - "*.qmd"
     - "!*xxxx_xx_xx*"
+    - "!*2024_01_03*"
 url: https://pdcherry.github.io
 website:
   title: "Frameshift"
@@ -25,7 +26,9 @@ website:
     left: Copyright 2023, Patrick Cherry <a rel="me" href="https://genomic.social/@pcherry">@pcherry@genomic.social</a>
 format:
   html:
-    theme: minty
+    theme:
+      light: minty
+      dark: slate
     css: styles.css
 execute:
   freeze: auto
