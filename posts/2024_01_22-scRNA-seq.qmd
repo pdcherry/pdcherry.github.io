@@ -1,0 +1,650 @@
+---
+title: "scRNA-seq Analysis: Messy Mouse Brain"
+author: "Patrick Cherry"
+date: "2024-01-22"
+categories:
+  - code
+  - scRNA-seq
+  - RNA-seq
+#image: "2024_01_03-liver_creative_commons.jpg"
+execute:
+  freeze: true
+---
+```{r setup, echo = FALSE, message = FALSE}
+#Sys.setenv(RETICULATE_PYTHON = "/Users/patrick/Library/r-miniconda/envs/r-reticulate/bin/python") # I
+# did use the above command, but the Sys.setenv is read by the cellassign during installation,
+# so this is necessary for installation. Maybe not for loading & running. TBD.
+library(dplyr)                      # for dataframe manipulation
+library(tidyr)                      # for dataframe group nesting and manipulation
+library(purrr)                      # for functional programming, including on nested dataframes
+library(readr)                      # for reading and writing csvs
+library(readxl)                     # for reading excel files
+library(stringr)                    # for efficient string manipulation
+library(Seurat)                     # for scRNA-seq data analysis
+library(gprofiler2)                 # for high-throughput GO analysis
+#library(pcaExplorer)                # for high-throughput GO analysis
+library(ggplot2)                    # for additional plotting features
+library(patchwork)                  # for combining plots
+#library(reticulate)
+library(garnett)                    # for cell identity assignment
+set.seed(1000)                      # for reproducibility
+```
+
+## Introduction
+In this data analysis exercise, I analyze a mysterious 10x single-cell RNA-seq data file, which consists of a collection of single cells from an unknown tissue with unknown cell types. This is standard 10x mouse single cell RNA-seq data output and we are curious what type of tissue and cells these are.
+
+### Objectives
+1. **Quality control and filtering.** Perform a basic QC of the data, explaining the rationale behind each step and the choice of parameters. How do the data look? What would you examine before moving forward to downstream analysis? Why?
+2. **Dimension reduction and visualization.** How can we make sense of all this data? Perform dimensional reduction with any methods at your choice, explaining the rationale behind the choice and caveats of other potential dimensional reduction methods. Plot these out in a suitable visualization(s).
+3. **Marker genes, clusters tissue, and cell types.** Identify genes and gene-sets that define the tissue and are differentially expressed. What tissue are we looking at? How many cell types are present, and what kind?
+
+Cell states can be very dynamic within the same cell type. For some of the most abundant cell types, feel free to dig deeper on any observed heterogeneity and the biological underpinning.
+
+## Data description
+  - counts: matrix `matrix.mtx.gz`
+  - cell barcodes: `barcodes.tsv.gz`
+  - gene features: `features.tsv.gz`
+
+# Load data
+```{r}
+koaladata <- Read10X(data.dir = "../../scRNA-seq/Koala/")
+
+koala <- CreateSeuratObject(counts = koaladata, project = "koala",
+                            min.cells = 3, min.features = 200)
+```
+
+The following parameters are used:
+  - min.cells = 3: a feature must have appeared in at least 3 cell barcodes
+  - min.features = 200 a cell must have at least 200 features to be included
+
+# Data QC
+Here are some features in the metadata we can use for QC:
+```{r}
+koala@meta.data %>% colnames()
+```
+
+Unfortunately, a *"percent.mt"* vector is not available. I ordinarily would heavily QC on this information.
+
+## Features
+```{r}
+VlnPlot(koala, features = c("nCount_RNA", "nFeature_RNA"), pt.size = .1) +
+  geom_hline(yintercept = 1100) +
+  geom_hline(yintercept = 2000, linetype = "dashed")
+```
+
+```{r}
+koala@meta.data$nCount_RNA %>%
+  as_tibble() %>%
+  ggplot(aes(x = "koala", y = value)) +
+  geom_violin(fill = "pink") + geom_jitter(size = 0.2, alpha = 0.5) +
+  labs(y = "nCount_RNA") +
+  theme_bw()
+```
+
+These are both skewed distributions, but RNA counts is more extremely skewed than features. Let's see how they scatter:
+```{r, warning = FALSE}
+features_by_counts_scatter_table <- bind_rows(koala$nCount_RNA, koala$nFeature_RNA) %>%
+  t() %>%
+  as_tibble() %>%
+  dplyr::rename("nCount_RNA" = 1, "nFeature_RNA" = 2)
+
+features_by_counts_scatter <- FeatureScatter(
+  koala, feature1 = "nCount_RNA", feature2 = "nFeature_RNA") #+
+  # stat_smooth(formula = "y ~ x*log(x)", method = glm) +
+  # stat_smooth(formula = "y ~ log(x)", method = glm, color = "yellow") +
+  # geom_smooth(formula = y ~ (Vm * x)/(K + x),
+  #             #data = features_by_counts_scatter_table,
+  #             method = "nls", color = "green", se = FALSE,
+  #             method.args = list(start = c(K = 10000, Vm = 6000)))
+
+features_by_counts_scatter
+```
+
+<!-- ```{r} -->
+<!-- summary(nls(formula = "nFeature_RNA ~ (Vm * nCount_RNA)/(K + nCount_RNA)", -->
+<!--             data = features_by_counts_scatter_table, -->
+<!--             start = c(K = 10000, Vm = 6000))) -->
+<!-- ``` -->
+
+
+```{r}
+features_by_counts_scatter + scale_x_log10() + scale_y_log10()
+```
+
+The feature count appears to increase approximately logarithmicly with RNA count. The Pearson correlation is 0.95, but the non linearity indicates the relationship may be stronger than the correlation coefficient indicates. This observation is consistent with an RNA-seq experiment wherein there is a fixed number of potentially expressed RNAs and the number of detected transcripts begins to saturate the and approach the maximum number able to be detected.
+
+The log-log transformed axis plot shows:
+ - There are only a few cells/droplets with fewer than 300 RNA counts, which is great for an scRNA-seq experiment.
+ - There is still some curve to the line, meaning the relationship is more trancendental (not simply a power-law, like polynomial).
+
+## Filter on feature count
+I am going to keep droplets ("cells") with 1100 features or fewer
+```{r}
+koala_filtered <- subset(koala, nFeature_RNA <= 1100)
+```
+
+Let's quickly confirm that the filtering changed the number of features throughout the Seurat object by using Seurat size commands to query the number of observations in the pre-filter and post-filter Seurat objects:
+```{r}
+length(koala$orig.ident); length(koala_filtered$orig.ident)
+```
+
+The feature count decreased from `r length(koala$orig.ident)` to `r length(koala_filtered$orig.ident)` upon filtering.
+
+(The `orig.ident` matrix within the Seurat object stores the cell metadata, and counting its number of entries can tell us number of unique observations.)
+
+```{r}
+head(koala_filtered$orig.ident)
+```
+
+### Features
+```{r}
+VlnPlot(koala_filtered, features = c("nCount_RNA", "nFeature_RNA"), pt.size = .1)
+```
+
+Post filtering, the RNA count plot looks more typical, with one major "peak" and a long tail. The features plot looks fairly evenly distributed because of the filtering cut off so close to the "peak" of the distribution, but I hypothesize it was necessary due to the hypothesized doublet peak right at 2000 features per droplet right near by.
+
+```{r, warning = FALSE}
+features_by_counts_scatter_table <- bind_rows(koala_filtered$nCount_RNA,
+                                              koala_filtered$nFeature_RNA) %>%
+  t() %>%
+  as_tibble() %>%
+  dplyr::rename("nCount_RNA" = 1, "nFeature_RNA" = 2)
+
+features_by_counts_scatter <- FeatureScatter(
+  koala_filtered, feature1 = "nCount_RNA", feature2 = "nFeature_RNA") #+
+  # stat_smooth(formula = "y ~ x*log(x)", method = glm) +
+  # stat_smooth(formula = "y ~ log(x)", method = glm, color = "yellow") +
+  # geom_smooth(formula = y ~ (Vm * x)/(K + x),
+  #             #data = features_by_counts_scatter_table,
+  #             method = "nls", color = "green", se = FALSE,
+  #             method.args = list(start = c(K = 10000, Vm = 6000)))
+
+features_by_counts_scatter
+```
+
+# Initial Analysis
+## Normalization
+```{r}
+koala_norm <- NormalizeData(koala_filtered)
+```
+
+The above is a log-normalization. This procedure divides each feature's abundance by the sample mean for that cell and takes the natural log (`log()` in `R`).
+
+```{r}
+koala_features <- FindVariableFeatures(koala_norm, selection.method = "vst")
+```
+
+The vst method is the default feature selection method, but I'm just making it explicit, because a later (cluster identification) package refers to this fact. The variance stabilizing transformation makes the variances (standard deviations) more uniform and stops them from being related to the mean value within a group, which facilitates downstream linear regression-based techniques (*e.g.* PCA).
+
+## Feature Selection by PCA
+```{r, message = FALSE}
+top_koala_features <- head(VariableFeatures(koala_features), 10)
+
+top_koala_features_plot <- VariableFeaturePlot(koala_features) %>%
+  LabelPoints(points = top_koala_features, repel = TRUE)
+
+top_koala_features_plot
+```
+```{r}
+top_koala_features
+```
+
+The most highly expressed gene is MEG3 (maternally expressed 3), a maternally expressed, imprinted long non-coding RNA (lncRNA). This likely means the tissue analyzed here is an egg cell, recently fertilized egg, or young embryo.
+
+## Scale
+Pre-process to center at 0 and make sd = 1 prior to PCA.
+
+```{r}
+gene_names <- rownames(koala_features)
+koala_features <- ScaleData(koala_features, features = gene_names)
+```
+
+## Run PCA
+Linear dimensionality reduction
+
+I'm going to go with all features and use the Elbow plot to determine which features are still important after this step.
+```{r, message = FALSE}
+koala_pca <- RunPCA(koala_features, features = VariableFeatures(koala_features) )
+```
+
+### Visualize PCA Results
+```{r}
+print(koala_pca[["pca"]], dims = 1:4)
+```
+
+Quick print out all of the positive and negative features in the top four fitted principle components.
+
+```{r}
+(dim_reduc_plot <- VizDimLoadings(koala_pca, dims = 1:4, reduction = "pca") &
+  theme(axis.text.y = element_text(size = 5)))
+```
+
+```{r}
+(pc_1_2_scatterplot <- DimPlot(koala_pca, reduction = "pca"))
+```
+
+```{r}
+DimHeatmap(koala_pca, dims = 1:15)
+```
+
+## Determine the dimensionality of the dataset
+Using jackstraw
+```{r}
+koala_js <- JackStraw(koala_pca, num.replicate = 100)
+```
+
+```{r}
+koala_js_score <- ScoreJackStraw(koala_js, dims = 1:20)
+```
+
+```{r}
+JackStrawPlot(koala_js_score, dims = 1:20)
+```
+
+```{r}
+ElbowPlot(koala_js_score)
+```
+
+Deciding that the elbow occurs at 9 principle components, so should retain dimensions 1 to 10. However, due to the strange behavior of this dataset, I am going to run `FindClusters()` on all 20 principle components and see what happens. It may confirm my findings without intervention.
+
+# Clustering
+```{r}
+koala_clusters <- FindNeighbors(koala_pca, dims = 1:20)
+koala_clusters <- FindClusters(koala_clusters, resolution = 0.5)
+```
+
+Despite retaining 20 dimensions in PCA, the Louvain cluster determination algorithm only identified 9 independently-clustering communities of droplets/cells. This is consistent with my by-eye reading of the elbow plot.
+
+# Run non-linear dimensional reduction (UMAP/tSNE)
+```{r}
+koala_umap <- RunUMAP(koala_clusters, dims = 1:10)
+```
+
+```{r}
+(koala_umap_plot <- DimPlot(koala_umap, reduction = 'umap'))
+```
+
+```{r, eval = FALSE, include = FALSE}
+ggsave("koala_filtered_umap_plot.png", koala_umap_plot,
+       width = 6, height = 4, dpi = 320,)
+```
+
+## Identify cluster biomarkers
+### Cluster 3
+```{r}
+koala_umap_cluster_4 <- FindMarkers(koala_umap, ident.1 = 4, min.pct = 0.25)
+head(koala_umap_cluster_4, n = 10)
+
+# find all markers distinguishing cluster 5 from clusters 0 through 3
+koala_umap_cluster_4_diff <- FindMarkers(koala_umap, ident.1 = 4, ident.2 = 0:3, min.pct = 0.25)
+head(koala_umap_cluster_4_diff, n = 10)
+```
+
+### All marker analysis
+```{r}
+# find markers for every cluster compared to all other cells, keep only the positive ones
+koala_umap_markers <- FindAllMarkers(koala_umap, only.pos = TRUE, min.pct = 0.25, logfc.threshold = 0.25)
+koala_umap_markers_10_per_cluster <- koala_umap_markers %>%
+  group_by(cluster) %>%
+  slice_max(n = 10, order_by = avg_log2FC)
+koala_umap_markers_10_per_cluster
+```
+
+```{r}
+koala_umap_markers_10_per_nest <- koala_umap_markers_10_per_cluster %>%
+  dplyr::select(gene) %>%
+  nest() %>%
+  mutate(data = as.list(map(data, ~.x[[1]] )))
+```
+
+### Set up function for all
+```{r}
+go_query_fun <- function(gene_name_vector){
+  go_result <- gost(query = gene_name_vector,
+                    organism = "mmusculus", ordered_query = FALSE, 
+                    multi_query = FALSE, significant = TRUE, exclude_iea = FALSE, 
+                    measure_underrepresentation = FALSE, evcodes = FALSE, 
+                    user_threshold = 0.05, correction_method = "fdr", 
+                    domain_scope = "annotated", custom_bg = NULL, 
+                    numeric_ns = "", sources = "GO:MF", as_short_link = FALSE)
+  
+  return(go_result)
+}
+```
+
+### Run the functon in df env
+```{r}
+koala_umap_markers_10_per_nest_go_ano <- koala_umap_markers_10_per_nest %>% 
+  mutate("go_table" = map(data, go_query_fun))
+koala_umap_markers_10_per_nest_go_ano
+```
+```{r}
+koala_umap_markers_10_go_df <- koala_umap_markers_10_per_nest_go_ano %>%
+  unnest(go_table) %>%
+  filter(row_number() %% 2 != 0) %>%
+  unnest(go_table) %>%
+  relocate(term_name, .after = cluster) %>%
+  arrange(cluster, p_value) %>%
+  select(!c("data", "query", "significant"))
+head(koala_umap_markers_10_go_df)
+```
+
+```{r, eval = FALSE}
+write_csv(koala_umap_markers_10_go_df, "koala_filtered_umap_markers_10_go_df.csv")
+```
+
+### All marker analysis
+without requiring uniqueness
+
+Let's run the analysis without requiring Variable genes be uniquely upregulated or downregulated in each cluster.
+```{r}
+# find markers for every cluster, keep only the positive ones
+koala_umap_markers <- FindAllMarkers(koala_umap, only.pos = FALSE, min.pct = 0.25, logfc.threshold = 0.25)
+koala_umap_markers_10_per_cluster <- koala_umap_markers %>%
+  group_by(cluster) %>%
+  slice_max(n = 10, order_by = avg_log2FC)
+koala_umap_markers_10_per_cluster
+```
+
+```{r}
+koala_umap_markers_10_per_nest <- koala_umap_markers_10_per_cluster %>%
+  dplyr::select(gene) %>%
+  nest() %>%
+  mutate(data = as.list(map(data, ~.x[[1]] )))
+koala_umap_markers_10_per_nest
+```
+
+### Run the functon in df env
+```{r}
+koala_umap_markers_10_per_nest_go_ano <- koala_umap_markers_10_per_nest %>% 
+  mutate("go_table" = map(data, go_query_fun))
+koala_umap_markers_10_per_nest_go_ano
+```
+```{r}
+koala_umap_2way_markers_10_go_df <- koala_umap_markers_10_per_nest_go_ano %>%
+  unnest(go_table) %>%
+  filter(row_number() %% 2 != 0) %>%
+  unnest(go_table) %>%
+  relocate(term_name, .after = cluster) %>%
+  arrange(cluster, desc(p_value))
+head(koala_umap_markers_10_go_df)
+```
+
+```{r, eval = FALSE}
+write_csv(koala_umap_2way_markers_10_go_df, "koala_umap_2way_markers_10_go_bdf.csv")
+```
+
+```{r}
+koala_umap_cluster_7 <- FindMarkers(koala_umap, ident.1 = 7, min.pct = 0.25)
+head(koala_umap_cluster_7, n = 10)[0]
+```
+
+### Cluster 7
+```{r}
+koala_umap_cluster_unique_7 <- FindMarkers(koala_umap, ident.1 = 7, ident.2 = (1:8)[!(1:8) == 7], min.pct = 0.5)
+head(as_tibble(koala_umap_cluster_unique_7, rownames = "gene"), n = 20)
+```
+
+  ## postsynaptic density protein 95 clustering 	6 	2 	.00 	> 100 	+ 	5.20E-06 	8.18E-03
+  ## postsynaptic membrane organization 	31 	2 	.01 	> 100 	+ 	9.74E-05 	3.00E-02
+  ## postsynaptic density organization 	28 	2 	.01 	> 100 	+ 	8.03E-05 	2.81E-02
+  ## postsynaptic specialization organization 	34 	2 	.02 	> 100 	+ 	1.16E-04 	3.45E-02
+  ## NMDA glutamate receptor clustering 	6 	2 	.00 	> 100 	+ 	5.20E-06 	7.43E-03
+  ## neurotransmitter-gated ion channel clustering 	15 	2 	.01 	> 100 	+ 	2.52E-05 	1.80E-02
+  ## positive regulation of synapse maturation 	10 	2 	.00 	> 100 	+ 	1.22E-05 	1.38E-02
+  ## regulation of synapse maturation 	23 	2 	.01 	> 100 	+ 	5.54E-05 	2.64E-02
+
+Cluster 7 looks like it may be 
+
+# Cell type assignments
+## Using garnett
+[Garnett](https:// cole-trapnell-lab.github.io/garnett) is a semi-supervised method of cell-type assignment for single cell data that is compatible with Seurat objects. It consists of four components. First, Garnett defines a markup language for specifying cell types using the genes that they specifically express. The markup language is hierarchical in that a cell type can have subtypes (for example, CD4+ and CD8+ are subsets of T cells). Second, Garnett includes a parser that processes the markup file together with a single-cell dataset, identifying representative cells bearing markers that unambiguously identify them as one of the cell types defined in the file. Third, Garnett trains a classifier that recognizes additional cells as belonging to each cell type based on their similarity to representative cells, similar to an approach that our groups recently developed for annotating a single-cell mouse atlas of chromatin accessibility. Garnett does not require that cells be organized into clusters, but it can optionally extend classifications to additional cells using either its own internal clustering routines or those of other tools. Finally, Garnett provides a method for applying a classifier trained on one dataset to rapidly annotate additional datasets.
+
+### Classifier
+[Garnett's directory of already-available classifiers](https://cole-trapnell-lab.github.io/garnett/classifiers/) indicates that one is available for Mouse Brain and spinal cord tissues, which I hypothesize is the primary content of this sample I am analyzed based on the gene ontology terms displayed and remarked upon in the previous section. The data are from Zeisel's and Linnarrson's *et al.* ["Molecular Architecture of the Mouse Nervous System"](https://www.sciencedirect.com/science/article/pii/S009286741830789X) and were trained and deposited by [Pliner & Trapnell *et al.*](https://www.nature.com/articles/s41592-019-0535-3).
+
+<!-- I will download the "mmbrain" RDS file and import it into R as a classifier—which doesn't require a import special function; all R object structed is saved when the generic `saveRDS()` export function is run. -->
+
+```{r, eval = TRUE, include = TRUE}
+# download.file("https://cole-trapnell-lab.github.io/garnett/classifiers/mmBrain_20191017.RDS",
+#               "mmBrain_20191017.RDS")
+download.file("https://cole-trapnell-lab.github.io/garnett/marker_files/mmBrain_markers.txt",
+              "mmBrain_markers.txt")
+```
+
+### Prepare scRNA-seq data for garnett
+```{r}
+# use Seurat to convert Seurat dimensionally reduced object to a CellDataSet object
+koala_umap_cds <- as.CellDataSet(koala_umap)
+
+# generate size factors for normalization later
+koala_umap_cds <- estimateSizeFactors(koala_umap_cds)
+```
+
+### Prepare trained classified from heirarchical marker gene file
+```{r}
+library(org.Mm.eg.db)
+
+marker_file_path <- "mmBrain_markers.txt"
+
+marker_check <- check_markers(koala_umap_cds, marker_file_path,
+                              db = org.Mm.eg.db,
+                              cds_gene_id_type = "SYMBOL",
+                              marker_file_gene_id_type = "SYMBOL")
+```
+
+```{r}
+marker_cell_types_analysis <- marker_check %>%
+  mutate("n_type" = n(), .by = c("cell_type", "parent")) %>%
+  mutate("n_cds" = n(), .by = c("cell_type", "parent", "in_cds")) %>%
+  arrange(desc(n_type)) %>%
+  dplyr::select(c("cell_type", "parent", "in_cds", "n_type", "n_cds")) %>%
+  distinct()
+marker_cell_types_analysis
+```
+
+```{r, eval = FALSE}
+write_csv(marker_check_analysis, "mmBrain_markers_marker_check_analysis.csv")
+```
+
+Make a table showing percent of genes for each cell type sub-classification that are present so I can filter and subset the marker genes to decrease the complexity of the model.
+```{r}
+marker_cell_types_prefilter <- marker_cell_types_analysis %>%
+  dplyr::select(!n_type) %>%
+  pivot_wider(id_cols = c("cell_type", "parent"), values_from = "n_cds",
+              names_from = "in_cds", names_glue = "gene_present_{in_cds}") %>%
+  mutate("percent_genes_present" = gene_present_TRUE / (gene_present_TRUE + gene_present_FALSE)) %>%
+  relocate(gene_present_TRUE, percent_genes_present, .after = parent) %>%
+  arrange(desc(gene_present_TRUE), desc(percent_genes_present))
+head(marker_cell_types_prefilter)
+```
+
+```{r}
+marker_cell_types_postfilter <- marker_cell_types_prefilter %>%
+  filter(parent == "root" | gene_present_TRUE > 8 | percent_genes_present > 0.49)
+head(marker_cell_types_postfilter)
+```
+
+```{r}
+marker_df_filtered <- marker_check %>%
+  # filter for cell_types retained by filter line in "postfilter"
+  semi_join(marker_cell_types_postfilter, by = "cell_type")
+head(marker_df_filtered)
+
+marker_df_filtered_orphans <- marker_df_filtered %>%
+  anti_join(., ., by = c("cell_type" = "parent"))
+head(marker_df_filtered_orphans)
+
+marker_df_filtered_orph_rem <-  anti_join(marker_df_filtered, marker_df_filtered_orphans, by = "marker_gene")
+head(marker_df_filtered_orph_rem)
+```
+
+I also have to head off an error about parent cell types referred to in the parent field of other entries not being present by doing a recursive semi_join. See the error copied below:
+`Error in check_markers(koala_umap_cds, marker_file_path, db = org.Mm.eg.db, :
+Subtype Telencephalon inhibitory interneurons is not defined in marker file.Subtype Cerebellum neurons is not defined in marker file.Subtype root is not defined in marker file.Subtype Di- and mesencephalon excitatory neurons is not defined in marker file.Subtype Dentate gyrus granule neurons is not defined in marker file.Subtype Oligodendrocytes is not defined in marker file.Subtype Immature neural is not defined in marker file.Subtype Olfactory inhibitory neurons is not defined in marker file.Subtype Hindbrain neurons is not defined in marker file.`
+
+**2023-05-29 14:36 PM** __Where I left off: Marker checks are writing to disk and are parsing. But missing parents (orphaned cell types) are still in the marker .txt specs, and I have misplaced the dataframes that actually contain the gene info.__
+
+#### write new marker file to disk
+The basic structure of the Garnett marker file is a series of entries, each describing elements of a cell type. After the cell name, each additional line will be a descriptor, which begins with a keyword, followed by a colon (':'). After the colon, a series of specifications can be added, separated by commas (','). Descriptors may spill onto following lines so long as you do not split a specification across multiple lines (i.e. if breaking up a long descriptor across multiple lines, all but the last line should end with a comma). Each new descriptor should begin on a new line. A generic cell type entry looks like this:
+
+“' > cell type name descriptor: spec1, spec2, spec3, spec4 descriptor2: spec1 “'
+
+#### define new writer function
+The joy of for loops
+```{r}
+write_garnett_marker_file <- function(marker_df, filename){
+  
+  marker_df <- marker_df %>%
+  dplyr::select(cell_type, parent, marker_gene) %>%
+  summarize("marker_gene" = paste(marker_gene, collapse = ", "),
+            .by = c(cell_type, parent))
+  
+  marker_file_lines = c()
+  for (rowNum in 1:nrow(marker_df)){
+    marker_file_lines = c(marker_file_lines, as.character(paste0(">", marker_df[rowNum, "cell_type"], sep = "")))
+    
+      if(is.na(marker_df[rowNum, "parent"])) {
+        
+      } else if(marker_df[rowNum, "parent"] == "root") {
+        
+      } else if(!is.na(marker_df[rowNum, "parent"])) {
+        marker_file_lines = c(marker_file_lines, as.character(paste("subtype of:", marker_df[rowNum, "parent"], sep = " ")))
+      }
+    
+    marker_file_lines = c(marker_file_lines, as.character(paste("expressed:", marker_df[rowNum, "marker_gene"], sep = " ")))
+    marker_file_lines = c(marker_file_lines, "")
+  }
+  
+  fileConn <- file(filename)
+  writeLines(marker_file_lines, fileConn)
+  close(fileConn)
+}
+```
+```{r}
+write_garnett_marker_file(marker_df_filtered_orph_rem, "mmBrain_markers_filtered.txt")
+```
+
+### Prepare trained classified from heirarchical marker gene file
+```{r}
+library(org.Mm.eg.db)
+
+marker_file_path <- "mmBrain_markers_filtered.txt"
+
+marker_check <- check_markers(koala_umap_cds, marker_file_path,
+                              db = org.Mm.eg.db,
+                              cds_gene_id_type = "SYMBOL",
+                              marker_file_gene_id_type = "SYMBOL")
+```
+
+```{r}
+marker_check_plot <- plot_markers(marker_check)
+```
+
+The marker plot is too large to be viewed in R or in the Rmarkdown output. (It errors). Please view "mmBrain_markers_check_plot.png" in the google drive filesystem. It is exported with manually-found dimensions that work for display and do not error.
+```{r, eval = FALSE}
+ggsave("mmBrain_markers_check_plot.png", marker_check_plot, width = 10, height = 20, limitsize = FALSE)
+```
+
+Basically, this is a really big model.
+
+### Train the classifier
+```{r}
+mmBrain_classifier <- train_cell_classifier(cds = koala_umap_cds,
+                                            marker_file = marker_file_path,
+                                            db = org.Mm.eg.db,
+                                            cds_gene_id_type = "SYMBOL",
+                                            num_unknown = 50,
+                                            marker_file_gene_id_type = "SYMBOL")
+```
+
+```{r}
+saveRDS(mmBrain_classifier, "2023_05_25-mmBrain_trained_classified.Rds")
+```
+
+```{r, eval = FALSE}
+# in case training doesn't work this round
+# mmBrain_classifier <- readRDS("2023_05_25-mmBrain_trained_classified.Rds")
+```
+
+
+### Perform garnett classify
+```{r, warning = FALSE}
+koala_features_classified <- classify_cells(koala_umap_cds, mmBrain_classifier,
+                                            db = org.Mm.eg.db,
+                                            cluster_extend = TRUE,
+                                            cds_gene_id_type = "SYMBOL")
+koala_features_classified
+```
+
+```{r}
+suppressPackageStartupMessages(library(tidyverse))
+```
+
+```{r}
+pData(koala_features_classified) %>%
+  count(cell_type)
+```
+
+```{r}
+pData(koala_features_classified) %>%
+  count(cluster_ext_type)
+```
+
+```{r}
+koala_features_classified_df <- inner_join(
+  rownames_to_column(as.data.frame(pData(koala_features_classified))),
+  rownames_to_column(as.data.frame(koala_features_classified@reducedDimS)),
+  by = "rowname")
+```
+
+```{r}
+classified_umap_plot <- ggplot(koala_features_classified_df) +
+  geom_point(aes(x = UMAP_1, y = UMAP_2, color = cluster_ext_type)) +
+  theme_bw()
+classified_umap_plot
+```
+
+```{r}
+classified_umap_drop_unknowns_plot <-
+  koala_features_classified_df %>%
+  filter(cluster_ext_type != "Unknown") %>%
+  ggplot() +
+  geom_point(aes(x = UMAP_1, y = UMAP_2, color = cluster_ext_type)) +
+  theme_bw()
+classified_umap_drop_unknowns_plot
+```
+
+```{r}
+classified_umap_drop_unknowns_plot <-
+  koala_features_classified_df %>%
+  filter(cell_type != "Unknown") %>%
+  ggplot() +
+  geom_point(aes(x = UMAP_1, y = UMAP_2, color = cell_type)) +
+  theme_bw()
+classified_umap_drop_unknowns_plot
+```
+
+
+
+
+
+
+
+## HTP GO Anlaysis for all 10 clusters
+```{r}
+koala_umap_markers_for_GO <- koala_umap_markers %>%
+  group_by(cluster) %>% slice_max(n = 20, order_by = avg_log2FC)
+koala_umap_markers_for_GO %>% ungroup() %>% dplyr::select("gene") %>% slice_tail(n = 167) %>% dput()
+```
+```{r}
+Seurat::FeaturePlot(koala_umap, features = c("Ptprb", "Stab2", "Lrmda", "Prkg1"), ncol = 2)
+```
+
+<!-- ```{r} -->
+<!-- (koala_umap_GOs <- topGOtable(DEgenes = c("Hal", "Grm8", "Hsd17b13", "Sds", "Gm35696", -->
+<!--                                           "Ncam2", "Chrm3", "Acaca", "Gldc", "Aox3"), -->
+<!--                               BGgenes = bg_gene_vector, -->
+<!--                                 #koala_js@assays$RNA@var.features, -->
+<!--                               ontology = "BP", geneID = "symbol", addGeneToTerms = TRUE)) -->
+<!-- ``` -->

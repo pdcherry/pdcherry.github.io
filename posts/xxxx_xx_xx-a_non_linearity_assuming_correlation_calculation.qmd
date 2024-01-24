@@ -40,16 +40,41 @@ pressure_point_plot <- pressure %>%
   geom_point() +
   stat_smooth(method = "lm", formula = "y ~ x", color = "orange") +
   stat_smooth(method = "glm", formula = "y ~ I(x^7)", color = "blue") +
-  # stat_smooth(method = "nls", formula = "log10(y) ~ A - (B / (C + x))", color = "green",
-  #              method.args = list(start = c(A = 7, B = 3000, C = 262)), se = FALSE) +
+  # stat_smooth(method = "nls", formula = "log(y) ~ A - (B / (C + x))", color = "green",
+  #             method.args = list(start = c(A = 7, B = 3000, C = 262)), se = FALSE) +
   labs(title = "Plot of non-linar data, vapor pressure of mercury vs. temperature",
        subtitle = "Vapor pressure is know a priori as a non-linear function of temperature.",
        caption = "Linear regression in orange, x^7 glm in blue.")
 pressure_point_plot
 ```
+
+# Non-linear regression using Antoine equation
+The following equation comes from the [Antoine equation](https://en.wikipedia.org/wiki/Antoine_equation) that describes the relation between vapor pressure and temperature for pure substances. It's derived from the Clausius–Clapeyron equation, which relates temperature to the derivative of pressure along a substances liquid-vapor coexistence curve.
 ```{r}
-nls(log10(pressure) ~ A - (B / (C + temperature)), pressure,
-    start = c(A = 7, B = 3000, C = 262))
+pressure_log_nls <- nls(log10(pressure) ~ A - (B / (C + temperature)), pressure,
+    start = c(A = 7, B = 3000, C = 273.15))
+summary(pressure_log_nls)
+```
+
+```{r}
+pressure_point_log_plot <- pressure %>%
+  ggplot(aes(y = pressure, x = temperature)) +
+  geom_point() +
+  stat_smooth(method = "lm", formula = "y ~ x", color = "orange") +
+  #stat_smooth(method = "glm", formula = "y ~ I(x^7)", color = "blue") +
+  stat_smooth(method = "nls", formula = "y ~ A - (B / (C + x))", color = "green",
+              method.args = list(start = c(A = 7, B = 3000, C = 262)), se = FALSE) +
+  scale_y_log10() +
+  labs(title = "Plot of non-linar data, vapor pressure of mercury vs. temperature",
+       y = "pressure, log scale (Torr)",
+       x = "temperature (Celsius)",
+       subtitle = "Vapor pressure is know a priori as a non-linear function of temperature.",
+       caption = "Linear regression in orange, x^7 nls in green")
+pressure_point_log_plot
+```
+
+```{r}
+plot(pressure_log_nls)
 ```
 
 Let's compare the model fit outputs from these two.

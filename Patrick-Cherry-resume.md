@@ -35,7 +35,7 @@
 
 ## Disclaimer
 
-Last updated on 2024-01-03.
+Last updated on 2024-01-10.
 
 Data-driven résumé made in R using pagedown.
 

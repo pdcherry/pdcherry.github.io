@@ -569,6 +569,10 @@ The bile secretion graphic is particularly interesting because it depicts spatia
 
 Porphyrin metabolism is a curious case: not many of the GO term's genes are up-regulated, and even along a linear pathway, not all the genes in are up-regulated. I am especially surprised to see biliverdin to bilirubin conversion down-regulated relative to the other tissues in this set. Meanwhile, two of bilirubin's downstream steps are up-regulated.
 
+```{r remove unneeded png files, eval = TRUE, include = FALSE, echo = FALSE}
+fs::dir_ls(regexp = "hsa\\d{2,10}[^(\\.pathview)](\\.png|\\.xml)") %>% fs::file_delete()
+```
+
 # Transcription Factor Enrichment Analysis
 With `TFEA_ChIP`, we will leverage the contingency matrices crossing DEseq2 up v. down and previously-existing ChIP-seq (up v. down) data sets.
 
