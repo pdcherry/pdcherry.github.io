@@ -31,7 +31,7 @@ This dynamic causes practically republican organizations to outwardly re-code an
 ## Notes on approach
 The website [sfendorsements.com](https://sfendorsements.com/) has collected and cataloged many of the city's politically active groups' (often Political Action Committees, or PACs) positions on ballot measures and election races for local positions. I hypothesize that these can be used to deduce the true alignment of these organizations.
 
-Peter Xu [make the code available](https://gitlab.com/peterxu/sf-endorsements), and has has previously made [google sheets](https://docs.google.com/spreadsheets/d/1f3cGgXjI912nA8e1_iTlEhJ7XpxjpSKZdT7wX3ryztg/edit#gid=1545354255) avaialbe for the endorsement data, but those are for 2022.
+Peter Xu [make the code available](https://gitlab.com/peterxu/sf-endorsements), and has has previously made [google sheets](https://docs.google.com/spreadsheets/d/1f3cGgXjI912nA8e1_iTlEhJ7XpxjpSKZdT7wX3ryztg/edit#gid=1545354255) available for the endorsement data, but those are for 2022.
 
 For this analysis, I will scrape the 2024 data, tidy it up, and analyze it.
 
@@ -85,8 +85,8 @@ endorsements_tidy <- endorsements_import #%>% glimpse()
 Great, the data are now tidy, where each row is an observation (a political group), and each column is a variable (race / measure).
 
 ```{r, include = FALSE, eval = FALSE}
-write_csv(endorsements_tidy, "2024_03_02-SF_endorsements_tidy.csv")
-write_csv(former_endorsements_import, "2024_03_02-2022_SF_endorsements_import.csv")
+write_csv(endorsements_tidy, "2024_03_02-SF_endorsements_tidy.csv", na = "")
+write_csv(former_endorsements_import, "2024_03_02-2022_SF_endorsements_import.csv", na = "")
 ```
 
 ### What are the propositions?
@@ -96,18 +96,23 @@ write_csv(former_endorsements_import, "2024_03_02-2022_SF_endorsements_import.cs
 
 read_csv("2024_03_03-2024_ballot_measures_desc.csv", show_col_types = FALSE) %>%
   ## replace any non UTF-8 by ''
+  ## non-UTF-8 characters may have been introduced when I was copying text from SF's website
   mutate(across(everything(), ~ iconv(.x, "UTF-8", "UTF-8",sub=''))) %>%
-  #mutate(Prop = paste0("<a href=\"", link, "\">", Prop, "</a>")) %>% glimpse()
   mutate("Prop" = cell_spec(Prop, format = "html", link = link, escape = TRUE)) %>%
   select (Prop, Title, "Description" = Desc) %>%
   kable(format = "html", escape = FALSE)
 ```
 
+## Edit after initial publication
+::: {.callout-warning}
+March 3, 2024 2:15 PM local time
+
+It has [come to my attention](https://carfree.city/@scott/112034022686769771) that the scraped data were not 100% complete. The SF Chronicle has posted some endorsements on Ballot Measures E and F that are not included in this analysis. Thanks to Scott for noticing this. As of this moment, I have manually verified and added these to the table.
+:::
+
+
 ## Analyze organizations by ballot measures
 ```{r}
-#| fig-width: 7
-#| fig-height: 6
-
 prop_data <-
   endorsements_tidy %>%
   select(Organization, contains("Prop")) %>%
@@ -117,7 +122,7 @@ prop_data <-
 rownames(prop_data) <- prop_data$Organization
 prop_data <- select(prop_data, !Organization)
 
-prop_clust <- nomclust(prop_data, measure = "lin", prox = 100)
+prop_clust <- nomclust(prop_data, measure = "iof", prox = TRUE)
 prop_prox_quant <- as_tibble(as.data.frame(as.matrix(prop_clust$prox)), rownames = "org")
 ```
 
@@ -154,7 +159,7 @@ prop_yesno_plot <- prop_yesno %>%
 prop_yesno_plot
 ```
 
-Visually, we can see from this plot that there is significant variation across political organization on endorsements for props C, E, F, G, and to a lesser extent B; whereas ballot measures 1, A, and D show less variation among political organizations. Also, interestingly, some organizations that offer endorsements did not endorse any position for some (or even most) propositions on the March 5 ballot.
+Visually, we can see from this plot that there is significant variation across political organizations on endorsements for props C, E, F, G, and to a lesser extent B; whereas ballot measures 1, A, and D show less variation among political organizations. Also, interestingly, some organizations that offer endorsements did not endorse any position for some (or even most) propositions on the March 5 ballot.
 
 However, for the above plot, the variation is easier to see than if the political organizations were sorted alphabetically because I cheated: I pre-sorted these based on their clustering order. So let's explore the clustering result.
 
@@ -168,6 +173,10 @@ Clustering is typically a quantitative method, so special accommodations have to
 dend.plot(prop_clust, main = "Categorical heirarchical clustering based on proposition guidance"); mtext(side = 1,
   line = 2, at = 20, caption_def)
 ```
+
+::: {.callout-note}
+The underlying data have been updated since the original publication. The clustering is meaningfully different than previously displayed.
+:::
 
 Generally speaking, the agglomerative coefficient of a clustering analysis describes the strength of the clustering structure that has been obtained by group average linkage. The coefficient takes values from 0 to 1, and is calculated as the mean of the normalized lengths at which the clusters are formed, _e.g._ the uniformity lengths displayed on the dendrogram. The more evenly and gradually the categories get broken down into different clusters, the closer to 1 the agglomerative coefficient will be.
 
@@ -228,4 +237,4 @@ Some notable large-distance pairs jump out, like:
  - Green Party (SF) vs SF Housing Action Coalition (distance = 4.35)
 
 ## Conclusions
-We can see from a reasonably well-fitting categorical clustering model that many political organizations have high similarity with the SF Republican Party's positions on ballot measures, despite having "Democratic" in their name. This result supports the idea that a empirical approach can reveal more about the character of an organization that the words in it's name.
+We can see from a reasonably well-fitting categorical clustering model that many political organizations have high similarity with the SF Republican Party's positions on ballot measures, despite having "Democratic" in their name. This result supports the idea that an empirical approach can reveal more about the character of an organization that the words in its name.

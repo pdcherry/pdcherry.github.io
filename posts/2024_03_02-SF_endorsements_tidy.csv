@@ -1,9 +1,28 @@
-names,San Francisco Chronicle,Democratic Party (SF),San Francisco Bay Guardian,SF League of Pissed Off Voters,YIMBY Action,GrowSF,Green Party (SF),SF Berniecrats,SF Tenants Union,Sierra Club,SF Housing Action Coalition,SF Labor Council,SEIU 1021,SF League of Conservation Voters,SPUR (Planning / Urban Research Association),League of Women Voters of SF,SF Republican Party,District 11 Democratic Club,Harvey Milk LGBTQ Democratic Club,United Democratic Club,Ed M. Lee Asian Pacific Democratic Club,Alice B. Toklas LGBT Democratic Club,Bernal Heights Democratic Club,Chinese American Democratic Club,Eastern Neighborhoods Democratic Club,Noe Valley Democratic Club,Home Sharers Democratic Club
-Prop A,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes,NA,Yes,Yes,Yes
-Prop B,No,Yes,No,No,NA,No,No,No,No,NA,NA,Yes,Yes,NA,NA,No,No,NA,NA,No,No,No,No,No,No,No,No
-Prop C,Yes,No,No,No,Yes,Yes,No,No,No,Yes,Yes,No,No,Yes,Yes,NA,Yes,No,No,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes
-Prop D,Yes,Yes,Yes,Yes,NA,Yes,Yes,Yes,Yes,NA,NA,Yes,Yes,NA,Yes,Yes,Yes,NA,Yes,NA,NA,NA,Yes,NA,NA,Yes,Yes
-Prop E,NA,No,No,No,NA,Yes,No,No,No,NA,NA,No,No,NA,NA,No,Yes,NA,No,Yes,Yes,Yes,No,Yes,Yes,Yes,Yes
-Prop F,NA,No,No,No,NA,Yes,No,No,No,NA,NA,No,No,NA,No,No,Yes,No,No,Yes,NA,No,No,Yes,Yes,Yes,Yes
-Prop G,Yes,Yes,No,No,NA,Yes,Yes,No,NA,NA,NA,NA,No,NA,NA,NA,Yes,No,No,Yes,Yes,NA,No,Yes,Yes,Yes,Yes
-Prop 1,Yes,Yes,Yes,Yes,NA,Yes,No,No,NA,NA,Yes,NA,Yes,NA,Yes,No,NA,NA,NA,Yes,Yes,Yes,Yes,Yes,Yes,Yes,Yes
+Organization,Prop A,Prop B,Prop C,Prop D,Prop E,Prop F,Prop G,Prop 1
+San Francisco Chronicle,Yes,No,Yes,Yes,No,No,Yes,Yes
+Democratic Party (SF),Yes,Yes,No,Yes,No,No,Yes,Yes
+San Francisco Bay Guardian,Yes,No,No,Yes,No,No,No,Yes
+SF League of Pissed Off Voters,Yes,No,No,Yes,No,No,No,Yes
+YIMBY Action,Yes,,Yes,,,,,
+GrowSF,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes
+Green Party (SF),No,No,No,Yes,No,No,Yes,No
+SF Berniecrats,Yes,No,No,Yes,No,No,No,No
+SF Tenants Union,Yes,No,No,Yes,No,No,,
+Sierra Club,Yes,,Yes,,,,,
+SF Housing Action Coalition,Yes,,Yes,,,,,Yes
+SF Labor Council,Yes,Yes,No,Yes,No,No,,
+SEIU 1021,Yes,Yes,No,Yes,No,No,No,Yes
+SF League of Conservation Voters,Yes,,Yes,,,,,
+SPUR (Planning / Urban Research Association),Yes,,Yes,Yes,,No,,Yes
+League of Women Voters of SF,Yes,No,,Yes,No,No,,No
+SF Republican Party,No,No,Yes,Yes,Yes,Yes,Yes,
+District 11 Democratic Club,Yes,,No,,,No,No,
+Harvey Milk LGBTQ Democratic Club,Yes,,No,Yes,No,No,No,
+United Democratic Club,Yes,No,Yes,,Yes,Yes,Yes,Yes
+Ed M. Lee Asian Pacific Democratic Club,Yes,No,Yes,,Yes,,Yes,Yes
+Alice B. Toklas LGBT Democratic Club,Yes,No,Yes,,Yes,No,,Yes
+Bernal Heights Democratic Club,Yes,No,No,Yes,No,No,No,Yes
+Chinese American Democratic Club,,No,Yes,,Yes,Yes,Yes,Yes
+Eastern Neighborhoods Democratic Club,Yes,No,Yes,,Yes,Yes,Yes,Yes
+Noe Valley Democratic Club,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes
+Home Sharers Democratic Club,Yes,No,Yes,Yes,Yes,Yes,Yes,Yes
