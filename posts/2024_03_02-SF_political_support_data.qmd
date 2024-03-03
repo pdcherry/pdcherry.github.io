@@ -107,7 +107,7 @@ read_csv("2024_03_03-2024_ballot_measures_desc.csv", show_col_types = FALSE) %>%
 ::: {.callout-warning}
 March 3, 2024 2:15 PM local time
 
-It has [come to my attention](https://carfree.city/@scott/112034022686769771) that the scraped data were not 100% complete. The SF Chronicle has posted some endorsements on Ballot Measures E and F that are not included in this analysis. Thanks to Scott for noticing this. As of this moment, I have manually verified and added these to the table.
+It has [come to my attention](https://carfree.city/@scott/112034022686769771) that the scraped data were not 100% complete. The SF Chronicle has posted some endorsements on Ballot Measures E and F that were not included in this analysis. Thanks to Scott for noticing this. As of this moment, I have manually verified and added these to the table.
 :::
 
 
@@ -182,9 +182,9 @@ Generally speaking, the agglomerative coefficient of a clustering analysis descr
 
 Very tellingly, we see three broad clusters:
 
- - On the left (in red), the fist cluster contains heavy hitters like the San Francisco Chronicle. It also contains the SF Republican Party, many neighborhood Democratic Clubs, and [GrowSF](https://growsf.org/), a nominally non-partisan and [well-funded](https://missionlocal.org/2024/02/explore-big-money-san-francisco-growsf-togethersf-neighbors-larsen-moritz-tan-web/) local 501(c)(4) political advocacy group.
- - Next, in the middle (in blue), this cluster is defined by SPUR and the YIMBY Action / Sierra Club / SF League of Conservation Voters (the latter three having identical ballot measure endorsements).
- - On the right, in green, the largest cluster (in terms or organizations) is defined by the Harvey Milk LGBTQ Democratic Club, and the San Francisco Democratic Party.
+ - On the left (in red), the fist cluster is the largest cluster (in terms of number of organizations). It contains some heavy hitters, like the San Francisco Chronicle, the Harvey Milk LGBTQ Democratic Club, and the San Francisco Democratic Party.  
+ - Next, in the middle (in green), this cluster is defined by SPUR and the YIMBY Action / Sierra Club / SF League of Conservation Voters (the latter three having identical ballot measure endorsements).
+ - On the right (in blue) is the cluster defined by the SF Republican Party. It also contains many low-distance neighborhood Democratic Clubs, and [GrowSF](https://growsf.org/), a nominally non-partisan and [well-funded](https://missionlocal.org/2024/02/explore-big-money-san-francisco-growsf-togethersf-neighbors-larsen-moritz-tan-web/) local 501(c)(4) political advocacy group.
 
 #### Political organization distance heat map
 I can also make a heat map of the clustering distance, or dissimilarity.
@@ -232,9 +232,12 @@ DT::datatable(unq_org_dist_tbl,
 
 Some notable large-distance pairs jump out, like:
 
- - Harvey Milk LGBTQ Democratic Club vs Chinese American Democratic Club (distance = 5.18)
- - SF Labor Council vs Chinese American Democratic Club (distance = 5.05)
- - Green Party (SF) vs SF Housing Action Coalition (distance = 4.35)
+ - Green Party (SF) vs SF Housing Action Coalition (distance = 4.3)
+ - The Green Party (SF) versus the middle cluster (Sierra Club, YIMBY Action, SF League of Conservation Voters) (distance = 4.11)
+ - Harvey Milk LGBTQ Democratic Club vs Chinese American Democratic Club and the United Democratic Club (distance = 2.89)
+ - SF Labor Council vs Chinese American Democratic Club (distance = 2.75)
+
+The least-distant org to the SF Republican Party (aside from itself) is GrowSF (distance = 0.238)
 
 ## Conclusions
 We can see from a reasonably well-fitting categorical clustering model that many political organizations have high similarity with the SF Republican Party's positions on ballot measures, despite having "Democratic" in their name. This result supports the idea that an empirical approach can reveal more about the character of an organization that the words in its name.
