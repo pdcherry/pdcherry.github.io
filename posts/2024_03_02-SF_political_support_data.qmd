@@ -1,0 +1,165 @@
+---
+title: "San Francisco political support data shows true alignment"
+author: "Patrick Cherry"
+date: "2024-03-02"
+categories:
+  - politics
+image: "2024_03_02-San_Francisco_and_Bay.jpg"
+format:
+  html:
+    df-print: kable
+execute:
+  freeze: true
+  echo: FALSE
+editor_options: 
+  chunk_output_type: inline
+---
+```{r}
+caption_def <- "2024-03-02 SF Political Alignment. by Patrick Cherry"
+```
+
+# Introduction
+The saying goes "all politics are local," and San Francisco is no exception.
+
+## Notes on approach
+The website [sfendorsements.com](https://sfendorsements.com/) has collected and cataloged many of the city's politically active groups (often Political Action Committees, or PACs) positions on ballot measures and election races for local positions. I hypothesize that these can be used to deduce the true alignment of these organizations.
+
+Peter Xu has been nice enough to [make the code available](https://gitlab.com/peterxu/sf-endorsements) for sfendorsements.com, and hosts the data in a [google sheet](https://docs.google.com/spreadsheets/d/1f3cGgXjI912nA8e1_iTlEhJ7XpxjpSKZdT7wX3ryztg/edit#gid=1545354255) that we can easily import for analysis. Marvelous!
+
+```{r, setup, echo = FALSE, message = FALSE}
+library(readr)                  # for reading and writing csvs
+library(fs)                     # for filesystem navigation in R
+library(dplyr)                  # for dataframe manipulation
+library(googlesheets4)          # for importing data directly from google sheets
+library(kableExtra)
+library(corrr)                  # for tidy correlation matrices
+library(nomclust)
+library(tree)
+library(tidyr)                  # for dataframe group nesting and manipulation
+library(purrr)                  # for functional programming, including on nested dataframes
+library(stringr)                # for efficient string manipulation
+library(magrittr)               # for enhanced pipes
+library(broom)                  # for model manipulation
+library(forcats)                # for factor manipulation
+library(ggplot2)                # for additional plotting features
+theme_set(theme_bw())           # set the default ggplot theme to be clear & cartooney
+```
+
+## Import and tidy data
+```{r, message = FALSE}
+endorsements_import <- googlesheets4::read_sheet(ss = "1f3cGgXjI912nA8e1_iTlEhJ7XpxjpSKZdT7wX3ryztg",
+                                                 sheet = "Endorsements",
+                                                 col_types = "c") %>%
+  select(!Instructions)
+  
+endorsements_tidy <- endorsements_import %>%
+  pivot_longer(cols = !1, names_to = "names") %>%
+  pivot_wider(id_cols = names, names_from = 1) %>%
+  type_convert()
+
+slice_head(endorsements_import, n = 5) %>% select(1:3, 5)
+```
+
+Great, the data are now tidy, where each row is an observation (a political group), and each column is a variable (race / measure).
+
+```{r, include = FALSE, eval = FALSE}
+write_csv(endorsements_tidy, "2024_03_02-SF_endorsements_tidy.csv")
+write_csv(endorsements_import, "2024_03_02-SF_endorsements_import.csv")
+```
+
+## Analyze organizations by ballot measures
+### What are the propositions?
+
+| Prop name | SF Elections link                                                                                               | Prop description                                                                                                                                                                                                                                                                   |
+|-----------|-----------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| propA     | [link](https://voterguide.sfelections.org/en/muni-reliability-and-street-safety-bond)                                   | Authorize issuing $400 million in bonds and levy a $1/$10,000 property tax until 2050 (not increasing property taxes: this is offset by other bonds are expiring) for Muni and street safety improvements                                                                          |
+| propB     | [link](https://voterguide.sfelections.org/en/building-inspection-commission)                                            | Change the appointment process for the Department of Building Inspections so that the mayor directly appoints the Director (instead of a 7-person DBI Commission) and the 7-person Commissions members are a bit more flexibly-appointed by the mayor and the Board of Supervisors |
+| propC     | [link](https://voterguide.sfelections.org/en/recall-timelines-and-vacancy-appointments)                                 | Limit recalls so that voters can only start a recall petition at least 12 months after start of term and 12 months before the next election (rather than 6 months for each right now), and prevents appointed replacements from running for election                               |
+| propD     | [link](https://voterguide.sfelections.org/en/office-victim-and-witness-rights-legal-services-domestic-violence-victims) | Create an office of Victim and Witness Rights to provide or coordinate existing services for victims and witnesses of all crimes, and provide free legal services for domestic violence victims in particular                                                                      |
+| propE     | [link](https://voterguide.sfelections.org/en/behested-payments)                                                         | Prevent Board of Supervisors members from requesting donations to government entities or non-profits ("behested payments") from contractors whose business the Board approved                                                                                                      |
+| propF     | [link](https://voterguide.sfelections.org/en/refuse-collection-and-disposal)                                            | Change how garbage collection rates (prices) are set: change the 3-member Refuse Rate Board (which sets prices) to replace the City Controller with a Ratepayer Representative (a representative nominated by a ratepayers' rights nonprofit)                                      |
+| propG     | [link](https://voterguide.sfelections.org/en/public-health-emergency-leave)                                             | Require employers with 100+ employees to provide public health emergency leave of up to 80 hours per year during a public health emergency (declared by local/state officials or when Spare the Air air quality alerts are in effect)                                              |
+| propH     | [link](https://voterguide.sfelections.org/en/recall-measure-regarding-chesa-boudin)                                     | Recall Chesa Boudin, the District Attorney elected in 2019 and currently scheduled to serve through 2024                                                                                                                                                                           |
+
+```{r}
+prop_data <-
+  endorsements_tidy %>%
+  select(names, contains("prop")) %>%
+  mutate(across(!names, ~ as_factor(replace_na(.x, "No comment")) )) %>%
+  as.data.frame()
+
+rownames(prop_data) <- prop_data$names
+prop_data <- select(prop_data, !names)
+
+prop_clust <- nomclust(prop_data, measure = "of", prox = 100)
+prop_prox_quant <- as_tibble(as.data.frame(as.matrix(prop_clust$prox)), rownames = "org")
+```
+
+### Who is recommending what?
+```{r}
+contrast <- function(colour) {
+  out   <- rep("black", length(colour))
+  light <- farver::get_channel(colour, "l", space = "hcl")
+  out[light < 50] <- "white"
+  out
+}
+autocontrast <- aes(colour = after_scale(contrast(fill)))
+```
+
+```{r, warning = FALSE}
+prop_yesno <-
+  endorsements_tidy %>%
+  select(names, contains("prop")) %>%
+  mutate("names" = fct_relevel(as_factor(names),prop_clust$dend$order.lab)) %>%
+  arrange(names) %>%
+  pivot_longer(cols = !names, names_to = "prop", values_to = "rec")
+
+prop_yesno_plot <- prop_yesno %>%
+  ggplot(aes(x = prop, y = fct_rev(names), fill = rec)) +
+  geom_tile() +
+  geom_text(aes(label = rec, !!!autocontrast), size = 2.5) +
+  scale_fill_viridis_d(option = "C", begin = .2, end = .8) +
+  scale_x_discrete(position = "top") +
+  labs(subtitle = "Summary of ballot measure endorsements by organization",
+  fill = "Endorsement",
+  caption = caption_def) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0, hjust = 0),
+        axis.title = element_blank())
+prop_yesno_plot
+```
+
+### Nominal clustering
+```{r}
+#| fig-width: 7
+#| fig-height: 8
+
+dend.plot(prop_clust, main = "Categorical heirarchical clustering based on proposition guidance")
+```
+
+
+```{r}
+#| fig-width: 8
+#| fig-height: 8
+prop_prox_quant_long <- pivot_longer(prop_prox_quant, !org, names_to = "org2", values_to = "proximity") %>%
+  mutate(across(contains("org"), ~ fct_relevel(as_factor(.x),prop_clust$dend$order.lab)  ))
+  # remove dups
+  # mutate("ordered_pair" = map2(org, org2, ~ paste( sort(c(.x, .y), method = "shell"), sep = "_") )) %>%
+  # mutate("n_occ" = row_number(), .by = c(ordered_pair)) %>%
+  # filter(n_occ <= 1) %>%
+  # #distinct(ordered_pair, .keep_all = TRUE) %>%
+  # select(!ordered_pair)
+
+prop_prox_quant_plot <- prop_prox_quant_long %>%
+  ggplot(aes(x = org, y = fct_rev(org2), fill = proximity)) +
+  geom_tile() +
+  scale_fill_viridis_c() +
+  labs(subtitle = "Dendrogram distance of SF political organizations by ballot measures",
+       fill = "Distance",
+       caption = caption_def) +
+  theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1),
+        axis.title = element_blank())
+prop_prox_quant_plot
+```
+
+
+
