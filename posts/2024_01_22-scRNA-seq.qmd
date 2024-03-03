@@ -21,6 +21,7 @@ library(readr)                      # for reading and writing csvs
 library(readxl)                     # for reading excel files
 library(stringr)                    # for efficient string manipulation
 library(Seurat)                     # for scRNA-seq data analysis
+library(DoubletFinder)              # for identifying doublets by simulation
 library(gprofiler2)                 # for high-throughput GO analysis
 #library(pcaExplorer)                # for high-throughput GO analysis
 library(ggplot2)                    # for additional plotting features
@@ -106,7 +107,6 @@ features_by_counts_scatter
 <!--             start = c(K = 10000, Vm = 6000))) -->
 <!-- ``` -->
 
-
 ```{r}
 features_by_counts_scatter + scale_x_log10() + scale_y_log10()
 ```
@@ -118,49 +118,51 @@ The log-log transformed axis plot shows:
  - There is still some curve to the line, meaning the relationship is more trancendental (not simply a power-law, like polynomial).
 
 ## Filter on feature count
-I am going to keep droplets ("cells") with 1100 features or fewer
-```{r}
-koala_filtered <- subset(koala, nFeature_RNA <= 1100)
-```
+When doing 'by-eye' filtering, I would set feature or count cut-offs here. But becuase I'm going to use `DoubletFinder`, let's hold off until after running the doublet finder analysis.
 
-Let's quickly confirm that the filtering changed the number of features throughout the Seurat object by using Seurat size commands to query the number of observations in the pre-filter and post-filter Seurat objects:
-```{r}
-length(koala$orig.ident); length(koala_filtered$orig.ident)
-```
+<!-- I am going to keep droplets ("cells") with 1100 features or fewer -->
+<!-- ```{r} -->
+<!-- koala_filtered <- subset(koala, nFeature_RNA <= 1100) -->
+<!-- ``` -->
 
-The feature count decreased from `r length(koala$orig.ident)` to `r length(koala_filtered$orig.ident)` upon filtering.
+<!-- Let's quickly confirm that the filtering changed the number of features throughout the Seurat object by using Seurat size commands to query the number of observations in the pre-filter and post-filter Seurat objects: -->
+<!-- ```{r} -->
+<!-- length(koala$orig.ident); length(koala_filtered$orig.ident) -->
+<!-- ``` -->
 
-(The `orig.ident` matrix within the Seurat object stores the cell metadata, and counting its number of entries can tell us number of unique observations.)
+<!-- The feature count decreased from `r length(koala$orig.ident)` to `r length(koala_filtered$orig.ident)` upon filtering. -->
 
-```{r}
-head(koala_filtered$orig.ident)
-```
+<!-- (The `orig.ident` matrix within the Seurat object stores the cell metadata, and counting its number of entries can tell us number of unique observations.) -->
 
-### Features
-```{r}
-VlnPlot(koala_filtered, features = c("nCount_RNA", "nFeature_RNA"), pt.size = .1)
-```
+<!-- ```{r} -->
+<!-- head(koala_filtered$orig.ident) -->
+<!-- ``` -->
 
-Post filtering, the RNA count plot looks more typical, with one major "peak" and a long tail. The features plot looks fairly evenly distributed because of the filtering cut off so close to the "peak" of the distribution, but I hypothesize it was necessary due to the hypothesized doublet peak right at 2000 features per droplet right near by.
+<!-- ### Features -->
+<!-- ```{r} -->
+<!-- VlnPlot(koala_filtered, features = c("nCount_RNA", "nFeature_RNA"), pt.size = .1) -->
+<!-- ``` -->
 
-```{r, warning = FALSE}
-features_by_counts_scatter_table <- bind_rows(koala_filtered$nCount_RNA,
-                                              koala_filtered$nFeature_RNA) %>%
-  t() %>%
-  as_tibble() %>%
-  dplyr::rename("nCount_RNA" = 1, "nFeature_RNA" = 2)
+<!-- Post filtering, the RNA count plot looks more typical, with one major "peak" and a long tail. The features plot looks fairly evenly distributed because of the filtering cut off so close to the "peak" of the distribution, but I hypothesize it was necessary due to the hypothesized doublet peak right at 2000 features per droplet right near by. -->
 
-features_by_counts_scatter <- FeatureScatter(
-  koala_filtered, feature1 = "nCount_RNA", feature2 = "nFeature_RNA") #+
-  # stat_smooth(formula = "y ~ x*log(x)", method = glm) +
-  # stat_smooth(formula = "y ~ log(x)", method = glm, color = "yellow") +
-  # geom_smooth(formula = y ~ (Vm * x)/(K + x),
-  #             #data = features_by_counts_scatter_table,
-  #             method = "nls", color = "green", se = FALSE,
-  #             method.args = list(start = c(K = 10000, Vm = 6000)))
+<!-- ```{r, warning = FALSE} -->
+<!-- features_by_counts_scatter_table <- bind_rows(koala_filtered$nCount_RNA, -->
+<!--                                               koala_filtered$nFeature_RNA) %>% -->
+<!--   t() %>% -->
+<!--   as_tibble() %>% -->
+<!--   dplyr::rename("nCount_RNA" = 1, "nFeature_RNA" = 2) -->
 
-features_by_counts_scatter
-```
+<!-- features_by_counts_scatter <- FeatureScatter( -->
+<!--   koala_filtered, feature1 = "nCount_RNA", feature2 = "nFeature_RNA") #+ -->
+<!--   # stat_smooth(formula = "y ~ x*log(x)", method = glm) + -->
+<!--   # stat_smooth(formula = "y ~ log(x)", method = glm, color = "yellow") + -->
+<!--   # geom_smooth(formula = y ~ (Vm * x)/(K + x), -->
+<!--   #             #data = features_by_counts_scatter_table, -->
+<!--   #             method = "nls", color = "green", se = FALSE, -->
+<!--   #             method.args = list(start = c(K = 10000, Vm = 6000))) -->
+
+<!-- features_by_counts_scatter -->
+<!-- ``` -->
 
 # Initial Analysis
 ## Normalization
@@ -264,10 +266,30 @@ koala_umap <- RunUMAP(koala_clusters, dims = 1:10)
 (koala_umap_plot <- DimPlot(koala_umap, reduction = 'umap'))
 ```
 
-```{r, eval = FALSE, include = FALSE}
+```{r}
+#| eval = FALSE
+#| include = FALSE
 ggsave("koala_filtered_umap_plot.png", koala_umap_plot,
        width = 6, height = 4, dpi = 320,)
 ```
+
+## `DoubletFinder` doublet removal
+```{r}
+#| eval = TRUE
+#| echo = TRUE
+#| output = FALSE
+
+koala_umap_psweep <- paramSweep(koala_umap, PCs = 1:10, sct = FALSE)
+```
+
+```{r}
+#| fig-cap: "Doublet Finder plot of y versus x..."
+#| fig-alt: "Doublet Finder plot of y versus x..."
+koala_umap_psweep_stats <- summarizeSweep(koala_umap_psweep, GT = FALSE)
+koala_umap_psweep_p.k <- find.pK(koala_umap_psweep_stats)
+```
+
+
 
 ## Identify cluster biomarkers
 ### Cluster 3
@@ -316,7 +338,6 @@ go_query_fun <- function(gene_name_vector){
 ```{r}
 koala_umap_markers_10_per_nest_go_ano <- koala_umap_markers_10_per_nest %>% 
   mutate("go_table" = map(data, go_query_fun))
-koala_umap_markers_10_per_nest_go_ano
 ```
 ```{r}
 koala_umap_markers_10_go_df <- koala_umap_markers_10_per_nest_go_ano %>%
@@ -329,7 +350,7 @@ koala_umap_markers_10_go_df <- koala_umap_markers_10_per_nest_go_ano %>%
 head(koala_umap_markers_10_go_df)
 ```
 
-```{r, eval = FALSE}
+```{r, eval = FALSE, include = FALSE}
 write_csv(koala_umap_markers_10_go_df, "koala_filtered_umap_markers_10_go_df.csv")
 ```
 
@@ -351,14 +372,12 @@ koala_umap_markers_10_per_nest <- koala_umap_markers_10_per_cluster %>%
   dplyr::select(gene) %>%
   nest() %>%
   mutate(data = as.list(map(data, ~.x[[1]] )))
-koala_umap_markers_10_per_nest
 ```
 
 ### Run the functon in df env
 ```{r}
 koala_umap_markers_10_per_nest_go_ano <- koala_umap_markers_10_per_nest %>% 
   mutate("go_table" = map(data, go_query_fun))
-koala_umap_markers_10_per_nest_go_ano
 ```
 ```{r}
 koala_umap_2way_markers_10_go_df <- koala_umap_markers_10_per_nest_go_ano %>%
@@ -440,7 +459,7 @@ marker_cell_types_analysis <- marker_check %>%
   arrange(desc(n_type)) %>%
   dplyr::select(c("cell_type", "parent", "in_cds", "n_type", "n_cds")) %>%
   distinct()
-marker_cell_types_analysis
+slice_head(marker_cell_types_analysis, n = 10)
 ```
 
 ```{r, eval = FALSE}
@@ -549,7 +568,7 @@ ggsave("mmBrain_markers_check_plot.png", marker_check_plot, width = 10, height =
 Basically, this is a really big model.
 
 ### Train the classifier
-```{r}
+```{r, eval = FALSE, include = FALSE}
 mmBrain_classifier <- train_cell_classifier(cds = koala_umap_cds,
                                             marker_file = marker_file_path,
                                             db = org.Mm.eg.db,
@@ -558,15 +577,14 @@ mmBrain_classifier <- train_cell_classifier(cds = koala_umap_cds,
                                             marker_file_gene_id_type = "SYMBOL")
 ```
 
-```{r}
-saveRDS(mmBrain_classifier, "2023_05_25-mmBrain_trained_classified.Rds")
+```{r, eval = FALSE, include = FALSE}
+#saveRDS(mmBrain_classifier, "2023_05_25-mmBrain_trained_classified.Rds")
 ```
 
-```{r, eval = FALSE}
-# in case training doesn't work this round
-# mmBrain_classifier <- readRDS("2023_05_25-mmBrain_trained_classified.Rds")
+```{r, eval = TRUE}
+# import previoously trained classifier
+mmBrain_classifier <- readRDS("../../pdcherry_github_data/scRNAseq/2023_06_03-13_cell_def_mmBrain_classifier.Rds")
 ```
-
 
 ### Perform garnett classify
 ```{r, warning = FALSE}
@@ -600,8 +618,9 @@ koala_features_classified_df <- inner_join(
 
 ```{r}
 classified_umap_plot <- ggplot(koala_features_classified_df) +
-  geom_point(aes(x = UMAP_1, y = UMAP_2, color = cluster_ext_type)) +
-  theme_bw()
+  geom_point(aes(x = umap_1, y = umap_2, color = cluster_ext_type), alpha = 0.5) +
+  theme_bw() +
+  scale_color_viridis_d(option = "H")
 classified_umap_plot
 ```
 
@@ -610,8 +629,9 @@ classified_umap_drop_unknowns_plot <-
   koala_features_classified_df %>%
   filter(cluster_ext_type != "Unknown") %>%
   ggplot() +
-  geom_point(aes(x = UMAP_1, y = UMAP_2, color = cluster_ext_type)) +
-  theme_bw()
+  geom_point(aes(x = umap_1, y = umap_2, color = cluster_ext_type), alpha = 0.5) +
+  theme_bw() +
+  scale_color_viridis_d(option = "H")
 classified_umap_drop_unknowns_plot
 ```
 
@@ -620,8 +640,9 @@ classified_umap_drop_unknowns_plot <-
   koala_features_classified_df %>%
   filter(cell_type != "Unknown") %>%
   ggplot() +
-  geom_point(aes(x = UMAP_1, y = UMAP_2, color = cell_type)) +
-  theme_bw()
+  geom_point(aes(x = umap_1, y = umap_2, color = cell_type), alpha = 0.5) +
+  theme_bw() +
+  scale_color_viridis_d(option = "H")
 classified_umap_drop_unknowns_plot
 ```
 
