@@ -1,7 +1,7 @@
 project:
   type: website
   output-dir: docs
-  pre-render: knit_resume_to_md.r
+#  pre-render: knit_resume_to_md.r
   render:
     - "*.qmd"
     - "*.md"
