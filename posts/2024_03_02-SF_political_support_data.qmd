@@ -31,7 +31,9 @@ This dynamic causes practically republican organizations to outwardly re-code an
 ## Notes on approach
 The website [sfendorsements.com](https://sfendorsements.com/) has collected and cataloged many of the city's politically active groups' (often Political Action Committees, or PACs) positions on ballot measures and election races for local positions. I hypothesize that these can be used to deduce the true alignment of these organizations.
 
-Peter Xu has been nice enough to [make the code available](https://gitlab.com/peterxu/sf-endorsements) for sfendorsements.com, and hosts the data in a [google sheet](https://docs.google.com/spreadsheets/d/1f3cGgXjI912nA8e1_iTlEhJ7XpxjpSKZdT7wX3ryztg/edit#gid=1545354255) that we can easily import for analysis. Marvelous!
+Peter Xu [make the code available](https://gitlab.com/peterxu/sf-endorsements), and has has previously made [google sheets](https://docs.google.com/spreadsheets/d/1f3cGgXjI912nA8e1_iTlEhJ7XpxjpSKZdT7wX3ryztg/edit#gid=1545354255) avaialbe for the endorsement data, but those are for 2022.
+
+For this analysis, I will scrape the 2024 data, tidy it up, and analyze it.
 
 ```{r, setup, echo = FALSE, message = FALSE}
 library(readr)                  # for reading and writing csvs
