@@ -228,4 +228,4 @@ Some notable large-distance pairs jump out, like:
  - Green Party (SF) vs SF Housing Action Coalition (distance = 4.35)
 
 ## Conclusions
-We can see from a reasonably well-fitting categorical clustering model that many political organizations have high similarity with the SF Republican Party' positions on ballot measures, despite having "Democratic" in their name. This result supports the idea that a empirical approach can reveal more about the character of an organization that the words in it's name.
+We can see from a reasonably well-fitting categorical clustering model that many political organizations have high similarity with the SF Republican Party's positions on ballot measures, despite having "Democratic" in their name. This result supports the idea that a empirical approach can reveal more about the character of an organization that the words in it's name.
