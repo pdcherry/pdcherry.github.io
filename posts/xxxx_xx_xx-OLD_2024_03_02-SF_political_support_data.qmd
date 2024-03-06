@@ -56,7 +56,7 @@ theme_set(theme_bw())           # set the default ggplot theme to be clear & car
 
 ## Import and tidy data
 ```{r eval = FALSE}
-source(path(exp_imp_path, "2024_03_02-SF_political_support_scrape_script.R"))
+source("2024_03_02-SF_political_support_scrape_script.R")
 ```
 
 <!-- ```{r, message = FALSE} -->
@@ -74,8 +74,7 @@ source(path(exp_imp_path, "2024_03_02-SF_political_support_scrape_script.R"))
 <!-- ``` -->
 
 ```{r message = FALSE}
-endorsements_import <- read_csv(path(exp_imp_path,"2024_03_03-props_table.csv"),
-                                show_col_types = FALSE)
+endorsements_import <- read_csv("2024_03_03-props_table.csv", show_col_types = FALSE)
 
 endorsements_tidy <- endorsements_import %>%
   mutate(across(everything(), ~ enc2utf8(.x)))
@@ -87,8 +86,8 @@ endorsements_tidy <- endorsements_import %>%
 Great, the data are now tidy, where each row is an observation (a political group), and each column is a variable (race / measure).
 
 ```{r include = FALSE, eval = FALSE}
-write_csv(endorsements_tidy, path(exp_imp_path, "2024_03_02-SF_endorsements_tidy.csv"), na = "")
-write_csv(former_endorsements_import, path(exp_imp_path, "2024_03_02-2022_SF_endorsements_import.csv"), na = "")
+write_csv(endorsements_tidy, "2024_03_02-SF_endorsements_tidy.csv", na = "")
+write_csv(former_endorsements_import, "2024_03_02-2022_SF_endorsements_import.csv", na = "")
 ```
 
 ### What are the propositions?
@@ -96,8 +95,7 @@ write_csv(former_endorsements_import, path(exp_imp_path, "2024_03_02-2022_SF_end
 #| label: tbl-props
 #| tbl-cap: "Table of proposition names, titles, and descriptive summary"
 
-read_csv(path(exp_imp_path, "2024_03_03-2024_ballot_measures_desc.csv"),
-         show_col_types = FALSE) %>%
+read_csv("2024_03_03-2024_ballot_measures_desc.csv", show_col_types = FALSE) %>%
   ## replace any non UTF-8 by ''
   ## non-UTF-8 characters may have been introduced when I was copying text from SF's website
   mutate(across(everything(), ~ iconv(.x, "UTF-8", "UTF-8",sub=''))) %>%
@@ -257,165 +255,5 @@ Some notable large-distance pairs jump out, like:
 
 The least-distant org to the SF Republican Party (aside from itself) is GrowSF (distance = 0.238)
 
-### Remarks on clustering by ballot measure
-We can see from a reasonably well-fitting categorical clustering model that many political organizations have high similarity with the SF Republican Party's positions on ballot measures, despite having "Democratic" in their name. This result supports the idea that an empirical approach can reveal more about the character of an organization that the words in its name.
-
-## Candidate Endorsement Analysis
-```{r message = FALSE}
-candidates_import <- read_csv(path(exp_imp_path, "2024_03_03-cand_table.csv"),
-                                show_col_types = FALSE)
-
-candidates_tidy <- candidates_import %>%
-  mutate("President" = as.character(President),
-         across(everything(), ~ enc2utf8(.x)),
-         across(!Organization, ~ as_factor(.x)))
-```
-
-Great, the data are now tidy, where each row is an observation (a political group), and each column is a variable (race).
-
-```{r include = FALSE, eval = FALSE}
-write_csv(candidates_tidy, path(exp_imp_path, "2024_03_02-SF_candidates_tidy.csv"), na = "")
-```
-
-### Who is recommending whom?
-```{r precompute clustering order}
-candidate_data <-
-  candidates_tidy %>%
-  mutate(across(!Organization, ~ replace_na(
-                                            as.character(.x),
-                                            "No comment")) ) %>%
-  as.data.frame()
-
-rownames(candidate_data) <- candidate_data$Organization
-candidate_data <- select(candidate_data, !Organization)
-
-candidate_clust <- nomclust(candidate_data, measure = "of", prox = TRUE)
-candidate_prox_quant <- as_tibble(as.data.frame(as.matrix(candidate_clust$prox)), rownames = "org")
-```
-
-```{r}
-#| label: tbl-cand-recs
-#| tbl-cap: "Table of organization endorsements of candidates for races"
-
-candidates_display <- candidates_tidy %>%
-  mutate("Organization" = fct_relevel(as_factor(Organization),candidate_clust$dend$order.lab)) %>%
-  arrange(Organization) %>%
-  mutate(across(everything(), ~ as.character(.x)),
-         across(everything(), ~ replace_na(.x, "")))
-  ## replace any non UTF-8 by ''
-  ## non-UTF-8 characters may have been introduced when I was copying text from SF's website
-  #mutate(across(everything(), ~ iconv(.x, "UTF-8", "UTF-8",sub=''))) %>%
-
-kable(candidates_display, format = "html", escape = FALSE)
-```
-
-I've cheated again and pre-arranged this table of candidate endorsements by the clustering order. It makes it pretty clear there are a few block. I'll also do a distance heat map below (which doesn't say the endorsement names, but shows similarity more clearly.)
-
-```{r}
-#| label: tbl-cand-recs-uniq-count
-#| tbl-cap: "Unique options per race"
-
-candidates_display %>%
-  summarize(across(.cols = !Organization,
-                   .fns = list("number of candidates" = ~ n_distinct(.x)),
-                   .names = "{.col}")) %>%
-  kable(format = "html", escape = FALSE)
-```
-
-Note that races have one to four options among the endorsements made by these political organizations. This is different than the ballot measures (where options were Yes / No / NA). This increase in the number of levels of each factor can affect the clustering.
-
-```{r}
-#| label: tbl-cand-recs-na-count
-#| tbl-cap: "Races where one or more organizations did not endorse anyone (binary: Yes / No)"
-
-candidates_display %>%
-  summarize(across(.cols = !Organization,
-                   .fns = list("contains an NA" = ~ if_else(
-                     sum((.x == "")) >0, "Yes", "No")),
-                   .names = "{.col}")) %>%
-  kable(format = "html", escape = FALSE)
-```
-
-Also note that, in every race, there is one option that is the organization declining to endorse anyone. Thus, the number of _candidates_ endorsed is `n - 1` the value represented in the table.
-
-This means that no organization made any endorsements for President. This fact is not true of any other race.
-
-### Nominal clustering
-Very tellingly, we see two broad clusters and two narrow clusters:
-
-```{r}
-#| fig-width: 8
-#| fig-height: 8
-
-dend.plot(candidate_clust,
-          main = "Categorical heirarchical clustering based on candidate endorsement"); mtext(side = 1,
-      line = 2, at = 20, caption_def)
-```
-
- - On the left (in red), the fist cluster is contains some heavy hitters, like the San Francisco Chronicle and the San Francisco Bay Guardian
- - Next, in the middle-left (in green), this large cluster contains some notable members, like the San Francisco Democratic Party, the Harvey Milk LGBTQ Democratic Club, GrowSF, and the Sierra Club.
- - On the right (in cyan and purple) are the two clusters for the SF Young Republicans and the SF Republican Party. It is curious these two organizations cluster apart (their fork is pretty high in distance), but looking to the endorsements table can shed light on why: their only common endorsement is for Yvette Corkrean for State Senate 11, and all others are disparate. All these endorsements are so divergent from the other organizations as to earn them their own clusters.
-
-#### Political organization distance heat map
-I can also make a heat map of the clustering distance, or dissimilarity.
-
-```{r}
-#| fig-width: 7.5
-#| fig-height: 7
-
-cand_prox_quant_long <- pivot_longer(candidate_prox_quant, !org, names_to = "org2", values_to = "proximity") %>%
-  mutate(across(contains("org"), ~ fct_relevel(as_factor(.x),candidate_clust$dend$order.lab)  ))
-
-prop_prox_quant_plot <- cand_prox_quant_long %>%
-  ggplot(aes(x = org, y = fct_rev(org2), fill = proximity)) +
-  geom_tile() +
-  scale_fill_viridis_c() +
-  labs(subtitle = "Dendrogram distance of SF political org. by candidate endorsements",
-       fill = "Distance",
-       caption = caption_def) +
-  theme(axis.text.x = element_text(angle = 90, vjust = .5, hjust = 1),
-        axis.title = element_blank())
-prop_prox_quant_plot
-```
-
-For the two large clusters in the dendrogram, this heat maps show two large squares of low-distance coloring (purple to dark blue) along the diagonal downward and to the right. These square blocks of proximity indicate clusters similarity among the organizations.
-
-Interesting, there is visually a third square of low distance that suggests the YIMBY Action, Sierra Club, and SF Housing Action Coalition (and cluster relatives) are in a slightly different set than the SF Democratic Party, The Harvey Milk LGBTQ Democratic Club, and GrowSF.
-
-Also clearly shown on this heatmap is how divergent the SF Young Republicans and the SF Republican Party are from any other organization analyzed. For example, the NOE Valley Democratic Club is closer (in clustering distance) to the SF Young Republicans and the SF Republican Party than the latter two are to each other.
-
-#### Political organization distance table (for candidate recs)
-Use the table below to filer, sort, and rank the clustering model's distance to make your own comparisons.
-
-```{r}
-#| label: tbl-org-cand-dis
-#| tbl-cap: "Table of unique political organization pairs, sorted by clustering proximity on endorsement"
-
-unq_cand_org_dist_tbl <- cand_prox_quant_long %>%
-  arrange(desc(proximity)) %>%
-  rowwise() %>%
-  mutate("org_sort_pair_list" = map2(org, org2, ~ (sort(c(as.character(.x),
-                                                          as.character(.y))))),
-         "org_sort_pair_chr" = paste(org_sort_pair_list, collapse = "_"),
-         "proximity" = signif(proximity, digits = 3)) %>%
-  ungroup() %>%
-  arrange(org_sort_pair_chr) %>%
-  distinct(org_sort_pair_list, .keep_all = TRUE)
-
-DT::datatable(select(unq_cand_org_dist_tbl, !c("org_sort_pair_list", "org_sort_pair_chr")),
-         extensions = c('FixedColumns', "FixedHeader"),
-          options = list(scrollX = TRUE,
-                         paging = TRUE,
-                         fixedHeader = TRUE,
-                         fixedHeight = TRUE))
-```
-
-### Remarks on clustering by candidate endorsement
-The race endorsements data set contains more options in general, allowing each organization for vary significantly in its character. We see this born out in the clustering dendrogram with more divergent clusters than seen in the ballot measure analysis.
-
-While the candidate endorsement clustering didn't reveal any surprising similarities (in the author's opinion), it did show how divergent the SF Republican Party and the SF Young Republicans are from the rest of the organizations, in terms of candidate endorsements.
-
 ## Conclusions
-One weakness of this clustering analysis is that it weights all ballot measures and races as the same. For an individual voter, some topics and races may have more salience or effect, and this analysis cannot take that into account.
-
-Broadly, these result support the idea that an empirical approach can reveal more about the character of an organization that the words in its name, and that this analysis is useful for determining action-based political alignment.
+We can see from a reasonably well-fitting categorical clustering model that many political organizations have high similarity with the SF Republican Party's positions on ballot measures, despite having "Democratic" in their name. This result supports the idea that an empirical approach can reveal more about the character of an organization that the words in its name.
