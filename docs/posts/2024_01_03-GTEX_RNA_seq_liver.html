@@ -311,8 +311,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(AnnotationDbi)</span>
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(org.Hs.eg.db)</span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gage)</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pathview)</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gageData)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gageData)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(pathview)</span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(TFEA.ChIP)              <span class="co"># analyze transcription factor enrichment in a gene set</span></span>
 <span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(BiocParallel)           <span class="co"># speed up some parallelizeable processing</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="fu">register</span>(<span class="fu">MulticoreParam</span>(<span class="dv">4</span>))     <span class="co"># set core parallelization to 4 CPU cores</span></span>
@@ -324,7 +324,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Metadata (sample annotations)</h1>
 <p>Samples come from https://github.com/broadinstitute/gtex-v8/blob/master/data/GTEx_Analysis_v8_RNAseq_samples.txt, and have to be manually downloaded.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gtex_samples <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"../../GTEx_Analysis_v8_RNAseq_samples.txt"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>) <span class="sc">%&gt;%</span></span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>gtex_samples <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"../../GTEX-liver-parent-dir/GTEx_Analysis_v8_RNAseq_samples.txt"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"sample_id"</span> <span class="ot">=</span> <span class="fu">str_replace_all</span>(sample_id, <span class="st">"-"</span>, <span class="st">"</span><span class="sc">\\</span><span class="st">."</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
@@ -446,7 +446,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gunzip</span> <span class="pp">*</span>.gz</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rna_counts <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"../../bulk-gex_v8_rna-seq_GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct"</span>,</span>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rna_counts <span class="ot">&lt;-</span> <span class="fu">read.delim</span>(<span class="st">"../../GTEX-liver-parent-dir/bulk-gex_v8_rna-seq_GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct"</span>,</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                         <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">skip =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">column_to_rownames</span>(<span class="at">var =</span> <span class="st">"Name"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -951,7 +951,7 @@ Caused by warning in `min()`:
 17               -9.34             1.81    6.04e- 88 APOC1   apolipoprotein C1  
 18              -10.7              1.03    3.93e- 86 TF      transferrin        
 19               -7.63             1.10    5.78e- 85 CYP2D6  cytochrome P450 fa…
-20                4.33             2.05    6.70e- 84 AIF1L   allograft inflamma…</code></pre>
+20                4.33             2.05    6.71e- 84 AIF1L   allograft inflamma…</code></pre>
 </div>
 </div>
 <p>Checking in on genes and hypotheses:</p>
@@ -1054,45 +1054,45 @@ Caused by warning in `min()`:
 <span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="st">"p.geomean"</span>, <span class="st">"stat.mean"</span>, <span class="st">"p.val"</span>, <span class="st">"set.size"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                                         p.geomean stat.mean
-hsa00830 Retinol metabolism                           2.779302e-15 -9.570937
-hsa00982 Drug metabolism - cytochrome P450            1.480851e-13 -8.552116
-hsa00980 Metabolism of xenobiotics by cytochrome P450 3.742583e-12 -7.909573
-hsa00140 Steroid hormone biosynthesis                 7.829862e-12 -7.983659
+hsa00830 Retinol metabolism                           2.779301e-15 -9.570937
+hsa00982 Drug metabolism - cytochrome P450            1.480861e-13 -8.552114
+hsa00980 Metabolism of xenobiotics by cytochrome P450 3.742608e-12 -7.909572
+hsa00140 Steroid hormone biosynthesis                 7.829862e-12 -7.983658
 hsa00983 Drug metabolism - other enzymes              3.227821e-11 -7.785412
-hsa04610 Complement and coagulation cascades          1.590346e-10 -7.112879
-hsa00260 Glycine, serine and threonine metabolism     8.543084e-08 -6.071404
-hsa00053 Ascorbate and aldarate metabolism            3.398045e-07 -6.247136
-hsa04146 Peroxisome                                   3.456134e-07 -5.215038
-hsa00071 Fatty acid metabolism                        8.363970e-07 -5.220379
+hsa04610 Complement and coagulation cascades          1.590380e-10 -7.112876
+hsa00260 Glycine, serine and threonine metabolism     8.543085e-08 -6.071404
+hsa00053 Ascorbate and aldarate metabolism            3.398045e-07 -6.247135
+hsa04146 Peroxisome                                   3.456135e-07 -5.215038
+hsa00071 Fatty acid metabolism                        8.363971e-07 -5.220379
 hsa00040 Pentose and glucuronate interconversions     8.446235e-07 -5.659101
 hsa00860 Porphyrin and chlorophyll metabolism         3.474540e-06 -4.994513
 hsa00500 Starch and sucrose metabolism                5.047958e-06 -4.774060
 hsa00380 Tryptophan metabolism                        1.180799e-05 -4.535570
-hsa00280 Valine, leucine and isoleucine degradation   2.437705e-05 -4.277734
+hsa00280 Valine, leucine and isoleucine degradation   2.437706e-05 -4.277734
 hsa03320 PPAR signaling pathway                       4.831137e-05 -4.070571
-hsa04976 Bile secretion                               5.608401e-05 -4.037952
-hsa04975 Fat digestion and absorption                 8.538313e-05 -4.013194
+hsa04976 Bile secretion                               5.608400e-05 -4.037952
+hsa04975 Fat digestion and absorption                 8.538312e-05 -4.013194
 hsa00120 Primary bile acid biosynthesis               1.087369e-04 -4.465205
 hsa00591 Linoleic acid metabolism                     1.465698e-04 -4.016737
                                                              p.val set.size
-hsa00830 Retinol metabolism                           2.779302e-15       60
-hsa00982 Drug metabolism - cytochrome P450            1.480851e-13       68
-hsa00980 Metabolism of xenobiotics by cytochrome P450 3.742583e-12       66
+hsa00830 Retinol metabolism                           2.779301e-15       60
+hsa00982 Drug metabolism - cytochrome P450            1.480861e-13       68
+hsa00980 Metabolism of xenobiotics by cytochrome P450 3.742608e-12       66
 hsa00140 Steroid hormone biosynthesis                 7.829862e-12       52
 hsa00983 Drug metabolism - other enzymes              3.227821e-11       48
-hsa04610 Complement and coagulation cascades          1.590346e-10       69
-hsa00260 Glycine, serine and threonine metabolism     8.543084e-08       32
+hsa04610 Complement and coagulation cascades          1.590380e-10       69
+hsa00260 Glycine, serine and threonine metabolism     8.543085e-08       32
 hsa00053 Ascorbate and aldarate metabolism            3.398045e-07       22
-hsa04146 Peroxisome                                   3.456134e-07       78
-hsa00071 Fatty acid metabolism                        8.363970e-07       43
+hsa04146 Peroxisome                                   3.456135e-07       78
+hsa00071 Fatty acid metabolism                        8.363971e-07       43
 hsa00040 Pentose and glucuronate interconversions     8.446235e-07       28
 hsa00860 Porphyrin and chlorophyll metabolism         3.474540e-06       38
 hsa00500 Starch and sucrose metabolism                5.047958e-06       50
 hsa00380 Tryptophan metabolism                        1.180799e-05       42
-hsa00280 Valine, leucine and isoleucine degradation   2.437705e-05       44
+hsa00280 Valine, leucine and isoleucine degradation   2.437706e-05       44
 hsa03320 PPAR signaling pathway                       4.831137e-05       70
-hsa04976 Bile secretion                               5.608401e-05       70
-hsa04975 Fat digestion and absorption                 8.538313e-05       44
+hsa04976 Bile secretion                               5.608400e-05       70
+hsa04975 Fat digestion and absorption                 8.538312e-05       44
 hsa00120 Primary bile acid biosynthesis               1.087369e-04       16
 hsa00591 Linoleic acid metabolism                     1.465698e-04       28</code></pre>
 </div>
@@ -1103,67 +1103,67 @@ hsa00591 Linoleic acid metabolism                     1.465698e-04       28</cod
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(<span class="st">"p.geomean"</span>, <span class="st">"stat.mean"</span>, <span class="st">"p.val"</span>, <span class="st">"set.size"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                                            p.geomean stat.mean
-hsa04260 Cardiac muscle contraction                      4.226923e-05 4.0485435
-hsa04510 Focal adhesion                                  8.259292e-05 3.8042688
-hsa04020 Calcium signaling pathway                       4.162904e-04 3.3711847
-hsa04971 Gastric acid secretion                          4.992403e-04 3.3629267
-hsa04540 Gap junction                                    2.260177e-03 2.8795191
-hsa04512 ECM-receptor interaction                        1.063049e-02 2.3255222
-hsa00512 Mucin type O-Glycan biosynthesis                1.216786e-02 2.3178456
-hsa04310 Wnt signaling pathway                           1.365917e-02 2.2195968
-hsa04010 MAPK signaling pathway                          1.744611e-02 2.1151954
-hsa04740 Olfactory transduction                          1.772474e-02 2.1215169
-hsa04144 Endocytosis                                     1.777223e-02 2.1102663
-hsa04360 Axon guidance                                   2.267218e-02 2.0114316
-hsa04810 Regulation of actin cytoskeleton                2.364352e-02 1.9896259
-hsa04070 Phosphatidylinositol signaling system           4.524492e-02 1.7041613
-hsa04742 Taste transduction                              4.633911e-02 1.7021996
-hsa04666 Fc gamma R-mediated phagocytosis                5.200086e-02 1.6354382
-hsa00603 Glycosphingolipid biosynthesis - globo series   5.488970e-02 1.6593014
-hsa04916 Melanogenesis                                   6.589814e-02 1.5133803
-hsa04960 Aldosterone-regulated sodium reabsorption       7.526569e-02 1.4512416
-hsa04970 Salivary secretion                              7.787444e-02 1.4259650
-hsa04966 Collecting duct acid secretion                  9.503669e-02 1.3287755
-hsa04720 Long-term potentiation                          1.029612e-01 1.2717035
-hsa04722 Neurotrophin signaling pathway                  1.100257e-01 1.2305044
-hsa04012 ErbB signaling pathway                          1.306016e-01 1.1275055
-hsa00604 Glycosphingolipid biosynthesis - ganglio series 1.335755e-01 1.1341217
-hsa04730 Long-term depression                            1.385772e-01 1.0911743
-hsa04330 Notch signaling pathway                         1.424131e-01 1.0774613
-hsa04962 Vasopressin-regulated water reabsorption        1.465997e-01 1.0579484
-hsa03010 Ribosome                                        1.579659e-01 1.0084071
-hsa00562 Inositol phosphate metabolism                   1.619384e-01 0.9910218
+hsa04260 Cardiac muscle contraction                      4.226930e-05 4.0485431
+hsa04510 Focal adhesion                                  8.259308e-05 3.8042683
+hsa04020 Calcium signaling pathway                       4.162910e-04 3.3711842
+hsa04971 Gastric acid secretion                          4.992409e-04 3.3629263
+hsa04540 Gap junction                                    2.260180e-03 2.8795187
+hsa04512 ECM-receptor interaction                        1.063049e-02 2.3255219
+hsa00512 Mucin type O-Glycan biosynthesis                1.216787e-02 2.3178454
+hsa04310 Wnt signaling pathway                           1.365919e-02 2.2195964
+hsa04010 MAPK signaling pathway                          1.744613e-02 2.1151951
+hsa04740 Olfactory transduction                          1.772475e-02 2.1215165
+hsa04144 Endocytosis                                     1.777225e-02 2.1102659
+hsa04360 Axon guidance                                   2.267219e-02 2.0114313
+hsa04810 Regulation of actin cytoskeleton                2.364354e-02 1.9896256
+hsa04070 Phosphatidylinositol signaling system           4.524494e-02 1.7041610
+hsa04742 Taste transduction                              4.633914e-02 1.7021994
+hsa04666 Fc gamma R-mediated phagocytosis                5.200090e-02 1.6354378
+hsa00603 Glycosphingolipid biosynthesis - globo series   5.488971e-02 1.6593012
+hsa04916 Melanogenesis                                   6.589818e-02 1.5133800
+hsa04960 Aldosterone-regulated sodium reabsorption       7.526571e-02 1.4512414
+hsa04970 Salivary secretion                              7.787447e-02 1.4259647
+hsa04966 Collecting duct acid secretion                  9.503672e-02 1.3287753
+hsa04720 Long-term potentiation                          1.029613e-01 1.2717033
+hsa04722 Neurotrophin signaling pathway                  1.100258e-01 1.2305040
+hsa04012 ErbB signaling pathway                          1.306016e-01 1.1275052
+hsa00604 Glycosphingolipid biosynthesis - ganglio series 1.335755e-01 1.1341216
+hsa04730 Long-term depression                            1.385772e-01 1.0911741
+hsa04330 Notch signaling pathway                         1.424132e-01 1.0774610
+hsa04962 Vasopressin-regulated water reabsorption        1.465997e-01 1.0579483
+hsa03010 Ribosome                                        1.579660e-01 1.0084068
+hsa00562 Inositol phosphate metabolism                   1.619385e-01 0.9910216
                                                                 p.val set.size
-hsa04260 Cardiac muscle contraction                      4.226923e-05       76
-hsa04510 Focal adhesion                                  8.259292e-05      200
-hsa04020 Calcium signaling pathway                       4.162904e-04      176
-hsa04971 Gastric acid secretion                          4.992403e-04       73
-hsa04540 Gap junction                                    2.260177e-03       88
+hsa04260 Cardiac muscle contraction                      4.226930e-05       76
+hsa04510 Focal adhesion                                  8.259308e-05      200
+hsa04020 Calcium signaling pathway                       4.162910e-04      176
+hsa04971 Gastric acid secretion                          4.992409e-04       73
+hsa04540 Gap junction                                    2.260180e-03       88
 hsa04512 ECM-receptor interaction                        1.063049e-02       84
-hsa00512 Mucin type O-Glycan biosynthesis                1.216786e-02       30
-hsa04310 Wnt signaling pathway                           1.365917e-02      148
-hsa04010 MAPK signaling pathway                          1.744611e-02      262
-hsa04740 Olfactory transduction                          1.772474e-02       97
-hsa04144 Endocytosis                                     1.777223e-02      201
-hsa04360 Axon guidance                                   2.267218e-02      129
-hsa04810 Regulation of actin cytoskeleton                2.364352e-02      209
-hsa04070 Phosphatidylinositol signaling system           4.524492e-02       78
-hsa04742 Taste transduction                              4.633911e-02       43
-hsa04666 Fc gamma R-mediated phagocytosis                5.200086e-02       93
-hsa00603 Glycosphingolipid biosynthesis - globo series   5.488970e-02       14
-hsa04916 Melanogenesis                                   6.589814e-02       99
-hsa04960 Aldosterone-regulated sodium reabsorption       7.526569e-02       42
-hsa04970 Salivary secretion                              7.787444e-02       85
-hsa04966 Collecting duct acid secretion                  9.503669e-02       27
-hsa04720 Long-term potentiation                          1.029612e-01       69
-hsa04722 Neurotrophin signaling pathway                  1.100257e-01      127
+hsa00512 Mucin type O-Glycan biosynthesis                1.216787e-02       30
+hsa04310 Wnt signaling pathway                           1.365919e-02      148
+hsa04010 MAPK signaling pathway                          1.744613e-02      262
+hsa04740 Olfactory transduction                          1.772475e-02       97
+hsa04144 Endocytosis                                     1.777225e-02      201
+hsa04360 Axon guidance                                   2.267219e-02      129
+hsa04810 Regulation of actin cytoskeleton                2.364354e-02      209
+hsa04070 Phosphatidylinositol signaling system           4.524494e-02       78
+hsa04742 Taste transduction                              4.633914e-02       43
+hsa04666 Fc gamma R-mediated phagocytosis                5.200090e-02       93
+hsa00603 Glycosphingolipid biosynthesis - globo series   5.488971e-02       14
+hsa04916 Melanogenesis                                   6.589818e-02       99
+hsa04960 Aldosterone-regulated sodium reabsorption       7.526571e-02       42
+hsa04970 Salivary secretion                              7.787447e-02       85
+hsa04966 Collecting duct acid secretion                  9.503672e-02       27
+hsa04720 Long-term potentiation                          1.029613e-01       69
+hsa04722 Neurotrophin signaling pathway                  1.100258e-01      127
 hsa04012 ErbB signaling pathway                          1.306016e-01       87
 hsa00604 Glycosphingolipid biosynthesis - ganglio series 1.335755e-01       15
 hsa04730 Long-term depression                            1.385772e-01       68
-hsa04330 Notch signaling pathway                         1.424131e-01       47
+hsa04330 Notch signaling pathway                         1.424132e-01       47
 hsa04962 Vasopressin-regulated water reabsorption        1.465997e-01       43
-hsa03010 Ribosome                                        1.579659e-01       87
-hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</code></pre>
+hsa03010 Ribosome                                        1.579660e-01       87
+hsa00562 Inositol phosphate metabolism                   1.619385e-01       57</code></pre>
 </div>
 </div>
 <p>Note that the p-values for pathways down-regulated in the liver are less significant than those of pathways up-regulated, likely due to by high dispersion among the comparison tissues.</p>
@@ -1196,12 +1196,14 @@ hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define plotting function for applying later</span></span>
-<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a>plot_pathway <span class="ot">&lt;-</span> <span class="cf">function</span>(pid) {<span class="fu">pathview</span>(<span class="at">gene.data =</span> foldchanges,</span>
-<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">pathway.id =</span> pid, <span class="at">species =</span> <span class="st">"hsa"</span>, <span class="at">new.signature =</span> <span class="cn">FALSE</span>)}</span>
-<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a><span class="co"># plot multiple pathways (plots saved to disk and returns a throwaway list object)</span></span>
-<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">=</span> <span class="fu">sapply</span>(keggresids, plot_pathway)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">"./2024_01_03-GTEX_RNA_seq_liver/"</span>)</span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Define plotting function for applying later</span></span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>plot_pathway <span class="ot">&lt;-</span> <span class="cf">function</span>(pid) {<span class="fu">pathview</span>(<span class="at">gene.data =</span> foldchanges,</span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">pathway.id =</span> pid, <span class="at">species =</span> <span class="st">"hsa"</span>, <span class="at">new.signature =</span> <span class="cn">FALSE</span>)}</span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a><span class="co"># plot multiple pathways (plots saved to disk and returns a throwaway list object)</span></span>
+<span id="cb93-7"><a href="#cb93-7" aria-hidden="true" tabindex="-1"></a>tmp <span class="ot">=</span> <span class="fu">sapply</span>(keggresids, plot_pathway)</span>
+<span id="cb93-8"><a href="#cb93-8" aria-hidden="true" tabindex="-1"></a><span class="fu">setwd</span>(<span class="st">".."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Typically, expression heat maps use the color-blind-unfriendly and unintuitive red for up-regulated expression, and green for decreased expression.</p>
 <p>However, here, because I never inverted (multiplied by -1) the log2-fold-change values, green is for increased relative expression, and red is for decreased relative expression.</p>
@@ -1209,7 +1211,7 @@ hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</
 <h4 class="anchored" data-anchor-id="hsa00830-retinol-metabolism">hsa00830 Retinol metabolism</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="hsa00830.pathview.png" class="img-fluid figure-img"></p>
+<p><img src="2024_01_03-GTEX_RNA_seq_liver/hsa00830.pathview.png" class="img-fluid figure-img"></p>
 <figcaption>hsa00830 Retinol metabolism</figcaption>
 </figure>
 </div>
@@ -1218,7 +1220,7 @@ hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</
 <h4 class="anchored" data-anchor-id="hsa00982-drug-metabolism---cytochrome-p450">hsa00982 Drug metabolism - cytochrome P450</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="hsa00982.pathview.png" class="img-fluid figure-img"></p>
+<p><img src="2024_01_03-GTEX_RNA_seq_liver/hsa00982.pathview.png" class="img-fluid figure-img"></p>
 <figcaption>hsa00982 Drug metabolism - cytochrome P450</figcaption>
 </figure>
 </div>
@@ -1227,7 +1229,7 @@ hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</
 <h4 class="anchored" data-anchor-id="hsa00980-metabolism-of-xenobiotics-by-cytochrome-p450">hsa00980 Metabolism of xenobiotics by cytochrome P450</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="hsa00980.pathview.png" class="img-fluid figure-img"></p>
+<p><img src="2024_01_03-GTEX_RNA_seq_liver/hsa00980.pathview.png" class="img-fluid figure-img"></p>
 <figcaption>hsa00980 Metabolism of xenobiotics by cytochrome P450</figcaption>
 </figure>
 </div>
@@ -1236,7 +1238,7 @@ hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</
 <h4 class="anchored" data-anchor-id="hsa00983-drug-metabolism---other-enzymes">hsa00983 Drug metabolism - other enzymes</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="hsa00983.pathview.png" class="img-fluid figure-img"></p>
+<p><img src="2024_01_03-GTEX_RNA_seq_liver/hsa00983.pathview.png" class="img-fluid figure-img"></p>
 <figcaption>hsa00983 Drug metabolism - other enzymes</figcaption>
 </figure>
 </div>
@@ -1245,7 +1247,7 @@ hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</
 <h4 class="anchored" data-anchor-id="hsa00140-steroid-hormone-biosynthesis">hsa00140 Steroid hormone biosynthesis</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="hsa00140.pathview.png" class="img-fluid figure-img"></p>
+<p><img src="2024_01_03-GTEX_RNA_seq_liver/hsa00140.pathview.png" class="img-fluid figure-img"></p>
 <figcaption>hsa00140 Steroid hormone biosynthesis</figcaption>
 </figure>
 </div>
@@ -1254,7 +1256,7 @@ hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</
 <h4 class="anchored" data-anchor-id="hsa00983-drug-metabolism---other-enzymes-1">hsa00983 Drug metabolism - other enzymes</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="hsa00983.pathview.png" class="img-fluid figure-img"></p>
+<p><img src="2024_01_03-GTEX_RNA_seq_liver/hsa00983.pathview.png" class="img-fluid figure-img"></p>
 <figcaption>hsa00983 Drug metabolism - other enzymes</figcaption>
 </figure>
 </div>
@@ -1263,7 +1265,7 @@ hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</
 <h4 class="anchored" data-anchor-id="hsa04976-bile-secretion">hsa04976 Bile secretion</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="hsa04976.pathview.png" class="img-fluid figure-img"></p>
+<p><img src="2024_01_03-GTEX_RNA_seq_liver/hsa04976.pathview.png" class="img-fluid figure-img"></p>
 <figcaption>hsa04976 Bile secretion</figcaption>
 </figure>
 </div>
@@ -1273,7 +1275,7 @@ hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</
 <h4 class="anchored" data-anchor-id="hsa00860-porphyrin-and-chlorophyll-metabolism">hsa00860 Porphyrin and chlorophyll metabolism</h4>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="hsa00860.pathview.png" class="img-fluid figure-img"></p>
+<p><img src="2024_01_03-GTEX_RNA_seq_liver/hsa00860.pathview.png" class="img-fluid figure-img"></p>
 <figcaption>hsa00860 Porphyrin and chlorophyll metabolism</figcaption>
 </figure>
 </div>
@@ -1330,35 +1332,35 @@ hsa00562 Inositol phosphate metabolism                   1.619384e-01       57</
 <div class="cell-output cell-output-stdout">
 <pre><code>             TF       ES arg.ES pVal numberOfChIPs is_significant
 FOXA2     FOXA2  0.99125      8 0.00             2           TRUE
-HNF1A     HNF1A  0.97817     16 0.01             1           TRUE
-HNF4G     HNF4G  0.97522     19 0.01             2           TRUE
+HNF1A     HNF1A  0.97817     16 0.02             1           TRUE
+HNF4G     HNF4G  0.97522     19 0.02             2           TRUE
 NR2F6     NR2F6  0.97234     20 0.03             1           TRUE
 HNF4A     HNF4A  0.96642     26 0.00             3           TRUE
 FOXA1     FOXA1  0.94599     40 0.01             3           TRUE
-NR2F2     NR2F2  0.94015     44 0.00             3           TRUE
-ATF3       ATF3  0.76196     11 0.02             6           TRUE
-GABPA     GABPA -0.69893    593 0.04             9           TRUE
-CREB1     CREB1 -0.80579    628 0.03             5           TRUE
-SIN3A     SIN3A -0.81379    654 0.05             5           TRUE
-CHD2       CHD2 -0.86508    618 0.00             5           TRUE
-TBP         TBP -0.87588    608 0.01             4           TRUE
-MAZ         MAZ -0.88623    639 0.05             3           TRUE
+NR2F2     NR2F2  0.94015     44 0.01             3           TRUE
+ATF3       ATF3  0.76196     11 0.04             6           TRUE
+MXI1       MXI1 -0.78348    564 0.05             5           TRUE
+SIN3A     SIN3A -0.81379    654 0.04             5           TRUE
+CHD2       CHD2 -0.86508    618 0.01             5           TRUE
+MAZ         MAZ -0.88623    639 0.04             3           TRUE
+CREM       CREM -0.89989    672 0.05             2           TRUE
 ELF1       ELF1 -0.90544    627 0.00             5           TRUE
-CBFB       CBFB -0.95049    660 0.03             2           TRUE
+CBFB       CBFB -0.95049    660 0.04             2           TRUE
+PML         PML -0.96507    663 0.04             1           TRUE
+PBX3       PBX3 -0.97234    668 0.03             1           TRUE
 SMAD5     SMAD5 -0.99854    686 0.00             1           TRUE
 NR5A1     NR5A1  0.95779     30 0.08             1          FALSE
-HHEX       HHEX  0.95488     32 0.11             1          FALSE
-GFI1       GFI1  0.95342     33 0.07             1          FALSE
-ONECUT1 ONECUT1  0.94905     36 0.09             1          FALSE
+HHEX       HHEX  0.95488     32 0.06             1          FALSE
+GFI1       GFI1  0.95342     33 0.12             1          FALSE
+ONECUT1 ONECUT1  0.94905     36 0.11             1          FALSE
 MBD4       MBD4  0.94614     38 0.10             1          FALSE
 SOX13     SOX13  0.94469     39 0.14             1          FALSE
-PAXIP1   PAXIP1  0.93886     43 0.14             1          FALSE
-FOXJ3     FOXJ3  0.93450     46 0.11             1          FALSE
-FOXP1     FOXP1  0.93294     48 0.07             2          FALSE
-ATF4       ATF4  0.92868     50 0.10             1          FALSE
-ZNF609   ZNF609  0.92576     52 0.18             1          FALSE
-THRB       THRB  0.92431     53 0.18             1          FALSE
-MED1       MED1  0.91557     59 0.20             1          FALSE</code></pre>
+PAXIP1   PAXIP1  0.93886     43 0.13             1          FALSE
+FOXJ3     FOXJ3  0.93450     46 0.19             1          FALSE
+FOXP1     FOXP1  0.93294     48 0.06             2          FALSE
+ATF4       ATF4  0.92868     50 0.17             1          FALSE
+ZNF609   ZNF609  0.92576     52 0.23             1          FALSE
+THRB       THRB  0.92431     53 0.13             1          FALSE</code></pre>
 </div>
 </div>
 <div class="cell">

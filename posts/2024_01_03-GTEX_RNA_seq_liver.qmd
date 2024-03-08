@@ -56,7 +56,7 @@ theme_set(theme_bw())           # set the default ggplot theme to be clear & car
 Samples come from https://github.com/broadinstitute/gtex-v8/blob/master/data/GTEx_Analysis_v8_RNAseq_samples.txt, and have to be manually downloaded.
 
 ```{r}
-gtex_samples <- read.delim("../../GTEx_Analysis_v8_RNAseq_samples.txt", sep = "\t") %>%
+gtex_samples <- read.delim("../../GTEX-liver-parent-dir/GTEx_Analysis_v8_RNAseq_samples.txt", sep = "\t") %>%
   mutate("sample_id" = str_replace_all(sample_id, "-", "\\."))
 ```
 
@@ -106,7 +106,7 @@ gunzip *.gz
 ```
 
 ```{r}
-rna_counts <- read.delim("../../bulk-gex_v8_rna-seq_GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct",
+rna_counts <- read.delim("../../GTEX-liver-parent-dir/bulk-gex_v8_rna-seq_GTEx_Analysis_2017-06-05_v8_RNASeQCv1.1.9_gene_reads.gct",
                          sep = "\t", skip = 2) %>%
   tibble::column_to_rownames(var = "Name")
 ```
