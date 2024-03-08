@@ -28,8 +28,12 @@ website:
 format:
   html:
     theme:
-      light: minty
-      dark: slate
+      light: themes/minty_mod.scss
+      dark: themes/cyborg_mod.scss
+      #dark: slate
+    highlight-style:
+      light: themes/gruvbox-light.theme
+      dark: themes/gruvbox-dark.theme
     css: styles.css
 execute:
   freeze: auto

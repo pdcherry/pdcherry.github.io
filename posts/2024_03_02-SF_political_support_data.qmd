@@ -4,7 +4,7 @@ author: "Patrick Cherry"
 date: "2024-03-03"
 categories:
   - politics
-image: "2024_03_02-San_Francisco_and_Bay.jpg"
+image: "2024_03_02-SF_political_support_data/2024_03_02-San_Francisco_and_Bay.jpg"
 format:
   html:
     df-print: paged
@@ -20,7 +20,7 @@ caption_def <- "2024-03-02 SF Political Alignment. by Patrick Cherry"
 exp_imp_path <- "./2024_03_02-SF_political_support_data/"
 ```
 
-![View of northern San Francisco at dusk](2024_03_02-San_Francisco_and_Bay.jpg)
+![View of northern San Francisco at dusk](2024_03_02-SF_political_support_data/2024_03_02-San_Francisco_and_Bay.jpg)
 
 # Introduction
 The saying goes "all politics are local," and San Francisco is no exception.

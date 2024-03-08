@@ -6,7 +6,6 @@ categories:
   - code
   - scRNA-seq
   - RNA-seq
-#image: "2024_01_03-liver_creative_commons.jpg"
 execute:
   freeze: true
 ---
