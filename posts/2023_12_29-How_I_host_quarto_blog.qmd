@@ -10,6 +10,9 @@ image: "2023_12_29-How_I_host_quarto_blog.jpg"
 execute:
   freeze: true
 ---
+```{r setup, include = FALSE, message = FALSE, echo = FALSE}
+library(reticulate)
+```
 
 I started a blog! Isn't that grand!?
 
@@ -65,7 +68,7 @@ I learned a lot from this adventure. From troubleshooting those malfunctioning G
 print("Hello, world")
 ```
 
-```{python}
+```{python warning = FALSE}
 print('Hello, world')
 ```
 

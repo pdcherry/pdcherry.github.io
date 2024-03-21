@@ -1,17 +1,3 @@
-#
-# This config.toml is an example and based on the ananke theme
-# https://github.com/theNewDynamic/gohugo-theme-ananke/.
-#
-# If you use a different theme, you might need to change the content of config.toml
-# to your liking.
-#
-
-#
-# Theme setup
-#
-# If you use go mod to install your theme, you must use the URL of the theme.
-# If your theme is in the themes directory, you just need to specify its name.
-#
 #theme = "ananke"
 theme = ["github.com/theNewDynamic/gohugo-theme-ananke"]
 
