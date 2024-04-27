@@ -1,6 +1,7 @@
 project:
   type: website
   output-dir: docs
+  pre-render: copy_public_resume_md_format.r
   #pre-render: knit_resume_to_md.r
   render:
     - "*.qmd"
