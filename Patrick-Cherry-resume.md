@@ -27,10 +27,10 @@ April 2024
 
 ## Contact
 
-- <i class='fa fa-envelope'></i> pcherry <at> pm <dot> me
+- <i class='fa fa-envelope'></i> pcherry \[at\] pm \[dot\] me
 - <i class='fa fa-phone'></i> upon request
 - <i class='fa fa-suitcase'></i> Senior Scientist \| Genomics
-- <i class='fa fa-building'></i> Twist Bioscience
+- <i class='fa fa-building'></i>  
 - <i class='fa fa-map'></i> San Francisco, California
 - <i class='fa fa-globe'></i>
   [pdcherry.github.io](https://pdcherry.github.io)
