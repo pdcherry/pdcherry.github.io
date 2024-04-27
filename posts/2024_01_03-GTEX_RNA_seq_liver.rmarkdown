@@ -9,6 +9,7 @@ image: "2024_01_03-GTEX_RNA_seq_liver/2024_01_03-liver_creative_commons.jpg"
 execute:
   freeze: true
 ---
+
 # Introduction
 I use the publicly available bulk RNA-Seq data from [GTEX](https://www.gtexportal.org/home/downloads/adult-gtex) (v8) identify biological pathways and processes specific to the liver. I also identify putative transcriptional regulators of these pathways and processes. To ensure that the analysis fits into local memory, I restrict the features in scope to be protein-coding genes, and the  tissues in scope to be the following following: heart, kidney, liver, lung, muscle, pancreas, spleen, stomach, pituitary gland, and thyroid.
 
@@ -25,6 +26,7 @@ Given this is liver RNA-seq, I expect to see genes implicated in the liver main 
  - glycolysis, gluconeogenesis, and fatty acid catabolism
  - bile salts catabolism and anabolism (cholesterols, hemoglobin/porphyrin)
  - amino acid conversion and catabolism
+
 
 ```{r, setup, echo = TRUE, message = FALSE}
 library(usethis)
@@ -52,8 +54,10 @@ register(MulticoreParam(4))     # set core parallelization to 4 CPU cores
 theme_set(theme_bw())           # set the default ggplot theme to be clear & cartooney
 ```
 
+
 # Metadata (sample annotations)
 Samples come from https://github.com/broadinstitute/gtex-v8/blob/master/data/GTEx_Analysis_v8_RNAseq_samples.txt, and have to be manually downloaded.
+
 
 ```{r}
 gtex_samples <- read.delim("../../GTEX-liver-parent-dir/GTEx_Analysis_v8_RNAseq_samples.txt", sep = "\t") %>%
@@ -64,21 +68,27 @@ gtex_samples <- read.delim("../../GTEX-liver-parent-dir/GTEx_Analysis_v8_RNAseq_
 gtex_samples %>% dplyr::count(tissue_id) %>% arrange(desc(n))
 ```
 
+
 Put *liver* first in this list, because after filtering, I will use it to set the order of the factors.
+
 ```{r}
 tissue_keep <- c("Liver", "Heart_Left_Ventricle", "Heart_Atrial_Appendage", "Kidney_Cortex",
                  "Kidney_Medulla", "Lung", "Muscle_Skeletal", "Pancreas", "Spleen", "Stomach",
                  "Pituitary", "Thyroid")
 ```
 
+
 Double-check I got all the names right
+
 ```{r}
 all(tissue_keep %in% gtex_samples[['tissue_id']])
 ```
 
+
 Got 'em!
 
 ## Filter sample table to our scoped tissue types
+
 ```{r}
 gtex_samples_filtered <- gtex_samples %>%
   dplyr::filter(tissue_id %in% tissue_keep) %>%
@@ -87,7 +97,9 @@ gtex_samples_filtered <- gtex_samples %>%
 dplyr::count(gtex_samples_filtered)
 ```
 
+
 4421 / 17382 = .254 . We are keeping ~ 25% of samples that were in GTEx v8.
+
 
 ```{r}
 gtex_samples_filtered %>%
@@ -96,10 +108,12 @@ gtex_samples_filtered %>%
   arrange(desc(n))
 ```
 
+
 ## Import the related bulk RNAseq counts
 Bulk RNAseq gct files came from: https://www.gtexportal.org/home/downloads/adult-gtex
 
 I'll use read counts because that's what DEseq2's statistical modeling requires. Unzip it first:
+
 ```{bash eval = FALSE, include = TRUE}
 cd ..
 gunzip *.gz
@@ -111,7 +125,9 @@ rna_counts <- read.delim("../../GTEX-liver-parent-dir/bulk-gex_v8_rna-seq_GTEx_A
   tibble::column_to_rownames(var = "Name")
 ```
 
+
 ### Troubleshoot filtering samples/matrix columns
+
 ```{r}
 rna_counts_cols <- colnames(rna_counts)
 ```
@@ -125,7 +141,9 @@ anti_join(gtex_samples_filtered, as_tibble(rna_counts_cols),
           by = c("sample_id" = "value"))
 ```
 
+
 0 is the desired outcome of an anti-join.
+
 
 ```{r}
 rna_counts_filtered <- rna_counts %>%
@@ -137,7 +155,9 @@ rna_counts_filtered <- rna_counts %>%
 dim(rna_counts_filtered)
 ```
 
+
 Great: filtering went correctly. The dashes-to-periods issue was irksome. We have y = 4421 samples, and 56200 features.
+
 
 ```{r}
 all(gtex_samples_filtered[['sample_id']] %in% colnames(rna_counts_filtered))
@@ -147,13 +167,16 @@ all(gtex_samples_filtered[['sample_id']] %in% colnames(rna_counts_filtered))
 all(gtex_samples_filtered[['sample_id']] == colnames(rna_counts_filtered))
 ```
 
+
 Great, we are good to continue to DEseq2 DESeqDataSet
 
 ## Filter features to protein-coding genes
 please restrict your analyses to protein-coding genes and the following tissues: 
+
 ```{r}
 keytypes(org.Hs.eg.db)
 ```
+
 ```{r}
 ensgs_to_filter <- tibble("ENSG" = dimnames(rna_counts_filtered)[[1]])
 ```
@@ -172,21 +195,27 @@ dplyr::count(ensgs_filtered_protein, genetype) %>% arrange(desc(n))
 ensgs_filtered_protein <- dplyr::filter(ensgs_filtered_protein, genetype == "protein-coding")
 ```
 
+
 Actually apply the filter below
+
 ```{r}
 rna_counts_filtered <- rna_counts_filtered[ensgs_filtered_protein[[1]], ]
 dim(rna_counts_filtered)
 ```
 
+
 ### Number of features
+
 ```{r}
 dplyr::count(ensgs_to_filter)[[1]]
 ```
+
 
 19184/56200 = 34%, so we are keeping 34% of features in the counts matrix, because ENSEMBL annotates them as protein-coding. Thus we are jettisoning 66% of features as being non-protein coding. What the ENCODE db indicates is that annotated ENCODE entries are the most common, followed by pseudo, ncRNA, snoRNA, "other," snRNA, rRNA, scRNA, and "unknown."
 
 # Run DEseq2 analysis
 ## Prepare data object for DEseq2
+
 ```{r}
 tissue_DE <- DESeqDataSetFromMatrix(countData = rna_counts_filtered,
                               colData = gtex_samples_filtered,
@@ -194,12 +223,15 @@ tissue_DE <- DESeqDataSetFromMatrix(countData = rna_counts_filtered,
 tissue_DE
 ```
 
+
 ### Filter for minimum counts
 Filter for features (genes) where there are less than 113 or more samples with normalized counts greater than or equal to 5. (113 is half the number of liver samples in the data, allowing for at least some dispersion in at least among the samples of the tissue type we want to understand.)
+
 ```{r}
 tissue_DE <- estimateSizeFactors(tissue_DE)
 idx <- rowSums( counts(tissue_DE, normalized = TRUE) >= 5 ) >= 113
 ```
+
 ```{r}
 tissue_DE <- tissue_DE[idx,]
 dim(tissue_DE)
@@ -211,9 +243,11 @@ dim(tissue_DE)
 (19184-18013)/19184
 ```
 
+
 Originally, when filtering for features with a minimum number of counts over the minimum number of genes, I filtered out 22,813 (40.6%) based on low counts / coverage. *However, now the I'm filtering genes for counts _after_ filtering for protein coding genes*, only 6.1% of features are dropped. This difference in proportionality indicates that low count features and protein coding genes are not necessarily independent. In fact, the non-protein-coding features were enriched for low expression levels across many of the samples.
 
 ## Run DEseq2 analysis
+
 ```{r}
 rm(gtex_samples, gtex_samples_filtered, rna_counts_filtered, rna_counts)
 ```
@@ -233,7 +267,9 @@ contrasts_no_intercept <- resultsNames(tissue_DE)[2:length(resultsNames(tissue_D
 contrasts_no_intercept
 ```
 
+
 ### Extract all contrast data from DEseq
+
 ```{r}
 combine_contrast_results <- function(deseq_obj){
   
@@ -255,8 +291,10 @@ tissue_DE_results_long <- combine_contrast_results(tissue_DE) %>%
 dplyr::count(tissue_DE_results_long, contrast)
 ```
 
+
 ## Prepare data with additional annotations
 #### Check if ENSG string manipulation prodcuces unique values
+
 ```{r, message = FALSE}
 dplyr::count(as_tibble(str_remove(row.names(tissue_DE_results_long),
            "(?<=ENSG\\d{1,14})\\.{0,1}\\d{0,3}$")), value) %>%
@@ -287,7 +325,9 @@ tissue_DE_results_long <- tissue_DE_results_long %>%
          )
 ```
 
+
 ### Further explore the contrasts
+
 ```{r}
 top_10_hits_summary <- tissue_DE_results_long %>%
   mutate("log2FoldChange" = -1*log2FoldChange) %>%
@@ -299,13 +339,17 @@ top_10_hits_summary <- tissue_DE_results_long %>%
 top_10_hits_summary %>% dplyr::select("contrast", "symbol", "name", "log2FoldChange")
 ```
 
+
 This is looking promising. When sorted by statistic and the top ten genes are displayed from each tissue, there are many common genes that are relatively up-regulated (in mRNA expression) in liver compared to each of the other tissues. SLC27A5 is very commonly (and very strongly) up-regulated in liver; RDH16 and CPS1 are as well.
+
 
 ```{r, include = FALSE, eval = FALSE}
 # write_csv(top_10_hits_summary, "top_10_hits_summary.csv")
 ```
 
+
 ### MA Plot (analysis QC)
+
 ```{r}
 ma_plot <- tissue_DE_results_long %>%
   ggplot(aes(y = log2FoldChange, x = baseMean)) +
@@ -320,7 +364,9 @@ ma_plot <- tissue_DE_results_long %>%
 ma_plot
 ```
 
+
 For all contrasts, the data points (gene IDs) are roughly symmetric around the x-axis (indicating no systematic bias), and the majority are close to the x-axis, indicating many genes are not differentially expressed.
+
 
 ```{r}
 ma_hist <- tissue_DE_results_long %>%
@@ -342,7 +388,9 @@ ma_hist_stats <- tissue_DE_results_long %>%
 ma_hist_stats
 ```
 
+
 As a clearer summary plot, the histograms for each contrast a preponderance of genes are close to the 0 on the x-axis, indicating many features have limited fold change between samples.
+
 
 ```{r}
 stat_hist <- tissue_DE_results_long %>%
@@ -355,9 +403,11 @@ stat_hist <- tissue_DE_results_long %>%
 stat_hist
 ```
 
+
 While the test statistic outputted by DEseq2 is less "clipped" to zero than the p-values (many of which exhaust the range and get reported as 0.000000e+00), the statistic range/distribution is not the same for all contrasts, notably for the Kidney Medulla vs Liver comparison. This can be explained from the [Filter sample table to our scoped tissue types](#Filter-sample-table-to-our-scoped-tissue-types) section of this document, which shows the Kidney Medulla GTEx tissue set as having far fewer samples (n = 4) than the other tissue types (mean = 368, sd = 230).
 
 As long as we `group_by()` when ranking, sorting, and otherwise comparing (in long format), this should be okay. Once pivoted into wide format, this can present a problem because not every column of values will be able to react similarly to the same ranking, sorting, or cut-offs.
+
 
 ```{r include = FALSE, eval = FALSE}
 # ggsave("ma_plot_contour.png", ma_plot,
@@ -370,10 +420,12 @@ As long as we `group_by()` when ranking, sorting, and otherwise comparing (in lo
 #        width = 7, height = 4.5, dpi = 320)
 ```
 
+
 # Cross-contrast analysis
 ## Summarize by feature
 Which is effectively a wide format, appropriate for joining.
 (Grouped-by calculations in the same column run more efficiently and are easier to program than row-wise multi-column calculations.
+
 
 ```{r}
 tissue_DE_results_feature_summary <- tissue_DE_results_long %>%
@@ -388,6 +440,7 @@ tissue_DE_results_feature_summary <- tissue_DE_results_long %>%
             .by = c("ENSG", "short_ensg", "symbol", "entrez", "name"))
 ```
 
+
 To explain why I'm contriving these summary statistics, I have to first acknowledge that downstream processing (GO analysis, TF.ChIP) expects continuous data ( _e.g._  `log2FoldChange`, `adj.p.val`) for *both* the up-regulated and down-regulated features. Thus, in drawing conclusions from the comparisons, I am balancing maintaining continuous variables that can be used later with summary statistics that _suggest_ consistency across all the tissue type comparisons made (and in the case of the highly confident features/genes, these suggestive consistency metrics indicate high levels of agreement).
 
 These metrics are the `mean_log2FoldChange`, `sd_log2FoldChange`, and the `below_zero_min_log2FoldChange`, (as well as these versions on `stat` and `padj`). Together, these continuous feature summary metrics describe how consistently the metrics are across comparisons (e.g. liver to thyroid, liver to lung, etc.). When a feature is specific to the liver, the mean will be negative and large, the sd will be smaller than the mean, and the min_below_zero will not be far away from the mean. Such an outcome indicates that all the comparisons agree that a gene is specifically up-regulated in the liver compared to all other tissues considered here.
@@ -395,6 +448,7 @@ These metrics are the `mean_log2FoldChange`, `sd_log2FoldChange`, and the `below
 Applying these summary transformations to the `log2FoldChange`, `pvalue`, and `padj` are reasonable because these metrics either do not depend on the number of samples (`log2FoldChange`), or account for the number of samples in the condition (`pvalue`, and `padj`), explicitly allowing for comparisons between conditions.
 
 ## Pivot to wide
+
 ```{r}
 tissue_DE_results_wide <- tissue_DE_results_long %>%
   pivot_wider(id_cols = c("ENSG", "short_ensg", "symbol", "entrez", "name"),
@@ -412,12 +466,15 @@ tissue_DE_results_wide <- tissue_DE_results_long %>%
 # write_csv(tissue_DE_results_wide, "tissue_DE_results_wide.csv")
 ```
 
+
 # Pathway / Gene Ontology (GO) Enrichment Analysis
+
 ```{r}
 slice_head(dplyr::select(tissue_DE_results_wide,
                          mean_log2FoldChange, sd_log2FoldChange, mean_pvalue, symbol, name),
            n = 20)
 ```
+
 
 Checking in on genes and hypotheses:
 
@@ -478,40 +535,51 @@ Themes on vitamin D, UDP-yl-ation (a means of preparing xenobiotics for excretio
 with GAGE
 
 ### Prepare GAGE's needed data
+
 ```{r}
 data(kegg.sets.hs)
 data(sigmet.idx.hs)
 kegg.sets.hs = kegg.sets.hs[sigmet.idx.hs]
 ```
 
+
 ### Perpare DEseq2 result for GAGE
+
 ```{r}
 foldchanges = tissue_DE_results_wide$mean_log2FoldChange
 names(foldchanges) = tissue_DE_results_wide$entrez
 head(foldchanges)
 ```
 
+
 ## Run GAGE
+
 ```{r}
 keggres = gage(foldchanges, gsets = kegg.sets.hs, same.dir = TRUE)
 ```
 
+
 ### View Results
 Remember that "down-regulated" (i.e. the "$less" table) is *up-regulated* in liver, due to the DEseq contrasts.
+
 ```{r}
 as.data.frame(head(keggres$less, 20)) %>%
   dplyr::select("p.geomean", "stat.mean", "p.val", "set.size")
 ```
 
+
 What's *down-regulated in liver* _compared to other tissues in the scope of our analysis_?
+
 ```{r}
 as.data.frame(head(keggres$greater, 30)) %>%
   dplyr::select("p.geomean", "stat.mean", "p.val", "set.size")
 ```
 
+
 Note that the p-values for pathways down-regulated in the liver are less significant than those of pathways up-regulated, likely due to by high dispersion among the comparison tissues.
 
 ### Pathway plots
+
 ```{r}
 keggrespathways <- data.frame(id = rownames(keggres$less), keggres$less) %>% 
   as_tibble() %>%
@@ -538,6 +606,7 @@ plot_pathway <- function(pid) {pathview(gene.data = foldchanges,
 tmp = sapply(keggresids, plot_pathway)
 setwd("..")
 ```
+
 
 Typically, expression heat maps use the color-blind-unfriendly and unintuitive red for up-regulated expression, and green for decreased expression.
 
@@ -571,12 +640,15 @@ The bile secretion graphic is particularly interesting because it depicts spatia
 
 Porphyrin metabolism is a curious case: not many of the GO term's genes are up-regulated, and even along a linear pathway, not all the genes in are up-regulated. I am especially surprised to see biliverdin to bilirubin conversion down-regulated relative to the other tissues in this set. Meanwhile, two of bilirubin's downstream steps are up-regulated.
 
+
 ```{r remove unneeded png files, eval = TRUE, include = FALSE, echo = FALSE}
 fs::dir_ls(regexp = "hsa\\d{2,10}[^(\\.pathview)](\\.png|\\.xml)") %>% fs::file_delete()
 ```
 
+
 # Transcription Factor Enrichment Analysis
 With `TFEA_ChIP`, we will leverage the contingency matrices crossing DEseq2 up v. down and previously-existing ChIP-seq (up v. down) data sets.
+
 
 ```{r}
 TFEA_DE_results_ordered <- as.data.frame(dplyr::select(tissue_DE_results_wide,
@@ -606,7 +678,9 @@ DE_CM <- contingency_matrix(genes_upreg) # generates list of contingency tables,
 pval_up_genes <- getCMstats(DE_CM) # generates list of p-values and OR from association test
 ```
 
+
 ## ChIP Transcription Factor data
+
 ```{r}
 chip_index <- get_chip_index(encodeFilter = TRUE)
 DE_CM_chip <- contingency_matrix(genes_upreg, #genes_ctrl,
@@ -642,6 +716,7 @@ TFrank_ES_p_plot <- TF_ranking %>% arrange(desc(ES)) %>%
 TFrank_ES_p_plot
 ```
 
+
 Notes on TF_ranking results:
 
  - HNF4 (Hepatocyte Nuclear Factor 4) is a nuclear receptor protein mostly expressed in the liver, gut, kidney, and pancreatic beta cells that is critical for liver development.
@@ -658,6 +733,7 @@ The GSEA option was unhelpful at sorting TFs by the level of evidence to support
 Still, I'm not impressed by these results. Even with more stringent filtering (log2-fold-change, p-value), I still can't get a list that looks specific to the liver.
 
 ### Run GSEA on TFEA.ChIP
+
 ```{r echo = TRUE, message = FALSE, include = FALSE}
 GSEA.result <- GSEA_run(TFEA_table$Genes, TFEA_table$log2FoldChange, chip_index, get.RES = TRUE)
 ```
@@ -667,18 +743,23 @@ GSEA.result[["Enrichment.table"]] %>% dplyr::arrange(`pval.adj`, desc(ES)) %>% s
   dplyr::select(!c("pval.adj", "Arg.ES"))
 ```
 
+
 The above table shows that GSEA (in addition to TFEA.ChIP) also returns many liver-implicated transcriptional regulators. The above table is sorted in descending order of effect size (running enrichment score), and also displays the accession ID of the tissue sample that generated the ChIP seq data set. The TFs (transcription factors) can be in the table more than once. 
+
 
 ```{r}
 GSEA.result[["Enrichment.table"]] %>% dplyr::count(TF) %>% arrange(desc(n)) %>% slice_head(n = 10)
 ```
 
+
 The above table counts the number of line items for each TF; despite CTCF (a practically ubiquitous transcriptional and chromatin regulator) being so highly represented across data sets, its running effect size was not high enough to make it show up in the top 40 (5.8%) of line items. (Same goes for EP300.)
 
 What this result shows is that the number of ChIP datasets under consideration in this package is not evenly distributed across all potential transcription factors, and so the number of times a transcription factor is identified as a hit is not a good measure of significance or salience.
+
 
 ```{r, include = FALSE, eval = FALSE}
 # write_csv(TF_ranking$TF_ranking, "TF_ranking_table.csv")
 # write_csv(GSEA.result[["Enrichment.table"]] %>% dplyr::arrange(desc(ES)),
 #           "gsea_result_table.csv")
 ```
+
