@@ -5,9 +5,8 @@
 # loaded and load the cached version in the .Rmd instead of re-fetching it twice
 # for the HTML and PDF rendering.
 
-library(fs) # for file system manipulation
-
 # Resume
+print(R.version$v)
 ## Copy the most recently rendered to github md version
 if(system.file(package='fs') != ""){
   fs::file_copy(path = "~/cherry-cv-public/README.md",
