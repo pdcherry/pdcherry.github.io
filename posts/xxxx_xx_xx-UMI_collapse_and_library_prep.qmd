@@ -1,0 +1,59 @@
+---
+title: "UMI collapse & library prep samples"
+author: "Patrick Cherry"
+date: "xxxx-xx-xx"
+categories:
+  - coding
+  - bioinformatics
+  - data
+  - sequencing library prep
+image: "FIND SOME IMAGE OF COLLAPSE"
+format:
+  html:
+    df-print: paged
+execute:
+  freeze: TRUE
+  echo: FALSE
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+caption_def <- "xxxx-xx-xx UMI collapse & library prep samples"
+exp_imp_path <- "./xxxx_xx_xx-SF_political_support_data/"
+```
+
+![SOME PHOTO OF COLLAPSE]()
+
+## Introduction
+UMIs, or unique molecular identifiers, are a component of the adapters of a next generation sequencing library prep kit. UMIs mark independent incorporation events during the ligation of inserts into the adapter-on library. UMIs accomplish this by being a diverse set of unique sequences embedded in the adapter DNA molecule. With UMIs present on the library DNA, the NGS sequencer can record those ids along with the content of the insert. Once sequenced, UMIs allow for removal of PCR duplicates with high-confidence, preservation of ligation duplicates, and error correction (either through PCR duplicate consensus, or through duplex consensus, where the opposite strands of the same incorporated molecule are analyzed as one unit).
+
+UMI adapters are frequently supplied as an equimolar mixture of adapter DNA molecules with varying UMI sequences. In dsDNA ligation-based library prep, these adapter molecules are typically partially dsDNA Y-adapters. Producing these adapters can be painstaking, error-prone, and expensive, so dsDNA UMI adapters typically have fewer unique UMI sequences in the mixture than "randomer" based single-stranded library prep applications.
+
+### Central question
+But how many UMI sequences is enough? How can we know that we're not loosing out on unique coverage due to "collisions" of the same UMIs on the truly independent insert molecules that happen to have identical start and end positions?
+
+This analysis uses some real-world data and some simulation to quantitatively arrive at a "good enough" configuration of UMI adapters.
+
+## Notes on approach
+
+
+```{r, setup, echo = FALSE, message = FALSE}
+library(readr)                  # for reading and writing csvs
+library(fs)                     # for filesystem navigation in R
+library(dplyr)                  # for dataframe manipulation
+library(tidyr)                  # for munging and tidying data
+library(purrr)                  # for functional programming on vectors
+library(corrr)                  # for tidy correlation matrices
+library(stringr)                # for efficient string manipulation
+library(magrittr)               # for enhanced pipes
+library(forcats)                # for factor manipulation
+library(ggplot2)                # for additional plotting features
+theme_set(theme_bw())           # set the default ggplot theme to be clear & cartooney
+```
+
+## Import and tidy data
+
+
+## Conclusions
+
