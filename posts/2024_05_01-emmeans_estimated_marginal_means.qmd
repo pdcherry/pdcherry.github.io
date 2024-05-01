@@ -5,11 +5,13 @@ date: "xxxx-xx-xx"
 categories:
   - data
   - code
-  - tree models
+  - experimental analysis
+  - unbalanced DoE
 #image: "2024_02_10-SF_tree_class_data_data/"
+# PATRICK TO DO: FIND UNBALANCED THEME IMAGE
 format:
   html:
-    df-print: paged
+    df-print: kable
 execute:
   freeze: TRUE
   echo: TRUE
@@ -17,26 +19,32 @@ editor_options:
   chunk_output_type: inline
 ---
 ```{r echo = FALSE}
-caption_def <- "2024-03-10 emmeans estimated marginal means"
+caption_def <- "2024-05-01 emmeans estimated marginal means"
 exp_imp_path <- "./2024-03-10_emmeans_data/"
 ```
 
 ```{r, setup, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)  # set default chunk option to print the code that generated that output
-options(knitr.table.format = 'markdown') # render kable tables in md for github, comment out otherwise
+#options(knitr.table.format = 'markdown') # render kable tables in md for github, comment out otherwise
 library(tidyverse)
 library(broom)
 library(emmeans)
 library(patchwork)                  # for combining plots
 ```
 
+# Introduction to marginal means
 Estimated marginal means (EMMs, previously known as least-squares means in the context of traditional regression models) are derived by using a model to make predictions over a regular grid of predictor combinations (called a reference grid).
 
-# The pigs dataset
-## Initial model fitting
-Consider the pigs dataset provided with the package (help("pigs") provides details). These data come from an experiment where pigs are given different percentages of protein (percent) from different sources (source) in their diet, and later we measured the concentration (conc) of leucine. The percent values are quantitative, but we chose those particular values deliberately, and (at least initially) we want separate estimates at each percent level; that is, we want to view percent as a factor, not a quantitative predictor.
+There are many advantages to using estimated marginal means to arrive at effect sizes (as well as confidence intervals) for a multi-factor / multi-level experiment.
 
-As discussed, our first task is to come up with a good model. Doing so requires a lot of skill, and we don’t want to labor too much over the details; you really need other references to deal with this aspect adequately. But we will briefly discuss five models and settle on one of them:
+  1. One challenge where EMMs really shines is when the number of subjects / samples per condition are not all the same or close to the same; this situation is called an "unbalanced experiment," and it occurs often during large Design of Experiment (DoE), either intentionally by design, or unintentionally due to experimental sample drop outs. EMMs can provide accurate estimates of means and standard errors (confidence intervals) for conditions that differ in sample size, such that, all else equal, conditions with a smaller _n_ have larger confidence intervals.
+  1. Another is when there is a hypothesized (or evident) interaction effect in either the mean or the spread of one or more conditions in the experiment. EMMs can estimate accurate relative effects and standard errors (confidence intervals) for each of those interactions.
+
+# The pigs dataset
+Consider the pigs dataset provided with the package (`help("pigs")` provides details). These data come from an experiment where pigs are given different percentages of protein (percent) from different sources (source) in their diet, and later we measured the concentration (conc) of the amino acid leucine. The percent values are quantitative, but we chose those particular values deliberately (like a DoE), and (at least initially) we want separate estimates at each percent level; that is, we want to view percent as a factor, not a quantitative predictor.
+
+## Initial model fitting
+Our first task is to come up with a good model. Doing so requires a lot of skill, and we don’t want to labor too much over the details; you really need other references to deal with this aspect adequately. But we will briefly discuss five models and settle on one of them:
 ```{r, warning = FALSE}
 mod1 <- lm(conc ~ source * factor(percent), data = pigs)
 par(mfrow = c(2,2)); plot(mod1)
@@ -53,7 +61,7 @@ map_dfr(list(mod1, mod2), glance)
 
 These models have R2 values of 0.808 and 0.700, and adjusted R2 values of 0.684 and 0.634. mod1 is preferable to mod2, suggesting we need the interaction term. However, a residual-vs-predicted plot of mod2 has a classic “horn” shape (curving and fanning out), indicating a situation where a response transformation might help better than including the interaction.
 
-It turns out that an inverse transformation, (1/conc) really serves us well. (Perhaps this isn’t too surprising, as concentrations are typically determined by titration, in which the actual measurements are volumes; and these are reciprocally related to concentrations, i.e., amounts per unit volume.)
+After trial and error, it turns out that an inverse (reciprocal) transformation, (1/conc) really serves well. (Perhaps this isn’t too surprising, as concentrations are typically determined by titration, in which the actual measurements are volumes of some counter-reactant; and these are reciprocally related to concentrations, i.e., amounts per unit volume.)
 
 So here are three more models:
 ```{r}
