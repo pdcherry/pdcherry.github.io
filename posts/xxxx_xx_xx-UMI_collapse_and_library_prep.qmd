@@ -37,7 +37,6 @@ This analysis uses some real-world data and some simulation to quantitatively ar
 
 ## Notes on approach
 
-
 ```{r, setup, echo = FALSE, message = FALSE}
 library(readr)                  # for reading and writing csvs
 library(fs)                     # for filesystem navigation in R
