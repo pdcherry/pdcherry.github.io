@@ -14,10 +14,11 @@ page-layout: full
 #  freeze: true
 ---
 
-A blog of indeterminate subject matter and publication frequency from a molecular biologist shifting into bioinformatics and data science.
+A blog of indeterminate subject matter and publication frequency from a bioinformatician and data scientist by way of molecular biology.
 
 Likely topics are molecular biology, biological data science, economics, policy, California ballot measure discussion, and outdoor adventures.
 
 ```{=html}
 <a rel="me" href="https://genomic.social/@pcherry"> </a>
+<a rel="me" href="https://fosstodon.org/@pcherry"> </a>
 ```
