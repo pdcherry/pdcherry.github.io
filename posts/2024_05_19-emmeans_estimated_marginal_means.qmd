@@ -7,6 +7,7 @@ categories:
   - code
   - experimental analysis
   - unbalanced DoE
+bibliography: 2024_05_19-emmeans_estimated_marginal_means.bib
 #image: "2024_02_10-SF_tree_class_data_data/"
 # PATRICK TO DO: FIND UNBALANCED THEME IMAGE
 format:
@@ -31,10 +32,16 @@ library(broom)
 library(emmeans)
 library(patchwork)                  # for combining plots
 library(modelbased)                 # https://easystats.github.io/modelbased/articles/estimate_means.html
+theme_set(theme_light())
 ```
 
 # Introduction to marginal means
-Estimated marginal means (EMMs, previously known as least-squares means in the context of traditional regression models) are derived by using a model to make predictions over a regular grid of predictor combinations (called a reference grid).
+Estimated marginal means (EMMs, previously known as least-squares means in the context of traditional regression models) [@Searle1980] are derived by using a model to make predictions over a regular grid of predictor combinations (called a reference grid). Estimated marginal means have historically been used commonly in agricultural science publications.
+***need better dscription here***
+
+As Searle, _et al._ write, there is a marginal mean for every variable (and every level of factor variables) in a data set, and a sufficiently defined model (be it a linear model, glm, _etc_.) will allow for those marginal means to be estimated.
+
+But I just used "marginal" in the definition of "estimated marginal means." So what does marginal mean? To distill it down, a marginal mean is the effect size that a particular variable contributes, all else being equal. (The all else being equal part comes from accounting for all other _significant_ effects in the model.)
 
 There are many advantages to using estimated marginal means to arrive at effect sizes (as well as confidence intervals) for a multi-factor / multi-level experiment.
 
@@ -45,11 +52,12 @@ There are many advantages to using estimated marginal means to arrive at effect 
 Consider the pigs dataset provided with the package (`help("pigs")` provides details). These data come from an experiment where pigs are given different percentages of protein (percent) from different sources (source) in their diet, and later we measured the concentration (conc) of the amino acid leucine. The percent values are quantitative, but we chose those particular values deliberately (like a DoE), and (at least initially) we want separate estimates at each percent level; that is, we want to view percent as a factor, not a quantitative predictor.
 
 ## Initial model fitting
-Our first task is to come up with a good model. Doing so requires a lot of skill, and we don’t want to labor too much over the details; you really need other references to deal with this aspect adequately. But we will briefly discuss five models and settle on one of them:
+Our first task is to come up with a good model. Constructing good models is equal parts art and science, but I won't labor too much over the details; any ready is encouraged to seek more in-depth guidance on model construction and evaluation. I will construct and view some models and settle on one of them:
 ```{r, warning = FALSE}
 mod1 <- lm(conc ~ source * factor(percent), data = pigs)
 par(mfrow = c(2,2)); plot(mod1)
 ```
+
 ```{r}
 mod2 <- update(mod1, . ~ source + factor(percent))   # no interaction
 par(mfrow = c(2,2)); plot(mod2)
@@ -58,7 +66,6 @@ par(mfrow = c(2,2)); plot(mod2)
 ```{r}
 map_dfr(list(mod1, mod2), glance)
 ```
-
 
 These models have R2 values of 0.808 and 0.700, and adjusted R2 values of 0.684 and 0.634. mod1 is preferable to mod2, suggesting we need the interaction term. However, a residual-vs-predicted plot of mod2 has a classic “horn” shape (curving and fanning out), indicating a situation where a response transformation might help better than including the interaction.
 
@@ -75,7 +82,12 @@ par(mfrow = c(2,2)); plot(mod5)
 ```{r}
 map_dfr(list(mod1, mod2, mod3, mod4, mod5), glance)
 ```
-(Note: We could have used 1/conc as the response variable, but emmeans provides an equivalent inverse() function that will prove more advantageous later.) The residual plots for these models look a lot more like a random scatter of points (and that is good). The R2 values for these models are 0.818, 0.787, and 0.749, respectively; and the adjusted R2s are 0.700, 0.740, and 0.719. mod4 has the best adjusted R2 and will be our choice.
+
+::: {.callout-note}
+We could have used `1/conc` as the response variable, but `emmeans` provides an equivalent `inverse()` function that will prove more advantageous later.
+:::
+
+The residual plots for these models look a lot more like a random scatter of points (and that is good). The R^2 values for these models are 0.818, 0.787, and 0.749, respectively; and the adjusted R^2s are 0.700, 0.740, and 0.719. mod4 has the best adjusted R^2 and will be our choice.
 
 # Estimated marginal means
 ```{r}
@@ -86,10 +98,19 @@ map_dfr(list(mod1, mod2, mod3, mod4, mod5), glance)
 (EMM.percent <- emmeans(mod4, "percent"))
 ```
 
-Calling `tidy()` (from `broom`) on the object will put it into a beautiful data frame. we could make a plot.
+Calling `tidy()` (from `broom`) on the object will put it into a beautiful data frame. And data frames can be plotted.
 
 ```{r}
 tidy(EMM.percent)
+```
+
+```{r}
+tidy(EMM.percent) %>%
+  ggplot(aes(y = estimate, x = percent)) +
+  geom_col(width = 1) +
+  geom_errorbar(width = 0.5,
+                aes(ymin = estimate - std.error,
+                    ymax = estimate + std.error))
 ```
 
 
@@ -100,7 +121,7 @@ Let’s compare these with the ordinary marginal means (OMMs) on inverse(conc):
 with(pigs, tapply(inverse(conc), source, mean))
 ```
 
-Can I write the above ordinary means in Tidyverse/dplyr language? 
+The above code is [in the style of](https://www.rostrum.blog/posts/2024-05-08-aesthetic/) base R [@Dray2024]. Can I write the above ordinary means in Tidyverse/dplyr language?
 ```{r}
 pigs %>%
   mutate(conc = 1/conc) %>%
@@ -154,3 +175,7 @@ This shows that the OMMs of the last column give most of the weight (3/5) to the
 
 In summary, we obtain a references grid of all factor combinations, obtain model predictions on that grid, and then the expected marginal means are estimated as equally-weighted marginal averages of those predictions. Those EMMs are not subject to confounding by other factors, such as might happen with ordinary marginal means of the data. Moreover, unlike OMMs, EMMs are based on a model that is fitted to the data.
 
+# References
+
+::: {#refs}
+:::
