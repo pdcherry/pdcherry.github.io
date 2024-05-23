@@ -30,6 +30,7 @@ library(tidyverse)
 library(broom)
 library(emmeans)
 library(patchwork)                  # for combining plots
+library(modelbased)                 # https://easystats.github.io/modelbased/articles/estimate_means.html
 ```
 
 # Introduction to marginal means
