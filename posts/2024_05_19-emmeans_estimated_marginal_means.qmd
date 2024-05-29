@@ -1,14 +1,14 @@
 ---
 title: "emmeans: estimated marginal means"
 author: "Patrick Cherry"
-date: "xxxx-xx-xx"
+date: "2024-05-19"
 categories:
   - data
   - code
   - experimental analysis
   - unbalanced DoE
 bibliography: 2024_05_19-emmeans_estimated_marginal_means.bib
-#image: "2024_02_10-SF_tree_class_data_data/"
+image: "2024_05_19-emmeans_estimated_marginal_means_pigs_cc.jpg"
 # PATRICK TO DO: FIND UNBALANCED THEME IMAGE
 format:
   html:
@@ -19,6 +19,8 @@ execute:
 editor_options: 
   chunk_output_type: inline
 ---
+![The diet of pigs contributes to their rate of growth and macromolecular composition. Photo reproduced here from m_takahashi under CC BY-ND 2.0 Deed Attribution-NoDerivs 2.0 Generic](2024_05_19-emmeans_estimated_marginal_means_pigs_cc.jpg)
+
 ```{r echo = FALSE}
 caption_def <- "2024-05-01 emmeans estimated marginal means"
 exp_imp_path <- "./2024-03-10_emmeans_data/"
