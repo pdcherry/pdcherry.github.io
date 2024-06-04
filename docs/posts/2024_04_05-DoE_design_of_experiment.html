@@ -127,6 +127,35 @@ div.csl-indent {
 <link href="../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
 <script src="../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Frameshift - DoE: Design of Experiment">
@@ -235,7 +264,10 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#historical-roots-of-design-of-experiment" id="toc-historical-roots-of-design-of-experiment" class="nav-link" data-scroll-target="#historical-roots-of-design-of-experiment">Historical roots of design of experiment</a></li>
   </ul></li>
-  <li><a href="#brief-intro-to-doe-concepts" id="toc-brief-intro-to-doe-concepts" class="nav-link" data-scroll-target="#brief-intro-to-doe-concepts">Brief intro to DoE concepts</a></li>
+  <li><a href="#brief-intro-to-doe-concepts" id="toc-brief-intro-to-doe-concepts" class="nav-link" data-scroll-target="#brief-intro-to-doe-concepts">Brief intro to DoE concepts</a>
+  <ul class="collapse">
+  <li><a href="#aplying-doe-principle-to-this-experiment" id="toc-aplying-doe-principle-to-this-experiment" class="nav-link" data-scroll-target="#aplying-doe-principle-to-this-experiment">Aplying DoE principle to this experiment</a></li>
+  </ul></li>
   <li><a href="#procedure" id="toc-procedure" class="nav-link" data-scroll-target="#procedure">Procedure</a></li>
   <li><a href="#doe-with-blocking-for-multiple-operators" id="toc-doe-with-blocking-for-multiple-operators" class="nav-link" data-scroll-target="#doe-with-blocking-for-multiple-operators">DoE with blocking for multiple operators</a>
   <ul class="collapse">
@@ -265,8 +297,8 @@ div.csl-indent {
 <section id="introduction-and-motivation" class="level2">
 <h2 class="anchored" data-anchor-id="introduction-and-motivation">Introduction and motivation</h2>
 <p>In this post, I describe an experimental design for generating a genomics dataset using statistical DoE principles.</p>
-<p>My motivation for designing and carrying out this experiment was that I had data showing the sensitivity (by percent recall of a set of genetic variants expressed as mRNAs) over a controlled range of concentrations (made by serial dilution). <em>However, those data were only gathered with one target enrichment panel, which was a fairly esoteric TE Panel.</em> The goal was to extend the conclusions on sensitivity and recall to other, more mainstream panels used in RNA-seq experiments. We’ll call the esoteric panel “Panel A.” I had the idea that, given the success Panel A’s bioinformatic performance, <em>it could be useful to show that many different TE panels work well for an extension of said bioinformatic performance</em>, encouragiung the use of those other panels by showing equal analytical performance in a head-to-head experiment.</p>
-<p>To do so, I proposed using multiplexed capture (to save on wet-lab resources and time), 100 ng of input RNA (and optionally 10 ng), and technical replicates (n = 3, or a minimum of n = 2 for dropout protection). These are parameterized in this DoE script below, and the resulting sample plan is exported to google sheets for directing the lab activities a team of scientists and research assocaites.</p>
+<p>My motivation for designing and carrying out this experiment was that I had data showing the sensitivity (by percent recall of a set of genetic variants expressed as mRNAs) over a controlled range of concentrations (made by serial dilution). <em>However, those data were only gathered with one target enrichment panel, which was a fairly esoteric TE Panel.</em> The goal was to extend the conclusions on sensitivity and recall to other, more mainstream panels used in RNA-seq experiments. We’ll call the esoteric panel “Panel A.” I had the idea that, given the success Panel A’s bioinformatic performance, <em>it could be useful to show that many different TE panels work well for an extension of said bioinformatic performance</em>, encouraging the use of those other panels by showing equal analytical performance in a head-to-head experiment.</p>
+<p>To do so, I proposed using multiplexed capture (to save on wet-lab resources and time), 100 ng of input RNA (and optionally 10 ng), and technical replicates (n = 3, or a minimum of n = 2 for dropout protection). These are parameterized in this DoE script below, and the resulting sample plan is exported to google sheets for directing the lab activities a team of scientists and research associates.</p>
 <section id="historical-roots-of-design-of-experiment" class="level3">
 <h3 class="anchored" data-anchor-id="historical-roots-of-design-of-experiment">Historical roots of design of experiment</h3>
 <p>British statistician and geneticist Ronald A. Fisher (1890-1962) heavily influenced the modern ideals of experimental design. His influential 1922 publication on maximum likelihood laid the groundwork for now widely-taught concepts of sufficiency, information, and efficiency <span class="citation" data-cites="Fisher1922">(<a href="#ref-Fisher1922" role="doc-biblioref">Fisher 1922</a>)</span>. Fisher also pioneered and developed the methods of study randomization, and he promoted principles of <em>design of experiment</em> <span class="citation" data-cites="Edwards1974">(<a href="#ref-Edwards1974" role="doc-biblioref">Edwards 1974</a>)</span>. The radial idea (at the time) was that designs could be based on varying multiple factors simultaneously, and the downstream analysis could be supported by multi-factor analysis of variance. This progress in design and analysis allowed for the testing of many fore variables and factors in one experiment (when designed properly) instead of many one-by-one factor comparisons.</p>
@@ -279,16 +311,24 @@ div.csl-indent {
 <li><em>Independent variable</em>: Also called treatment factor, it is a variable under study as a potential cause, and so it is controlled at or near some target value, as informed by the hypothesis. An experiment can have more than one independent variable; it is common to analyze multiple independent variables at the same time.</li>
 <li><em>Background variable</em>: Also called a <em>lurking variable</em>, it is a variable that the experimenter is not aware exists or affects the outcome of the experiment. Due to this lack of awareness, it is not controlled. In a well-planned experiment, lurking variables should balance out in effect so as not to impact the conclusion of the experiment.</li>
 <li><em>Dependent variable</em>: Also called a <em>response variable</em>, it is the outcome or output measured from the experiment. An experiment can have multiple dependent variables, but it is more typical to analyze for one of these variables at a time.</li>
-<li><em>Replicate</em>: additional runs of the same experiment (same treatment, same controls, etc.). Replicates help to understand the within-condition variability of outcomes, and decide if enough evidence is present to concluse the independent variable is <em>causing</em> a change in the response variable.</li>
-<li><em>Confounded factors</em>: <em>Confounding</em> is a relationship of two or more factors to eachother. Two or more factors are confounded when they are <em>autocorrelated</em> in the design – that is, when the levels / values of each factor co-occur throughout the experiment –to the exclusion of other combinations of levels of those factors. In this situation, it is impossible to provide evidence for which factor causes any observed change in the response variable. (Some analyses will emit an error or a warning when confounding or autocorrelation of independent variable occurs.)</li>
-<li><em>Biased factor</em>: <em>Bias</em> in another relationship between experimental factors. Bias occurs when an experimenter makes a change to an independent variable at the precise time when changes in a lurking variable also occur. This is effectively confounding with a lurking varible, but because lurking variables are not always known or measured, the situation can go undetected, which can lead to erroneous conclusions. For this reason, it can be good to measure suspected lurking varaibles <em>even if they are not controlled</em> for retrospective analysis of bias.</li>
-<li><em>Experimental error</em>: the difference between the measured response for a condtion and the long-run average of that condition. In this definition, error is a statistical measure, and not literally a “mistake” or “inaccuracy,” as synonyms for error suggest. Experimtal error is expected (to some degree) because background or lurking variables can subtly influence outcomes or measurements.</li>
+<li><em>Replicate</em>: additional runs of the same experiment (same treatment, same controls, etc.). Replicates help to understand the within-condition variability of outcomes, and decide if enough evidence is present to conclude the independent variable is <em>causing</em> a change in the response variable.</li>
+<li><em>Confounded factors</em>: <em>Confounding</em> is a relationship of two or more factors to each other. Two or more factors are confounded when they are <em>auto-correlated</em> in the design – that is, when the levels / values of each factor co-occur throughout the experiment –to the exclusion of other combinations of levels of those factors. In this situation, it is impossible to provide evidence for which factor causes any observed change in the response variable. (Some analyses will emit an error or a warning when confounding or autocorrelation of independent variable occurs.)</li>
+<li><em>Biased factor</em>: <em>Bias</em> in another relationship between experimental factors. Bias occurs when an experimenter makes a change to an independent variable at the precise time when changes in a lurking variable also occur. This is effectively confounding with a lurking variable, but because lurking variables are not always known or measured, the situation can go undetected, which can lead to erroneous conclusions. For this reason, it can be good to measure suspected lurking variables <em>even if they are not controlled</em> for retrospective analysis of bias.</li>
+<li><em>Experimental error</em>: the difference between the measured response for a condition and the long-run average of that condition. In this definition, error is a statistical measure, and not literally a “mistake” or “inaccuracy,” as synonyms for error suggest. Experimental error is expected (to some degree) because background or lurking variables can subtly influence outcomes or measurements.</li>
+<li><em>Randomization</em>: the random assignment of conditions to a particular sample of an experiment, which leads to the likely reduction of experimental error.</li>
+<li><em>Blocking</em>: the spreading of all other variables as evenly as is practical over the variable in question. If a variable is suspected of being a lurking variable, it can be “blocked” in the experimental design, which spreads its bias (if any) as evenly as is practical across all other combinations of factors. This even spreading allows for a bias in the blocked variable to be detected with high precision in analysis.</li>
 </ul>
 <p>Experimental error is subdivided into <strong>bias error</strong> and <strong>random error</strong>:</p>
 <ul>
-<li><em>Bias error</em> tend to remain constant or change in a consistent pattern over time or with other variables (whether measured or not).</li>
-<li><em>Random error</em> changes from one experiment to another unpredictably. However, it the long run, random error averages to zero and has a consistent probability distribtuion that allows us to draw conclusions.</li>
+<li><em>Bias error</em> tends to remain constant or change in a consistent pattern over time or with other variables (whether measured or not).</li>
+<li><em>Random error</em> changes from one experiment to another unpredictably. However, it the long run, random error averages to zero and has a consistent probability distribution that allows us to draw conclusions.</li>
 </ul>
+<section id="aplying-doe-principle-to-this-experiment" class="level3">
+<h3 class="anchored" data-anchor-id="aplying-doe-principle-to-this-experiment">Aplying DoE principle to this experiment</h3>
+<p>Randomization is a good way to get random error to cancel out within an experiment. Any one randomized experiment that suffers (by chance) from a preponderance of random error will not replicate that random error in a repeat experiment, because the randomization will change, and likely distribute the error differently across samples. Thus, randomization is effective for preventing error from confounding experimental conclusion in the long term.</p>
+<p>But what if we want to prevent error from affecting <em>this experiment</em>? If we have a hypothesized source of the bias in mind, then we can deploy a <em>randomized complete block</em> design, also known as using blocking on a variable.</p>
+<p>If we have a suspected influence from a variable that we’re not testing as an independent variable, we can attempt to minimize the contribution of its effect (or bias) to the experimental conclusions.</p>
+</section>
 </section>
 <section id="procedure" class="level2">
 <h2 class="anchored" data-anchor-id="procedure">Procedure</h2>
@@ -303,8 +343,9 @@ div.csl-indent {
 </section>
 <section id="doe-with-blocking-for-multiple-operators" class="level2">
 <h2 class="anchored" data-anchor-id="doe-with-blocking-for-multiple-operators">DoE with blocking for multiple operators</h2>
-<p>I will block for the operators carrying out library prep, because operator is a known source of variation that is not relevant to understanding the effect of TE panel, RNA input mass, or concentration on performance.</p>
+<p>I will block for the operators carrying out library prep, because operator is a known source of variation that is not relevant to understanding the effect of TE panel, RNA input mass, or concentration on performance. (For example, my direct report is better at target enrichment than I am–she gets better fold-80 scores and off-target percentages than me routinely. But we’re here to study <em>the panels</em>, not the operators, and we need to share the work.)</p>
 <p>Blocking is the non-random assignment of samples to groups to minimize differences in the sample composition between the groups such that any effect of the grouping can be determined by the model and ignored (modeled out quantitatively and precisely).</p>
+<p>The <code>optBlock</code> function from the <code>AlgDesign</code> package maximizing <span class="math inline">\(|X'X|\)</span>, the determinant of the product of the inverse of the design matrix and the design matrix, a process called <em>D-optimization</em>. Further explanation is beyond the scope fo this tutorial, but is available in copious detail in the documentation of the <code>AlgDesign</code> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rna_TE_sensitivity_doe<span class="sc">$</span>D;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -317,12 +358,15 @@ div.csl-indent {
 </div>
 <p>Diagonality is the degree to which the blocked variables are uncorrelated: a diagonality of 1.0 is perfectly uncorrelated. A value of 0.871 is moderate. We are getting values less than 1.0, because not every number of unique sample ( 2 * 4 * <del>5</del> ) factors to be processed is divisible by the number of blocking groups. We will see this effect illustrated in the “Check orthogonality of blocking” section.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rna_TE__blocking_df <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(rna_TE_sensitivity_doe<span class="sc">$</span>Blocks<span class="sc">$</span>B1, <span class="st">"operator"</span> <span class="ot">=</span> <span class="st">"Operator A"</span>),</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">mutate</span>(rna_TE_sensitivity_doe<span class="sc">$</span>Blocks<span class="sc">$</span>B2, <span class="st">"operator"</span> <span class="ot">=</span> <span class="st">"Operator B"</span>),</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(panel, conc, mass_input)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>rna_TE__blocking_df <span class="ot">&lt;-</span> purrr<span class="sc">::</span><span class="fu">map</span>(<span class="fu">names</span>(rna_TE_sensitivity_doe<span class="sc">$</span>Blocks),</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                        <span class="sc">~</span> rna_TE_sensitivity_doe<span class="sc">$</span>Blocks[[.x]]) <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="at">.id =</span> <span class="st">"operator"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"operator"</span> <span class="ot">=</span> LETTERS[<span class="fu">as.integer</span>(operator)],</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>         <span class="st">"operator"</span> <span class="ot">=</span> <span class="fu">paste</span>(<span class="st">"Operator"</span>, operator)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(panel, conc, mass_input)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Above, for each block, we bind the rows together into one data frame, converting the block names to the intended use, which is specifying which operator is working. Then arrange the data by panel name, concentration, and mass input.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>(panels_to_join <span class="ot">&lt;-</span> rna_TE__blocking_df <span class="sc">%&gt;%</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(panel) <span class="sc">%&gt;%</span></span>
@@ -335,6 +379,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
+<p>Above, we prepare the panel info for joining.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>(fusconcs_to_join <span class="ot">&lt;-</span> rna_TE__blocking_df <span class="sc">%&gt;%</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(conc) <span class="sc">%&gt;%</span></span>
@@ -348,6 +393,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
+<p>As well as preparing the concentration info for joining.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>(massinput_to_join <span class="ot">&lt;-</span> rna_TE__blocking_df <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(mass_input) <span class="sc">%&gt;%</span></span>
@@ -361,6 +407,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
+<p>And lastly prepare the mass input levels for joining.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>rna_TE__doe_blocked <span class="ot">&lt;-</span> rna_TE__blocking_df <span class="sc">%&gt;%</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(panels_to_join, <span class="at">by =</span> <span class="st">"panel"</span>) <span class="sc">%&gt;%</span></span>
@@ -373,18 +420,25 @@ div.csl-indent {
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(replicate_num, <span class="at">.after =</span> operator) <span class="sc">%&gt;%</span></span>
 <span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"LP_operator"</span> <span class="ot">=</span> <span class="st">"operator"</span>) <span class="sc">%&gt;%</span></span>
 <span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(panel, mass_input) <span class="sc">%&gt;%</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"capture"</span> <span class="ot">=</span> <span class="fu">ceiling</span>(<span class="fu">row_number</span>()<span class="sc">/</span><span class="dv">6</span>) ) <span class="sc">%&gt;%</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(<span class="st">"capture"</span>, <span class="at">.after =</span> replicate_num) <span class="sc">%&gt;%</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(panel, <span class="fu">desc</span>(conc), mass_input)</span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(rna_TE__doe_blocked, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># below, assign samples to captures in plexity of up to 6</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># the table is sorted in order of panel and mass input, so most of the time,</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># samples will be paired with other samples with the same mass input, which is</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># best practice.</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"capture"</span> <span class="ot">=</span> <span class="fu">ceiling</span>(<span class="fu">row_number</span>()<span class="sc">/</span><span class="dv">6</span>) ) <span class="sc">%&gt;%</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(<span class="st">"capture"</span>, <span class="at">.after =</span> replicate_num) <span class="sc">%&gt;%</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(panel, <span class="fu">desc</span>(conc), mass_input)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(rna_TE__doe_blocked, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":[""],"name":["_rn_"],"type":[""],"align":["left"]},{"label":["panel"],"name":[1],"type":["chr"],"align":["left"]},{"label":["conc"],"name":[2],"type":["fct"],"align":["left"]},{"label":["mass_input"],"name":[3],"type":["fct"],"align":["left"]},{"label":["LP_operator"],"name":[4],"type":["chr"],"align":["left"]},{"label":["replicate_num"],"name":[5],"type":["int"],"align":["right"]},{"label":["capture"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["panel_size"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["needed_sequencing"],"name":[8],"type":["lgl"],"align":["right"]}],"data":[{"1":"TE Panel A","2":"0.027","3":"10","4":"Operator A","5":"1","6":"1","7":"3","8":"NA","_rn_":"1"},{"1":"TE Panel A","2":"0.027","3":"10","4":"Operator B","5":"2","6":"1","7":"3","8":"NA","_rn_":"2"},{"1":"TE Panel A","2":"0.027","3":"10","4":"Operator B","5":"3","6":"1","7":"3","8":"NA","_rn_":"3"},{"1":"TE Panel A","2":"0.027","3":"100","4":"Operator B","5":"1","6":"3","7":"3","8":"NA","_rn_":"4"},{"1":"TE Panel A","2":"0.027","3":"100","4":"Operator B","5":"2","6":"3","7":"3","8":"NA","_rn_":"5"},{"1":"TE Panel A","2":"0.027","3":"100","4":"Operator B","5":"3","6":"3","7":"3","8":"NA","_rn_":"6"},{"1":"TE Panel A","2":"0.0027","3":"10","4":"Operator A","5":"1","6":"1","7":"3","8":"NA","_rn_":"7"},{"1":"TE Panel A","2":"0.0027","3":"10","4":"Operator A","5":"2","6":"1","7":"3","8":"NA","_rn_":"8"},{"1":"TE Panel A","2":"0.0027","3":"10","4":"Operator A","5":"3","6":"1","7":"3","8":"NA","_rn_":"9"},{"1":"TE Panel A","2":"0.0027","3":"100","4":"Operator A","5":"1","6":"4","7":"3","8":"NA","_rn_":"10"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["panel"],"name":[1],"type":["chr"],"align":["left"]},{"label":["conc"],"name":[2],"type":["fct"],"align":["left"]},{"label":["mass_input"],"name":[3],"type":["fct"],"align":["left"]},{"label":["LP_operator"],"name":[4],"type":["chr"],"align":["left"]},{"label":["replicate_num"],"name":[5],"type":["int"],"align":["right"]},{"label":["capture"],"name":[6],"type":["dbl"],"align":["right"]},{"label":["panel_size"],"name":[7],"type":["dbl"],"align":["right"]},{"label":["needed_sequencing"],"name":[8],"type":["lgl"],"align":["right"]}],"data":[{"1":"TE Panel A","2":"0.027","3":"10","4":"Operator A","5":"1","6":"1","7":"3","8":"NA"},{"1":"TE Panel A","2":"0.027","3":"10","4":"Operator B","5":"2","6":"1","7":"3","8":"NA"},{"1":"TE Panel A","2":"0.027","3":"10","4":"Operator B","5":"3","6":"1","7":"3","8":"NA"},{"1":"TE Panel A","2":"0.027","3":"100","4":"Operator B","5":"1","6":"3","7":"3","8":"NA"},{"1":"TE Panel A","2":"0.027","3":"100","4":"Operator B","5":"2","6":"3","7":"3","8":"NA"},{"1":"TE Panel A","2":"0.027","3":"100","4":"Operator B","5":"3","6":"3","7":"3","8":"NA"},{"1":"TE Panel A","2":"0.0027","3":"10","4":"Operator A","5":"1","6":"1","7":"3","8":"NA"},{"1":"TE Panel A","2":"0.0027","3":"10","4":"Operator A","5":"2","6":"1","7":"3","8":"NA"},{"1":"TE Panel A","2":"0.0027","3":"10","4":"Operator A","5":"3","6":"1","7":"3","8":"NA"},{"1":"TE Panel A","2":"0.0027","3":"100","4":"Operator A","5":"1","6":"4","7":"3","8":"NA"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
 </div>
+<p>Above, we interpret the numeric levels from the DoE by joining each to the tables that provide the literal values for those experimental variables.</p>
+<p>Above, we also assigned samples to captures in plexity of up to 6 the table is sorted in order of panel and mass input, so most of the time, samples will be paired with other samples with the same mass input, which is best practice.</p>
+<p>Quickly spot-checking the first 10 rows, everything looks reasonable.</p>
 <section id="check-orthogonality-of-blocking" class="level3">
 <h3 class="anchored" data-anchor-id="check-orthogonality-of-blocking">Check orthogonality of blocking</h3>
 <div class="cell">
@@ -397,6 +451,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
+<p>Above, we count how many samples are operated by each operator at each mass level. The counts are all equal, meaning the two <code>mass_input</code> factor levels have been “spread evenly” across the available operators.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rna_TE__doe_blocked <span class="sc">%&gt;%</span> <span class="fu">count</span>(LP_operator, panel)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -407,6 +462,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
+<p>The same is true for the levels of the <code>panel</code> factor: they have been “spread evenly” across the available operators.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>rna_TE__doe_blocked <span class="sc">%&gt;%</span> <span class="fu">count</span>(LP_operator, conc)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -417,6 +473,7 @@ div.csl-indent {
 </div>
 </div>
 </div>
+<p>Finally, with RNA concentration, we see that not exactly every operator has the same number of samples at each level of RNA concentration being tested. This is because the number is not evenly divisible, and so some variability in the number of assigned samples will have to exist. Qualitatively, they look reasonably evenly-spread from across the two operators.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>googlesheets4<span class="sc">::</span><span class="fu">write_sheet</span>(rna_TE__doe_blocked, <span class="at">ss =</span> <span class="st">"sheet_string_goes_here"</span>,</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">sheet =</span> <span class="st">"rna_TE_sensitivity_doe"</span>);</span>
@@ -426,6 +483,7 @@ div.csl-indent {
 <span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                                      file_pref,</span>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                                      <span class="st">"_rna_TE_sensitivity_doe.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>Out put the design to google sheets, where the scientists and research associates can view the experiment’s sample plan.</p>
 </section>
 <section id="analyze-captures" class="level3">
 <h3 class="anchored" data-anchor-id="analyze-captures">Analyze captures</h3>
@@ -440,13 +498,14 @@ div.csl-indent {
 </div>
 </div>
 </div>
+<p>Above, we can see that, for as many samples as possible, libraries with the same total RNA input mass are captured together in the same multiplexed hybridization reaction. In some cases, we see up to three 10 ng input libraries being co-hybridized with 100 ng input libraries. Given the number of samples we want to run and the division of different TE panels, this is the best we can do.</p>
 </section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
 <p>Great! We have an experiment design for testing the effect of these panels against each other and against whole transcriptome sequencing. The experiment had n = 3 replicates, and it is blocked for having two operators carry out the RNA-seq library preps.</p>
 <p>Importantly, when I get feedback on the design of this sample layout, I can easily show my work. Even better, if changes are needed, the entire design is programmed, and can be changed in seconds.</p>
-<p>Let’s go!</p>
+<p>Let’s get this experiment started.</p>
 
 
 

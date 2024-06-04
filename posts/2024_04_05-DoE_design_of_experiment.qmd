@@ -28,9 +28,9 @@ editor_options:
 ## Introduction and motivation
 In this post, I describe an experimental design for generating a genomics dataset using statistical DoE principles.
 
-My motivation for designing and carrying out this experiment was that I had data showing the sensitivity (by percent recall of a set of genetic variants expressed as mRNAs) over a controlled range of concentrations (made by serial dilution). *However, those data were only gathered with one target enrichment panel, which was a fairly esoteric TE Panel.* The goal was to extend the conclusions on sensitivity and recall to other, more mainstream panels used in RNA-seq experiments. We'll call the esoteric panel "Panel A." I had the idea that, given the success Panel A's bioinformatic performance, *it could be useful to show that many different TE panels work well for an extension of said bioinformatic performance*, encouragiung the use of those other panels by showing equal analytical performance in a head-to-head experiment.
+My motivation for designing and carrying out this experiment was that I had data showing the sensitivity (by percent recall of a set of genetic variants expressed as mRNAs) over a controlled range of concentrations (made by serial dilution). *However, those data were only gathered with one target enrichment panel, which was a fairly esoteric TE Panel.* The goal was to extend the conclusions on sensitivity and recall to other, more mainstream panels used in RNA-seq experiments. We'll call the esoteric panel "Panel A." I had the idea that, given the success Panel A's bioinformatic performance, *it could be useful to show that many different TE panels work well for an extension of said bioinformatic performance*, encouraging the use of those other panels by showing equal analytical performance in a head-to-head experiment.
 
-To do so, I proposed using multiplexed capture (to save on wet-lab resources and time), 100 ng of input RNA (and optionally 10 ng), and technical replicates (n = 3, or a minimum of n = 2 for dropout protection). These are parameterized in this DoE script below, and the resulting sample plan is exported to google sheets for directing the lab activities a team of scientists and research assocaites.
+To do so, I proposed using multiplexed capture (to save on wet-lab resources and time), 100 ng of input RNA (and optionally 10 ng), and technical replicates (n = 3, or a minimum of n = 2 for dropout protection). These are parameterized in this DoE script below, and the resulting sample plan is exported to google sheets for directing the lab activities a team of scientists and research associates.
 
 ### Historical roots of design of experiment
 British statistician and geneticist Ronald A. Fisher (1890-1962) heavily influenced the modern ideals of experimental design. His influential 1922 publication on maximum likelihood laid the groundwork for now widely-taught concepts of sufficiency, information, and efficiency [@Fisher1922]. Fisher also pioneered and developed the methods of study randomization, and he promoted principles of *design of experiment* [@Edwards1974]. The radial idea (at the time) was that designs could be based on varying multiple factors simultaneously, and the downstream analysis could be supported by multi-factor analysis of variance. This progress in design and analysis allowed for the testing of many fore variables and factors in one experiment (when designed properly) instead of many one-by-one factor comparisons.
@@ -45,13 +45,20 @@ Below, I provide a glossary of design of experiment (DoE) concepts and their def
  - *Confounded factors*: *Confounding* is a relationship of two or more factors to each other. Two or more factors are confounded when they are *auto-correlated* in the design -- that is, when the levels / values of each factor co-occur throughout the experiment --to the exclusion of other combinations of levels of those factors. In this situation, it is impossible to provide evidence for which factor causes any observed change in the response variable. (Some analyses will emit an error or a warning when confounding or autocorrelation of independent variable occurs.)
  - *Biased factor*: *Bias* in another relationship between experimental factors. Bias occurs when an experimenter makes a change to an independent variable at the precise time when changes in a lurking variable also occur. This is effectively confounding with a lurking variable, but because lurking variables are not always known or measured, the situation can go undetected, which can lead to erroneous conclusions. For this reason, it can be good to measure suspected lurking variables *even if they are not controlled* for retrospective analysis of bias.
  - *Experimental error*: the difference between the measured response for a condition and the long-run average of that condition. In this definition, error is a statistical measure, and not literally a "mistake" or "inaccuracy," as synonyms for error suggest. Experimental error is expected (to some degree) because background or lurking variables can subtly influence outcomes or measurements.
- - *Blocking*: the spreading of all other variables as evenly as is practical over the variable in question. If a variable is suspected of being a lurking variable, it can be "blocked" in the experimental design, which spreads its bias (if any) as evenly as is practicle across all other combinations of factors. This even spreading allows for a bias in the blocked varaible to be detected with high precision in analysis.
+ - *Randomization*: the random assignment of conditions to a particular sample of an experiment, which leads to the likely reduction of experimental error.
+ - *Blocking*: the spreading of all other variables as evenly as is practical over the variable in question. If a variable is suspected of being a lurking variable, it can be "blocked" in the experimental design, which spreads its bias (if any) as evenly as is practical across all other combinations of factors. This even spreading allows for a bias in the blocked variable to be detected with high precision in analysis.
 
 Experimental error is subdivided into __bias error__ and __random error__:
 
   - *Bias error* tends to remain constant or change in a consistent pattern over time or with other variables (whether measured or not).
   - *Random error* changes from one experiment to another unpredictably. However, it the long run, random error averages to zero and has a consistent probability distribution that allows us to draw conclusions.
 
+### Aplying DoE principle to this experiment
+Randomization is a good way to get random error to cancel out within an experiment. Any one randomized experiment that suffers (by chance) from a preponderance of random error will not replicate that random error in a repeat experiment, because the randomization will change, and likely distribute the error differently across samples. Thus, randomization is effective for preventing error from confounding experimental conclusion in the long term.
+
+But what if we want to prevent error from affecting *this experiment*? If we have a hypothesized source of the bias in mind, then we can deploy a *randomized complete block* design, also known as using blocking on a variable.
+
+If we have a suspected influence from a variable that we're not testing as an independent variable, we can attempt to minimize the contribution of its effect (or bias) to the experimental conclusions.
 
 ## Procedure
 ```{r, setup, echo = FALSE, message = FALSE}
@@ -81,7 +88,7 @@ panel_info <- tribble(
 ```
 
 ## DoE with blocking for multiple operators
-I will block for the operators carrying out library prep, because operator is a known source of variation that is not relevant to understanding the effect of TE panel, RNA input mass, or concentration on performance.
+I will block for the operators carrying out library prep, because operator is a known source of variation that is not relevant to understanding the effect of TE panel, RNA input mass, or concentration on performance. (For example, my direct report is better at target enrichment than I am--she gets better fold-80 scores and off-target percentages than me routinely. But we're here to study *the panels*, not the operators, and we need to share the work.)
 
 Blocking is the non-random assignment of samples to groups to minimize differences in the sample composition between the groups such that any effect of the grouping can be determined by the model and ignored (modeled out quantitatively and precisely).
 
@@ -97,9 +104,12 @@ rna_TE_sensitivity_doe <- gen.factorial(c(4,5,2), nVars = 3, factors = c(1),
   bind_rows(., ., .) 
 
 rna_TE_sensitivity_doe
-rna_TE_sensitivity_doe <- optBlock(frml = ~ conc + panel + mass_input, 
-                                          withinData = rna_TE_sensitivity_doe, blocksizes = rep(60, 2), nRepeats	= 3)
+rna_TE_sensitivity_doe <- AlgDesign::optBlock(frml = ~ conc + panel + mass_input,
+                                              withinData = rna_TE_sensitivity_doe,
+                                              blocksizes = rep(60, 2), nRepeats	= 3)
 ```
+
+The `optBlock` function from the `AlgDesign` package maximizing $|X'X|$, the determinant of the product of the inverse of the design matrix and the design matrix, a process called *D-optimization*. Further explanation is beyond the scope fo this tutorial, but is available in copious detail in the documentation of the `AlgDesign` package.
 
 ```{r}
 rna_TE_sensitivity_doe$D;
@@ -109,18 +119,24 @@ rna_TE_sensitivity_doe$diagonality
 Diagonality is the degree to which the blocked variables are uncorrelated: a diagonality of 1.0 is perfectly uncorrelated. A value of 0.871 is moderate. We are getting values less than 1.0, because not every number of unique sample ( 2 * 4 * ~~5~~ ) factors to be processed is divisible by the number of blocking groups. We will see this effect illustrated in the "Check orthogonality of blocking" section.
 
 ```{r}
-rna_TE__blocking_df <- bind_rows(
- mutate(rna_TE_sensitivity_doe$Blocks$B1, "operator" = "Operator A"),
- mutate(rna_TE_sensitivity_doe$Blocks$B2, "operator" = "Operator B"),
-) %>%
+rna_TE__blocking_df <- purrr::map(names(rna_TE_sensitivity_doe$Blocks),
+                        ~ rna_TE_sensitivity_doe$Blocks[[.x]]) %>%
+  bind_rows(.id = "operator") %>%
+  as_tibble() %>%
+  mutate("operator" = LETTERS[as.integer(operator)],
+         "operator" = paste("Operator", operator)) %>%
   arrange(panel, conc, mass_input)
 ```
+
+Above, for each block, we bind the rows together into one data frame, converting the block names to the intended use, which is specifying which operator is working. Then arrange the data by panel name, concentration, and mass input.
 
 ```{r, message = FALSE}
 (panels_to_join <- rna_TE__blocking_df %>%
   distinct(panel) %>%
    bind_cols(rename(panel_info, "panel_name" = 1)))
 ```
+
+Above, we prepare the panel info for joining.
 
 ```{r, message = FALSE}
 (fusconcs_to_join <- rna_TE__blocking_df %>%
@@ -129,12 +145,16 @@ rna_TE__blocking_df <- bind_rows(
   rename("concentrations" = 2))
 ```
 
+As well as preparing the concentration info for joining.
+
 ```{r, message = FALSE}
 (massinput_to_join <- rna_TE__blocking_df %>%
   distinct(mass_input) %>%
   bind_cols(mass_inputs) %>%
   rename("mass_inputs" = 2))
 ```
+
+And lastly prepare the mass input levels for joining.
 
 ```{r}
 rna_TE__doe_blocked <- rna_TE__blocking_df %>%
@@ -148,24 +168,40 @@ rna_TE__doe_blocked <- rna_TE__blocking_df %>%
   relocate(replicate_num, .after = operator) %>%
   rename("LP_operator" = "operator") %>%
   arrange(panel, mass_input) %>%
+  # below, assign samples to captures in plexity of up to 6
+  # the table is sorted in order of panel and mass input, so most of the time,
+  # samples will be paired with other samples with the same mass input, which is
+  # best practice.
   mutate("capture" = ceiling(row_number()/6) ) %>%
   relocate("capture", .after = replicate_num) %>%
   arrange(panel, desc(conc), mass_input)
 head(rna_TE__doe_blocked, n = 10)
 ```
 
+Above, we interpret the numeric levels from the DoE by joining each to the tables that provide the literal values for those experimental variables.
+
+Above, we also assigned samples to captures in plexity of up to 6 the table is sorted in order of panel and mass input, so most of the time, samples will be paired with other samples with the same mass input, which is best practice.
+
+Quickly spot-checking the first 10 rows, everything looks reasonable.
+
 ### Check orthogonality of blocking
 ```{r}
 rna_TE__doe_blocked %>% count(LP_operator, mass_input)
 ```
 
+Above, we count how many samples are operated by each operator at each mass level. The counts are all equal, meaning the two `mass_input` factor levels have been "spread evenly" across the available operators.
+
 ```{r}
 rna_TE__doe_blocked %>% count(LP_operator, panel)
 ```
 
+The same is true for the levels of the `panel` factor: they have been "spread evenly" across the available operators.
+
 ```{r}
 rna_TE__doe_blocked %>% count(LP_operator, conc)
 ```
+
+Finally, with RNA concentration, we see that not exactly every operator has the same number of samples at each level of RNA concentration being tested. This is because the number is not evenly divisible, and so some variability in the number of assigned samples will have to exist. Qualitatively, they look reasonably evenly-spread from across the two operators.
 
 ```{r, eval = FALSE}
 googlesheets4::write_sheet(rna_TE__doe_blocked, ss = "sheet_string_goes_here",
@@ -177,18 +213,22 @@ write_csv(rna_TE__doe_blocked, paste0(file_dest_dir, "/",
                                       "_rna_TE_sensitivity_doe.csv"))
 ```
 
+Out put the design to google sheets, where the scientists and research associates can view the experiment's sample plan.
+
 ### Analyze captures
 ```{r}
 rna_TE__doe_blocked %>%
   count(capture, panel, mass_input)
 ```
 
+Above, we can see that, for as many samples as possible, libraries with the same total RNA input mass are captured together in the same multiplexed hybridization reaction. In some cases, we see up to three 10 ng input libraries being co-hybridized with 100 ng input libraries. Given the number of samples we want to run and the division of different TE panels, this is the best we can do.
+
 ## Conclusion
 Great! We have an experiment design for testing the effect of these panels against each other and against whole transcriptome sequencing. The experiment had n = 3 replicates, and it is blocked for having two operators carry out the RNA-seq library preps.
 
 Importantly, when I get feedback on the design of this sample layout, I can easily show my work. Even better, if changes are needed, the entire design is programmed, and can be changed in seconds.
 
-Let's go!
+Let's get this experiment started.
 
 ---
 nocite: |
