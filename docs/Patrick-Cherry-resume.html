@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.550">
+<meta name="generator" content="quarto-1.5.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Frameshift - Patrick Cherry’s CV</title>
+<title>Frameshift – Patrick Cherry’s CV</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -90,7 +90,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -125,7 +125,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
   <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
 </div>
       </div> <!-- /container-fluid -->
@@ -202,7 +202,7 @@ ul.task-list li input[type="checkbox"] {
 <li><i class="fa-solid fa-id-card" aria-label="id-card"></i> United States Citizen</li>
 </ul>
 <div class="disclaimer">
-<p>Last updated on 2024-05-24.</p>
+<p>Last updated on 2024-05-27.</p>
 <p>Data-driven résumé made in R using Quarto.</p>
 </div>
 </section>
@@ -244,7 +244,7 @@ ul.task-list li input[type="checkbox"] {
 <p>2024 - 2021</p>
 <ul>
 <li>Invented and introduced multiple new products to market yielding millions of dollars in new revenue as <em>Tech Lead</em>, including: <em>Pan-cancer cfDNA</em> (v1 &amp; v2), <em>CNV Controls</em>, <em>RNA Fusion Controls</em>, <em>Fragmentome Controls</em>, and RNA-seq</li>
-<li>Answered biological and business questions with reproducible exploratory analysis using <code>R</code> and the libraries: <code>dplyr</code>, <code>dbplyr</code>, <code>DBI</code>, <code>purrr</code>, <code>ggplot2</code>, <code>Bioconductor</code>, <code>DEseq2</code>, <code>seurat</code>, <code>tidymodels</code>, <code>glm</code>, <code>nls</code>, <code>lme4</code>, and more</li>
+<li>Answered biological and business questions with DoE and data analysis using <code>R</code> and the libraries: <code>dplyr</code>, <code>dbplyr</code>, <code>DBI</code>, <code>purrr</code>, <code>ggplot2</code>, <code>Bioconductor</code>, <code>DEseq2</code>, <code>seurat</code>, <code>tidymodels</code>, <code>glm</code>, <code>nls</code>, <code>lme4</code>, <code>AlgDesign</code>, and more</li>
 <li>Edited and maintained production QC pipelines with automated reporting using <code>Python</code> and the libraries: <code>NumPy</code>, <code>pandas</code>, <code>polars</code>, <code>seaborn</code>, <code>statsmodels</code>, <code>biopython</code>, <code>pybedtools</code>, <code>pysam</code>, <code>vcfpy</code>, <code>scanpy</code>, and others</li>
 <li>Maintained production code (<code>git</code> version control with code review) with CD (github actions); operated in high-performance compute environment <code>aws</code> <code>s3</code> and <code>Databricks</code> using Unix shell / <code>bash</code> tools, like <code>STAR-fusion</code></li>
 <li>Authored internal <code>R</code> package “<code>twistcolorpal</code>” on Github with help files to help scientists style plots to Twist branding</li>
@@ -269,7 +269,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Emeryville, California</p>
 <p>2021 - 2019</p>
 <ul>
-<li>Boosted <em>NGS Core</em> genotyping success by 45% using data-driven decision-making and teaching; Guided demanding and diverse internal customers on complex NGS experiments</li>
+<li>Boosted <em>NGS Core</em> genotyping success by 45% using DoE experimentation, data-driven decision-making, and teaching; Guided demanding and diverse internal customers on complex NGS experiments</li>
 <li>Built and disseminated <code>Rmarkdown</code> notebook for autonomous NGS data exploration</li>
 <li>Coded build and QC experiments using Zymergen’s <code>Drawbridge</code> alembic API Python library to LIMS</li>
 <li>Rendered strain build and plasmid build reports from LIMS <code>SQL</code> database in <code>MySQL</code> Workbench</li>
@@ -873,18 +873,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -916,7 +905,47 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -951,7 +980,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');

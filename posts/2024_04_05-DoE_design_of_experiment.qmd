@@ -3,8 +3,12 @@ title: "DoE: Design of Experiment"
 author: "Patrick Cherry"
 date: "2024-04-05"
 categories:
-  - politics
+  - DoE
+  - design of experiment
+  - code
+  - science
 image: "2024_04_05-DoE_architecture_imperfect_grid.jpg"
+bibliography: 2024_04_05-DoE_design_of_experiment.bib
 format:
   html:
     df-print: paged
@@ -14,20 +18,40 @@ execute:
 editor_options: 
   chunk_output_type: inline
 ---
-
-```{r}
-caption_def <- "2024-03-02 SF Political Alignment. by Patrick Cherry"
-exp_imp_path <- "./2024_03_02-SF_political_support_data/"
-```
-
 ![DoE experiments can make conclusions that are greater than the sum of its parts, through thoughtful designs. Much like an architectural facade, DoEs often employ a grid of conditions that do not perfectly sample every possible combination. Image credit: seier+seier on Flickr under CC](2024_04_05-DoE_architecture_imperfect_grid.jpg)
 
-## Introduction and Background
-I had the idea that, given the success Panel A's bioinformatic performance, *it could be useful to show that TE panels work well for an extension of said bioinformatic performance.*
+> To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of.
+> — Ronald A. Fisher
+> First Session of the Indian Statistical Conference, Calcutta, 1938
+> [@OxfordEssentialQuotations]
 
-To do so, I propose using multiplexed capture, 100 ng (and optionally 10 ng of RNA input), and technical replicates (3, perhaps 2). These are parameterized in this DoE script below and the resulting sample plan is exported to google sheets.
+## Introduction and motivation
+In this post, I describe an experimental design for generating a genomics dataset using statistical DoE principles.
+
+My motivation for designing and carrying out this experiment was that I had data showing the sensitivity (by percent recall of a set of genetic variants expressed as mRNAs) over a controlled range of concentrations (made by serial dilution). *However, those data were only gathered with one target enrichment panel, which was a fairly esoteric TE Panel.* The goal was to extend the conclusions on sensitivity and recall to other, more mainstream panels used in RNA-seq experiments. We'll call the esoteric panel "Panel A." I had the idea that, given the success Panel A's bioinformatic performance, *it could be useful to show that many different TE panels work well for an extension of said bioinformatic performance*, encouragiung the use of those other panels by showing equal analytical performance in a head-to-head experiment.
+
+To do so, I proposed using multiplexed capture (to save on wet-lab resources and time), 100 ng of input RNA (and optionally 10 ng), and technical replicates (n = 3, or a minimum of n = 2 for dropout protection). These are parameterized in this DoE script below, and the resulting sample plan is exported to google sheets for directing the lab activities a team of scientists and research assocaites.
+
+### Historical roots of design of experiment
+British statistician and geneticist Ronald A. Fisher (1890-1962) heavily influenced the modern ideals of experimental design. His influential 1922 publication on maximum likelihood laid the groundwork for now widely-taught concepts of sufficiency, information, and efficiency [@Fisher1922]. Fisher also pioneered and developed the methods of study randomization, and he promoted principles of *design of experiment* [@Edwards1974]. The radial idea (at the time) was that designs could be based on varying multiple factors simultaneously, and the downstream analysis could be supported by multi-factor analysis of variance. This progress in design and analysis allowed for the testing of many fore variables and factors in one experiment (when designed properly) instead of many one-by-one factor comparisons.
 
 ## Brief intro to DoE concepts
+Below, I provide a glossary of design of experiment (DoE) concepts and their definitions. After, I describe which apply to here, and how I incorporated that concept into the design.
+
+ - *Independent variable*: Also called treatment factor, it is a variable under study as a potential cause, and so it is controlled at or near some target value, as informed by the hypothesis. An experiment can have more than one independent variable; it is common to analyze multiple independent variables at the same time.
+ - *Background variable*: Also called a *lurking variable*, it is a variable that the experimenter is not aware exists or affects the outcome of the experiment. Due to this lack of awareness, it is not controlled. In a well-planned experiment, lurking variables should balance out in effect so as not to impact the conclusion of the experiment.
+ - *Dependent variable*: Also called a *response variable*, it is the outcome or output measured from the experiment. An experiment can have multiple dependent variables, but it is more typical to analyze for one of these variables at a time.
+ - *Replicate*: additional runs of the same experiment (same treatment, same controls, etc.). Replicates help to understand the within-condition variability of outcomes, and decide if enough evidence is present to conclude the independent variable is _causing_ a change in the response variable.
+ - *Confounded factors*: *Confounding* is a relationship of two or more factors to each other. Two or more factors are confounded when they are *auto-correlated* in the design -- that is, when the levels / values of each factor co-occur throughout the experiment --to the exclusion of other combinations of levels of those factors. In this situation, it is impossible to provide evidence for which factor causes any observed change in the response variable. (Some analyses will emit an error or a warning when confounding or autocorrelation of independent variable occurs.)
+ - *Biased factor*: *Bias* in another relationship between experimental factors. Bias occurs when an experimenter makes a change to an independent variable at the precise time when changes in a lurking variable also occur. This is effectively confounding with a lurking variable, but because lurking variables are not always known or measured, the situation can go undetected, which can lead to erroneous conclusions. For this reason, it can be good to measure suspected lurking variables *even if they are not controlled* for retrospective analysis of bias.
+ - *Experimental error*: the difference between the measured response for a condition and the long-run average of that condition. In this definition, error is a statistical measure, and not literally a "mistake" or "inaccuracy," as synonyms for error suggest. Experimental error is expected (to some degree) because background or lurking variables can subtly influence outcomes or measurements.
+ - *Blocking*: the spreading of all other variables as evenly as is practical over the variable in question. If a variable is suspected of being a lurking variable, it can be "blocked" in the experimental design, which spreads its bias (if any) as evenly as is practicle across all other combinations of factors. This even spreading allows for a bias in the blocked varaible to be detected with high precision in analysis.
+
+Experimental error is subdivided into __bias error__ and __random error__:
+
+  - *Bias error* tends to remain constant or change in a consistent pattern over time or with other variables (whether measured or not).
+  - *Random error* changes from one experiment to another unpredictably. However, it the long run, random error averages to zero and has a consistent probability distribution that allows us to draw conclusions.
+
 
 ## Procedure
 ```{r, setup, echo = FALSE, message = FALSE}
@@ -41,8 +65,10 @@ library(AlgDesign)                # for DoE blocking
 set.seed(1001)
 ```
 
-```{r, echo = TRUE}
-file_pref <- "2023_05_24_RNA_TE__sensitivty_DoE"
+```{r, include = FALSE}
+file_pref <- "2024_04_05_RNA_TE_sensitivty_DoE"
+caption_def <- "2024-04-05 SF Political Alignment. by Patrick Cherry"
+exp_imp_path <- "./2024_04_05_RNA_TE_sensitivty_DoE/"
 ```
 
 ```{r}
@@ -51,8 +77,7 @@ panel_info <- tribble(
   "TE Panel A", 3.0, NA,
   "TE Panel B",  36.8, NA,
   "TE Panel C",  35.8, NA,
-  "Whole Transcriptome", NA, NA,
-)
+  "Whole Transcriptome", NA, NA)
 ```
 
 ## DoE with blocking for multiple operators
@@ -67,26 +92,26 @@ mass_inputs <- factor(c(10, 100))
 
 vec_levels_for_variables <- c(panels, concentrations, mass_inputs)
 
-rna_TE__sensitivity_doe <- gen.factorial(c(4,5,2), nVars = 3, factors = c(1),
+rna_TE_sensitivity_doe <- gen.factorial(c(4,5,2), nVars = 3, factors = c(1),
                                                varNames = c("panel", "conc", "mass_input")) %>%
   bind_rows(., ., .) 
 
-rna_TE__sensitivity_doe
-rna_TE__sensitivity_doe <- optBlock(frml = ~ conc + panel + mass_input, 
-                                          withinData = rna_TE__sensitivity_doe, blocksizes = rep(60, 2), nRepeats	= 3)
+rna_TE_sensitivity_doe
+rna_TE_sensitivity_doe <- optBlock(frml = ~ conc + panel + mass_input, 
+                                          withinData = rna_TE_sensitivity_doe, blocksizes = rep(60, 2), nRepeats	= 3)
 ```
 
 ```{r}
-rna_TE__sensitivity_doe$D;
-rna_TE__sensitivity_doe$diagonality
+rna_TE_sensitivity_doe$D;
+rna_TE_sensitivity_doe$diagonality
 ```
 
 Diagonality is the degree to which the blocked variables are uncorrelated: a diagonality of 1.0 is perfectly uncorrelated. A value of 0.871 is moderate. We are getting values less than 1.0, because not every number of unique sample ( 2 * 4 * ~~5~~ ) factors to be processed is divisible by the number of blocking groups. We will see this effect illustrated in the "Check orthogonality of blocking" section.
 
 ```{r}
 rna_TE__blocking_df <- bind_rows(
- mutate(rna_TE__sensitivity_doe$Blocks$B1, "operator" = "Operator A"),
- mutate(rna_TE__sensitivity_doe$Blocks$B2, "operator" = "Operator B"),
+ mutate(rna_TE_sensitivity_doe$Blocks$B1, "operator" = "Operator A"),
+ mutate(rna_TE_sensitivity_doe$Blocks$B2, "operator" = "Operator B"),
 ) %>%
   arrange(panel, conc, mass_input)
 ```
@@ -144,12 +169,12 @@ rna_TE__doe_blocked %>% count(LP_operator, conc)
 
 ```{r, eval = FALSE}
 googlesheets4::write_sheet(rna_TE__doe_blocked, ss = "sheet_string_goes_here",
-                           sheet = "rna_TE__sensitivity_doe");
+                           sheet = "rna_TE_sensitivity_doe");
 file_dest_dir <- "doe_design_of_experiment_with_library_prep_files"
 fs::dir_create(file_dest_dir);
 write_csv(rna_TE__doe_blocked, paste0(file_dest_dir, "/",
                                       file_pref,
-                                      "_rna_TE__sensitivity_doe.csv"))
+                                      "_rna_TE_sensitivity_doe.csv"))
 ```
 
 ### Analyze captures
@@ -164,3 +189,8 @@ Great! We have an experiment design for testing the effect of these panels again
 Importantly, when I get feedback on the design of this sample layout, I can easily show my work. Even better, if changes are needed, the entire design is programmed, and can be changed in seconds.
 
 Let's go!
+
+---
+nocite: |
+  @fedorov1972optimal
+---
