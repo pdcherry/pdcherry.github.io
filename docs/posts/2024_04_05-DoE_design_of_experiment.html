@@ -345,7 +345,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="doe-with-blocking-for-multiple-operators">DoE with blocking for multiple operators</h2>
 <p>I will block for the operators carrying out library prep, because operator is a known source of variation that is not relevant to understanding the effect of TE panel, RNA input mass, or concentration on performance. (For example, my direct report is better at target enrichment than I am–she gets better fold-80 scores and off-target percentages than me routinely. But we’re here to study <em>the panels</em>, not the operators, and we need to share the work.)</p>
 <p>Blocking is the non-random assignment of samples to groups to minimize differences in the sample composition between the groups such that any effect of the grouping can be determined by the model and ignored (modeled out quantitatively and precisely).</p>
-<p>The <code>optBlock</code> function from the <code>AlgDesign</code> package maximizing <span class="math inline">\(|X'X|\)</span>, the determinant of the product of the inverse of the design matrix and the design matrix, a process called <em>D-optimization</em>. Further explanation is beyond the scope fo this tutorial, but is available in copious detail in the documentation of the <code>AlgDesign</code> package.</p>
+<p>The <code>optBlock</code> function from the <code>AlgDesign</code> package is maximizing <span class="math inline">\(|X'X|\)</span>, the determinant of the product of the inverse of the design matrix and the design matrix, a process called <em>D-optimization</em>. (The D criterion minimizes the overall variance of the estimates during analysis.) <span class="citation" data-cites="Donev1988">(<a href="#ref-Donev1988" role="doc-biblioref">Donev and Atkinson 1988</a>)</span> Further explanation is beyond the scope of this tutorial, but is available in copious detail in the documentation of the <code>AlgDesign</code> package.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>rna_TE_sensitivity_doe<span class="sc">$</span>D;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -512,6 +512,9 @@ window.Quarto = {
 </section>
 
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Donev1988" class="csl-entry" role="listitem">
+Donev, A. N., and A. C. Atkinson. 1988. <span>“An Adjustment Algorithm for the Construction of Exact d -Optimum Experimental Designs.”</span> <em>Technometrics</em> 30 (4): 429–33. <a href="https://doi.org/10.1080/00401706.1988.10488438">https://doi.org/10.1080/00401706.1988.10488438</a>.
+</div>
 <div id="ref-Edwards1974" class="csl-entry" role="listitem">
 Edwards, A. W. F. 1974. <span>“The History of Likelihood.”</span> <em>International Statistical Review / Revue Internationale de Statistique</em> 42 (1): 9–15. <a href="http://www.jstor.org/stable/1402681">http://www.jstor.org/stable/1402681</a>.
 </div>

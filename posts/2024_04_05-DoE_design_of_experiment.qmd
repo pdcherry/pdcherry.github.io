@@ -109,7 +109,7 @@ rna_TE_sensitivity_doe <- AlgDesign::optBlock(frml = ~ conc + panel + mass_input
                                               blocksizes = rep(60, 2), nRepeats	= 3)
 ```
 
-The `optBlock` function from the `AlgDesign` package maximizing $|X'X|$, the determinant of the product of the inverse of the design matrix and the design matrix, a process called *D-optimization*. Further explanation is beyond the scope fo this tutorial, but is available in copious detail in the documentation of the `AlgDesign` package.
+The `optBlock` function from the `AlgDesign` package is maximizing $|X'X|$, the determinant of the product of the inverse of the design matrix and the design matrix, a process called *D-optimization*. (The D criterion minimizes the overall variance of the estimates during analysis.) [@Donev1988] Further explanation is beyond the scope of this tutorial, but is available in copious detail in the documentation of the `AlgDesign` package.
 
 ```{r}
 rna_TE_sensitivity_doe$D;
