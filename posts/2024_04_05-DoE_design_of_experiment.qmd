@@ -9,6 +9,7 @@ categories:
   - science
 image: "2024_04_05-DoE_architecture_imperfect_grid.jpg"
 bibliography: 2024_04_05-DoE_design_of_experiment.bib
+from: markdown+tex_math_single_backslash
 format:
   html:
     df-print: paged
