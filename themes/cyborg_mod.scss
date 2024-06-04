@@ -2,11 +2,6 @@
 
 $theme: "cyborg" !default;
 
-// justify body paragraphs
-p{
-  text-align: justify;
-}
-
 //
 // Color system
 //
@@ -345,4 +340,7 @@ legend {
   }
 }
 
-
+// justify body paragraphs
+body{
+  text-align: justify;
+}

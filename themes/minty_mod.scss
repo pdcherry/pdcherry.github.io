@@ -2,11 +2,6 @@
 
 $theme: "minty" !default;
 
-// justify body paragraphs
-p{
-  text-align: justify;
-}
-
 //
 // Color system
 //
@@ -190,4 +185,7 @@ legend {
   }
 }
 
-
+// justify body paragraphs
+p{
+  text-align: justify;
+}
