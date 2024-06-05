@@ -92,7 +92,7 @@ I will block for the operators carrying out library prep, because operator is a 
 
 Blocking is the non-random assignment of samples to groups to minimize differences in the sample composition between the groups such that any effect of the grouping can be determined by the model and ignored (modeled out quantitatively and precisely).
 
-```{r, include=FALSE}
+```{r}
 panels <- factor(c("TE Panel A", "TE Panel V", "TE Panel C", "Whole Transcriptome"))
 concentrations <- factor(c(.027, .0027, .00027, .000027, .0000027))
 mass_inputs <- factor(c(10, 100))
@@ -213,7 +213,7 @@ write_csv(rna_TE__doe_blocked, paste0(file_dest_dir, "/",
                                       "_rna_TE_sensitivity_doe.csv"))
 ```
 
-Out put the design to google sheets, where the scientists and research associates can view the experiment's sample plan.
+Output the design to google sheets, where the scientists and research associates can view the experiment's sample plan.
 
 ### Analyze captures
 ```{r}
