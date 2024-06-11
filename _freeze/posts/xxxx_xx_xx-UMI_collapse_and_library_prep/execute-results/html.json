@@ -1,0 +1,19 @@
+{
+  "hash": "0420b3427ad16bfe03a647ba31c6d44c",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"UMI collapse & library prep samples\"\nauthor: \"Patrick Cherry\"\ndate: \"xxxx-xx-xx\"\ncategories:\n  - coding\n  - bioinformatics\n  - data\n  - sequencing library prep\nimage: \"FIND SOME IMAGE OF COLLAPSE\"\nformat:\n  html:\n    df-print: paged\nexecute:\n  freeze: TRUE\n  echo: FALSE\neditor_options: \n  chunk_output_type: inline\n---\n\n::: {.cell}\n\n:::\n\n\n\n![SOME PHOTO OF COLLAPSE]()\n\n## Introduction\nUMIs, or unique molecular identifiers, are a component of the adapters of a next generation sequencing library prep kit. UMIs mark independent incorporation events during the ligation of inserts into the adapter-on library. UMIs accomplish this by being a diverse set of unique sequences embedded in the adapter DNA molecule. With UMIs present on the library DNA, the NGS sequencer can record those ids along with the content of the insert. Once sequenced, UMIs allow for removal of PCR duplicates with high-confidence, preservation of ligation duplicates, and error correction (either through PCR duplicate consensus, or through duplex consensus, where the opposite strands of the same incorporated molecule are analyzed as one unit).\n\nUMI adapters are frequently supplied as an equimolar mixture of adapter DNA molecules with varying UMI sequences. In dsDNA ligation-based library prep, these adapter molecules are typically partially dsDNA Y-adapters. Producing these adapters can be painstaking, error-prone, and expensive, so dsDNA UMI adapters typically have fewer unique UMI sequences in the mixture than \"randomer\" based single-stranded library prep applications.\n\n### Central question\nBut how many UMI sequences is enough? How can we know that we're not loosing out on unique coverage due to \"collisions\" of the same UMIs on the truly independent insert molecules that happen to have identical start and end positions?\n\nThis analysis uses some real-world data and some simulation to quantitatively arrive at a \"good enough\" configuration of UMI adapters.\n\n## Notes on approach\n\n\n\n::: {.cell}\n\n:::\n\n\n\n## Import and tidy data\n\n\n## Conclusions\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
