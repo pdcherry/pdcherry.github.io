@@ -7,8 +7,9 @@ categories:
   - code
   - experimental analysis
   - unbalanced DoE
+  - causal inference
 bibliography: 2024_05_19-emmeans_estimated_marginal_means.bib
-image: "2024_05_19-emmeans_estimated_marginal_means_pigs_cc.jpg"
+image: "2024_05_19-emmeans_diff_plot.png"
 format:
   html:
     df-print: kable
@@ -28,32 +29,36 @@ exp_imp_path <- "./2024-03-10_emmeans_data/"
 ```
 
 # Introduction to marginal means
-Estimated marginal means (EMMs, previously known as least-squares means in the context of traditional regression models) [@Searle1980] are derived by using a model to make predictions over a regular grid of predictor combinations (called a reference grid). Estimated marginal means have historically been used commonly in agricultural science publications.
-
-[Russ Lenth](https://stat.uiowa.edu/people/russell-v-lenth) authored the `emmeans` package (distributed [on CRAN](https://cran.r-project.org/web/packages/emmeans/)) to be an implementation of the "least-squares" means (which Lenth prefers to call "marginal means" for the reasons discussed below) in R.
+Estimated marginal means (EMMs, previously known as least-squares means in the context of traditional regression models) are derived by using a model to make predictions over a regular grid of predictor combinations (called a reference grid) [@Searle1980]. Estimated marginal means have historically been used commonly in agricultural science publications. [Russ Lenth](https://stat.uiowa.edu/people/russell-v-lenth) authored the `emmeans` package (distributed [on CRAN](https://cran.r-project.org/web/packages/emmeans/)) to be an implementation of the "least-squares" means (which Lenth prefers to call "marginal means" for the reasons discussed below) in R.
 
 As Searle, _et al._ write, there is a **marginal mean** for every variable (and every level of factor variables) in a data set, and a sufficiently defined model (be it a linear model (`lm`), `glm`, `lmer`, or `glmer` _etc_.) will allow for those marginal means to be estimated.
 
+### _Ceteris paribus_
 But I just used "marginal" in the definition of "estimated marginal means." So what does marginal signify? To distill it down, a marginal mean is the effect size that a particular variable contributes, _all else being equal_. (The all else being equal part comes from accounting for all other _significant_ effects in the model.)
 
 There are many advantages to using estimated marginal means to arrive at effect sizes (as well as confidence intervals) for a multi-factor / multi-level _experiment_.
 
-  1. One challenge where EMMs really shines is when the number of subjects / samples per condition are not all the same or close to the same; this situation is called an "unbalanced experiment," and it occurs often during large Design of Experiment (DoE), either intentionally by design, or unintentionally due to experimental sample drop outs. EMMs can provide accurate estimates of means and standard errors (confidence intervals) for conditions that differ in sample size, such that, all else equal, conditions with a smaller _n_ have larger confidence intervals.
-  1. Another is when there is a hypothesized (or evident) interaction effect in either the mean or the spread of one or more conditions in the experiment. EMMs can estimate accurate relative effects and standard errors (confidence intervals) for each of those interactions.
+  1. One challenge where EMMs provide real advantage is when the number of subjects / samples per condition are not all the same or close to the same; this situation is called an "unbalanced experiment," and it occurs often during large [Designs of Experiment (DoEs)](/posts/2024_04_05-DoE_design_of_experiment.html), either intentionally by design, or unintentionally due to experimental sample drop outs. EMMs can provide accurate estimates of means and standard errors (confidence intervals) for conditions that differ in sample size, such that, all else equal, conditions with a smaller _n_ have wider confidence intervals.
+  1. Another advantage is when there is a hypothesized (or evident) interaction effect in either the mean or the spread of one or more conditions in the experiment. EMMs can estimate accurate relative effects and standard errors (confidence intervals) for each of those interactions.
 
-## Note on using EMMs for _experiments_
-::: {#EMMs-for-experiments .callout-tip}
+### Note on using EMMs for _experiments_
+::: {#EMMs-for-experiments .callout-note}
 ### EMMs are best used on data obtained from controlled experiments.
 EMMs are less applicable to observational data.
 :::
 
-__Add better explanation here__
+A _[ceteris paribus](https://en.wikipedia.org/wiki/Ceteris_paribus)_ (all else being equal) assumption is often critical to drawing scientific conclusions, because scientists seek to infer cause by ruling out all other possible influences. The "else" in "all else equal" distills both:
+
+ 1. **the scientific idea of a controlled experiment**, wherein variables being tested are altered precisely and systematically, and variables _not_ being tested are held constant for all samples in the experiment;
+ 1. and **the statistical idea of marginal**, which is the relative change from an arbitrary starting point. Marginal statistics show what change or influence can be expected if we know one variable is changing---but know no other information about the condition.
+
+Thus, a marginal effect, or a marginal mean, is a _causal_ statement that says, on the margin (all else being equal), if a variable changes in this way, the average response _due to that one change_ is this much [@hernan2010causal].
 
 # The pigs dataset
-Consider the pigs dataset provided with the package (`help("pigs")` provides details). These data come from an experiment where pigs are given different percentages of protein (percent) from different sources (source) in their diet, and later we measured the concentration (conc) of the amino acid leucine. The percent values are quantitative, but we chose those particular values deliberately (like a DoE), and (at least initially) we want separate estimates at each percent level; that is, we want to view percent as a factor, not a quantitative predictor.
+Consider the pigs dataset provided with the package (`help("pigs")` provides details). These data come from an experiment where pigs are given different percentages of protein (percent) from different sources (source) in their diet, and later the concentration (conc) of free plasma leucine, in mcg/mL, was measured. (Observations 7, 22, 23, 31, 33, and 35 have been omitted, creating a more notable imbalance. [@oehlert2010first]) The percent values are quantitative, but the experimenter chose those particular values deliberately (like a DoE), and (at least initially) the experimenter wants separate estimates at each percent level; that is, in this case, percent is a factor, not a quantitative predictor.
 
 ## Initial model fitting
-```{r message = FALSE}
+```{r, message = FALSE, warning = FALSE}
 library(tidyverse)          # dplyr, ggplot2, etc.
 theme_set(theme_light())    # set default themes for ggplot in this doc to add contrast
 library(broom)              # help tidy display and compare of model summary stats
@@ -62,7 +67,7 @@ library(patchwork)          # for combining plots
 library(modelbased)         # https://easystats.github.io/modelbased/articles/estimate_means.html
 ```
 
-Our first task is to come up with a good model. Making sure the model is appropriate for the data, experiment, and underlying scientific processes is critical to drawing valid conclusions of `emmeans`. Constructing good models is equal parts art and science, but I won't labor too much over the details; any reader is encouraged to seek more in-depth guidance on model construction and evaluation. I will construct and view some models and settle on one of them. The key model diagnostics I will keep an eye on are:
+Our first task is to come up with a good model. Making sure the model is appropriate for the data, experiment, and underlying scientific processes is critical to drawing valid conclusions with `emmeans`. Constructing good models is equal parts art and science, but I won't labor too much over the details; any reader is encouraged to seek more in-depth guidance on model construction and evaluation. I will construct and view some models and settle on one of them. The key model diagnostics I will keep an eye on are:
 
  - AIC
  - BIC
@@ -82,12 +87,12 @@ par(mfrow = c(2,2)); plot(mod2)
 ```
 
 ```{r}
-map_dfr(list(mod1, mod2), glance)
+map_dfr(list(mod1, mod2), glance, .id = "model")
 ```
 
-These models have R2 values of 0.808 and 0.700, and adjusted R2 values of 0.684 and 0.634. mod1 is preferable to mod2, suggesting we need the interaction term. However, a residual-vs-predicted plot of mod2 has a classic “horn” shape (curving and fanning out), indicating a situation where a response transformation might help better than including the interaction.
+These models have R2 values of 0.808 and 0.700, and adjusted R2 values of 0.684 and 0.634. mod1 is preferable to mod2, suggesting the interaction term is needed. However, a residual-vs-predicted plot of mod2 has a classic “horn” shape (curving and fanning out), indicating a situation where a response transformation might help better than including the interaction.
 
-After trial and error, it turns out that an inverse (reciprocal) transformation, (1/conc) serves really well. (Perhaps this isn’t too surprising, as concentrations are often determined by titration, in which the actual measurements are volumes of some counter-reactant; and these are reciprocally related to concentrations, i.e., amounts per unit volume.) In a real experiment, I would read the experimetnal protocol to verify this idea, or speak with the scientist conducting the experiment.
+After trial and error, it turns out that an inverse (reciprocal) transformation, (1/conc) serves really well. (Perhaps this isn’t too surprising, as concentrations are often determined by titration, in which the actual measurements are volumes of some counter-reactant; and these are reciprocally related to concentrations, i.e., amounts per unit volume.) In a real experiment, I would read the experimental protocol to verify this idea, or speak with the scientist conducting the experiment.
 
 So here are three more models:
 ```{r}
@@ -101,7 +106,7 @@ par(mfrow = c(2,2)); plot(mod5)
 map_dfr(list(mod1, mod2, mod3, mod4, mod5), glance, .id = "model")
 ```
 
-::: {###reciprocal-fun-model .callout-note}
+::: {#reciprocal-fun-model .callout-tip}
 I could have used `1/conc` as the response variable, but `emmeans` provides an equivalent `inverse()` function that will prove more advantageous later.
 :::
 
@@ -118,9 +123,9 @@ The residual plots for these models look a lot more like a random scatter of poi
 
 Calling `tidy()` (from `broom`) on the object will put it into a beautiful data frame. And data frames can be plotted.
 
-The input type can be set to “response”, indicating that values should be back-transformed. Note that the back-transformation is done as the last step, so all tests are conducted on the transformed scaled.
+The input type can be set to `“response”`, indicating that values should be back-transformed. Note that the back-transformation is done as the last step, so all tests are conducted on the transformed scale.
 
-The package `emmeans` supports `confint` (confidence intervals) and `test` (hypothesis testing) using a function parameter called `type`. The parameter `type` only has an effect if there is a known transformation or link function. The parameter value "response" specifies that the inverse transformation be applied, and in that case, the reported values (estimates, standard errors, confidence internals) will be on the original response scale; otherwise, the output is on the non-linear predictor scale, as defined in the formula for the regression.
+The package `emmeans` supports `confint` (confidence intervals) and `test` (hypothesis testing) using a function parameter called `type`. The parameter `type` only has an effect if there is a known transformation or link function. The parameter value `"response"` specifies that the inverse transformation be applied, and in that case, the reported values (estimates, standard errors, confidence intervals) will be on the original response scale; otherwise, the output is on the non-linear predictor scale, as defined in the formula for the regression.
 
 ```{r}
 tidy(confint(EMM.percent, type = "response"))
@@ -132,7 +137,10 @@ tidy(confint(EMM.percent, type = "response")) %>%
   geom_col(width = 1) +
   geom_errorbar(width = 0.5,
                 aes(ymin = conf.low,
-                    ymax = conf.high))
+                    ymax = conf.high)) +
+  labs(title = "Marginal effect with confidence intervals",
+       y = "response, free plasma leucine (µg/mL)",
+       x = "percent of source protein in diet (%)")
 ```
 
 ```{r}
@@ -170,17 +178,17 @@ pigs %>%
 Both sets of OMMs are vaguely similar to the corresponding EMMs. However, please note that the EMMs for percent form a decreasing sequence, while the the OMMs decrease but then increase at the end.
 
 # The reference grid, and definition of EMMs
-Estimated marginal means are defined as marginal means of model predictions over the grid comprising all factor combinations – called the reference grid. For the example at hand, the reference grid is
+Estimated marginal means are defined as marginal means of model predictions over the grid comprising all factor combinations---called the reference grid. For the example at hand, the reference grid is
 
 ```{r}
 emmeans::ref_grid(mod4)
 ```
 
 ```{r}
-(RG <- expand.grid(source = levels(pigs$source), percent = unique(pigs$percent)))
+(RG <- expand.grid(source = levels(pigs$source), percent = as_factor(unique(pigs$percent))))
 ```
 
-To get the EMMs, we first need to obtain predictions on this grid:
+To get the EMMs, I first need to obtain predictions on this grid:
 
 ```{r}
 (preds <- matrix(predict(mod4, newdata = RG), nrow = 3))
@@ -188,24 +196,84 @@ To get the EMMs, we first need to obtain predictions on this grid:
 
 then obtain the marginal means of these predictions:
 ```{r}
-apply(preds, 1, mean)   # row means -- for source
+apply(preds, 1, mean)   # row means for source
 ```
 
+::: aside
+For further reading on the family of R's `apply` functions, see [Guru99's great summary](https://www.guru99.com/r-apply-sapply-tapply.html).
+:::
+
 ```{r}
-apply(preds, 2, mean)   # column means -- for percent
+apply(preds, 2, mean)   # column means for percent
 ```
 
 These marginal averages match the EMMs obtained earlier via `emmeans()`.
 
-Now let’s go back to the comparison with the ordinary marginal means. The source levels are represented by the columns of `pred`; and note that each row of `pred` is a decreasing set of values. So it is no wonder that the marginal means – the EMMs for source – are decreasing. That the OMMs for percent do not behave this way is due to the imbalance in sample sizes:
+Now let’s go back to the comparison with the ordinary marginal means. The source levels are represented by the columns of `pred`; and note that each row of `pred` is a decreasing set of values. So it is no wonder that the marginal means---the EMMs for source---are decreasing. That the OMMs for percent do not behave this way is due to the imbalance in sample sizes:
 
 ```{r}
-with(pigs, table(source, percent))
+with(pigs, table(source, percent));
+nrow(pigs) / nrow(RG)
 ```
 
-This shows that the OMMs of the last column give most of the weight (3/5) to the first source, which tends to have higher inverse(conc), making the OMM for 18 percent higher than that for 15 percent, even though the reverse is true with every level of source. This kind of disconnect is an example of Simpson’s paradox, in which a confounding factor can distort your findings. The EMMs are not subject to this paradox, but the OMMs are, when the sample sizes are correlated with the expected values.
+`table` uses factors to build a contingency table of the counts at each combination of factor levels.
 
-In summary, we obtain a references grid of all factor combinations, obtain model predictions on that grid, and then the expected marginal means are estimated as equally-weighted marginal averages of those predictions. Those EMMs are not subject to confounding by other factors, such as might happen with ordinary marginal means of the data. Moreover, unlike OMMs, EMMs are based on a model that is fitted to the data.
+The mean number of samples per condition is 2.42, so any source * percent condition with greater than 2.42 has greater than average weighting in the OMM, whereas those with below 2.42 observations has below the average weighting.
+
+The alarming observation that two conditions have only one observation (soy @ 18% and skim @ 18%) show that those effects, while they may be reported as "means," are really just one observation, a situation which is more susceptible to bias.
+
+```{r}
+emmeans::emmip(mod4, source ~ percent, type = "response") +
+  labs(title = "EMM: Estimated marginal means result");
+ggplot(summarize(pigs, "conc" = mean(conc), .by = c("percent", "source")),
+      aes(y = conc, x = percent, color = source)) +
+  geom_line() +
+  labs(title = "OMM: Ordinary grouped means result")
+```
+
+```{r}
+pigs_sample_n <- pigs %>%
+  mutate("percent" = as_factor(percent)) %>%
+  count(percent, source)
+
+combined_omm_emm_data <- pigs %>%
+  mutate("percent" = as_factor(percent)) %>%
+  summarize("conc" = mean(conc), .by = c("percent", "source")) %>%
+  bind_rows(
+          mutate(RG, "conc" = inverse(predict(mod4, newdata = RG))),
+          .id = "analysis") %>%
+  mutate("analysis" = case_when(analysis == 1 ~ "OMM",
+                                analysis == 2 ~ "EMM")) %>%
+  left_join(pigs_sample_n, by = c("percent", "source"))
+
+combined_omm_emm_plot <- combined_omm_emm_data %>%
+  ggplot(aes(y = conc, x = percent, color = source, linetype = analysis,
+             group = interaction(source, analysis))) +
+  geom_line() +
+  geom_point(aes(size = n)) +
+  scale_color_viridis_d(option = "D", end = 0.8) +
+  labs(subtitle = "Overlay of EMM and ordinary means analysis",
+       y = "response, free plasma leucine (µg/mL)",
+       x = "percent of source protein in diet (%)",
+       size = "sample n")
+combined_omm_emm_plot
+```
+
+```{r, eval = FALSE, include = FALSE}
+ggsave("2024_05_19-emmeans_diff_plot.png", combined_omm_emm_plot,
+       width = 5, height = 4, dpi = 320)
+```
+
+Overlaying the data using some custom code to tidy up the combining of both EMM and OMM data into one plottable frame shows how the ordinary marginal (_i.e._ grouped) means deviate from the Estimated Marginal Means when there are fewer individual observations (n = 1 for soy @ 18% and n = 1 for skim @ 18%, which happens to deviate the farthest). Those low-n observations are displayed as smaller dots, whereas the other conditions have 2 or 3, which get plotted as larger dots.
+
+The EMMs vs OMMs tend to differ more for smaller sample sizes (n).
+
+EMMs worked well for us. The application of a linear model (and a linearizing transformation of the response scale) allows for the balanced _reference grid_ to get balanced estimated means for each effect. This process produced more balanced estimated means than the ordinary means taken from the grouped-by factor levels.
+
+Given the good fit of the model, I would trust these EMMs more than the ordinary grouped-by means. Plus, the linear model gives us confidence intervals for each estimated marginal effect, to which statistical analysis can be applied.
+
+# Conclusions
+In summary, I obtained a reference grid of all factor combinations, obtained model predictions on that grid, and then I estimated the expected marginal means as equally-weighted marginal averages of those predictions. Those EMMs are not subject to confounding by other factors or biased sampling, such as might happen with ordinary marginal means of the data. Moreover, unlike OMMs, EMMs are based on a model that is well-fitted to the data.
 
 # References
 
