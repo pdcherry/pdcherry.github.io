@@ -129,7 +129,7 @@ div.csl-indent {
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Frameshift - emmeans: estimated marginal means">
 <meta property="og:description" content="">
-<meta property="og:image" content="2024_05_19-emmeans_diff_plot.png">
+<meta property="og:image" content="2024_05_19-emmeans_estimated_marginal_means_dir/2024_05_19-emmeans_diff_plot.png">
 <meta property="og:site_name" content="Frameshift">
 </head>
 
@@ -256,9 +256,10 @@ div.csl-indent {
 
 
 
+<!-- improved plot, added table illustrating EMM OMM differences -->
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_05_19-emmeans_estimated_marginal_means_pigs_cc.jpg" class="img-fluid figure-img"></p>
+<p><img src="2024_05_19-emmeans_estimated_marginal_means_dir/2024_05_19-emmeans_estimated_marginal_means_pigs_cc.jpg" class="img-fluid figure-img"></p>
 <figcaption>The diet of pigs contributes to their rate of growth and macromolecular composition. Photo reproduced here from m_takahashi under CC BY-ND 2.0 Deed Attribution-NoDerivs 2.0 Generic</figcaption>
 </figure>
 </div>
@@ -979,33 +980,236 @@ source 9 12 15 18
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"percent"</span> <span class="ot">=</span> <span class="fu">as_factor</span>(percent)) <span class="sc">%&gt;%</span></span>
 <span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">"conc"</span> <span class="ot">=</span> <span class="fu">mean</span>(conc), <span class="at">.by =</span> <span class="fu">c</span>(<span class="st">"percent"</span>, <span class="st">"source"</span>)) <span class="sc">%&gt;%</span></span>
 <span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_rows</span>(</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(RG, <span class="st">"conc"</span> <span class="ot">=</span> <span class="fu">inverse</span>(<span class="fu">predict</span>(mod4, <span class="at">newdata =</span> RG))),</span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">.id =</span> <span class="st">"analysis"</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"analysis"</span> <span class="ot">=</span> <span class="fu">case_when</span>(analysis <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"OMM"</span>,</span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                                analysis <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"EMM"</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pigs_sample_n, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"percent"</span>, <span class="st">"source"</span>))</span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>combined_omm_emm_plot <span class="ot">&lt;-</span> combined_omm_emm_data <span class="sc">%&gt;%</span></span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> conc, <span class="at">x =</span> percent, <span class="at">color =</span> source, <span class="at">linetype =</span> analysis,</span>
-<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>             <span class="at">group =</span> <span class="fu">interaction</span>(source, analysis))) <span class="sc">+</span></span>
-<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> n)) <span class="sc">+</span></span>
-<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>(<span class="at">option =</span> <span class="st">"D"</span>, <span class="at">end =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
-<span id="cb35-21"><a href="#cb35-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">"Overlay of EMM and ordinary means analysis"</span>,</span>
-<span id="cb35-22"><a href="#cb35-22" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"response, free plasma leucine (µg/mL)"</span>,</span>
-<span id="cb35-23"><a href="#cb35-23" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"percent of source protein in diet (%)"</span>,</span>
-<span id="cb35-24"><a href="#cb35-24" aria-hidden="true" tabindex="-1"></a>       <span class="at">size =</span> <span class="st">"sample n"</span>)</span>
-<span id="cb35-25"><a href="#cb35-25" aria-hidden="true" tabindex="-1"></a>combined_omm_emm_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">bind_cols</span>(RG,</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>              <span class="fu">inverse</span>(<span class="fu">predict</span>(mod4, <span class="at">newdata =</span> RG, <span class="at">interval =</span> <span class="st">"confidence"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>                <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>                dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">"conc"</span> <span class="ot">=</span> fit)</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>              ),</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">.id =</span> <span class="st">"analysis"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"analysis"</span> <span class="ot">=</span> <span class="fu">case_when</span>(analysis <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"OMM"</span>,</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>                                analysis <span class="sc">==</span> <span class="dv">2</span> <span class="sc">~</span> <span class="st">"EMM"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(pigs_sample_n, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"percent"</span>, <span class="st">"source"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As seen in the above code, I can also use the <code>predict()</code> function to calculate confidence intervals for the marginal means. To do this, I need to specify the <code>interva</code> argument, which can take two values: <code>"confidence"</code> and <code>"prediction"</code> <span class="citation" data-cites="Sanderson2023">(<a href="#ref-Sanderson2023" role="doc-biblioref">Steven P. Sanderson II 2023</a>)</span>.</p>
+<p>A confidence interval is the range of values within which we are confident that the true mean of the population will fall. A prediction interval is the range of values within which we are confident that the true value of a new observation will fall. Thus, for comparing the EMM to the OMM, a confidence interval is appropriate because we are comparing means, not individual observations.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>combined_omm_emm_plot <span class="ot">&lt;-</span> combined_omm_emm_data <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> conc, <span class="at">x =</span> percent, <span class="at">color =</span> source, <span class="at">linetype =</span> analysis,</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>             <span class="co">#</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>             )) <span class="sc">+</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">group =</span> <span class="fu">interaction</span>(source, analysis))) <span class="sc">+</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> n)) <span class="sc">+</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_errorbar</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> upr, <span class="at">ymax =</span> lwr),</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">width =</span> <span class="fl">0.1</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>) <span class="sc">+</span></span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_viridis_d</span>(<span class="at">option =</span> <span class="st">"D"</span>, <span class="at">end =</span> <span class="fl">0.8</span>) <span class="sc">+</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="dv">2</span>,<span class="fl">4.5</span>)) <span class="sc">+</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> source) <span class="sc">+</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">subtitle =</span> <span class="st">"Overlay of EMM and ordinary means analysis"</span>,</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"response, free plasma leucine (µg/mL)"</span>,</span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"percent of source protein in diet (%)"</span>,</span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>       <span class="at">size =</span> <span class="st">"sample n"</span>,</span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Error bars are for EMMs."</span>)</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>combined_omm_emm_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="2024_05_19-emmeans_estimated_marginal_means_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="2024_05_19-emmeans_estimated_marginal_means_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Overlaying the data using some custom code to tidy up the combining of both EMM and OMM data into one plottable frame shows how the ordinary marginal (<em>i.e.</em> grouped) means deviate from the Estimated Marginal Means when there are fewer individual observations (n = 1 for soy @ 18% and n = 1 for skim @ 18%, which happens to deviate the farthest). Those low-n observations are displayed as smaller dots, whereas the other conditions have 2 or 3, which get plotted as larger dots.</p>
-<p>The EMMs vs OMMs tend to differ more for smaller sample sizes (n).</p>
+<p>Note that where the ordinary marginal means diverge away from the estimated marginal means, the EMM confidence interval is also wide, ultimately leading to the ordinary mean being within the confidence interval. This observation shows that the model (and its predictions) are consistent with the data. These confidence intervals are not calculated when doing ordinary means analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>combined_omm_emm_data <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">id_cols =</span> <span class="fu">c</span>(<span class="st">"source"</span>, <span class="st">"percent"</span>, <span class="st">"n"</span>),</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">names_from =</span> <span class="st">"analysis"</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">values_from =</span> <span class="fu">c</span>(<span class="st">"conc"</span>, <span class="st">"lwr"</span>, <span class="st">"upr"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="fu">where</span>(<span class="sc">~</span> <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(.x)) <span class="sc">&gt;=</span> <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"EMM_CI_width"</span> <span class="ot">=</span> lwr_EMM <span class="sc">-</span> upr_EMM,</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">"EMM_pct_uncertainty"</span> <span class="ot">=</span> <span class="fu">round</span>(EMM_CI_width <span class="sc">/</span> conc_EMM <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>),</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>         <span class="st">"OMM_EMM_pct_diff"</span> <span class="ot">=</span> <span class="fu">round</span>((conc_OMM <span class="sc">-</span> conc_EMM) <span class="sc">/</span> conc_EMM <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">1</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(EMM_pct_uncertainty, OMM_EMM_pct_diff, <span class="at">.after =</span> conc_EMM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 2%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 19%">
+<col style="width: 16%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">source</th>
+<th style="text-align: left;">percent</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">conc_OMM</th>
+<th style="text-align: right;">conc_EMM</th>
+<th style="text-align: right;">EMM_pct_uncertainty</th>
+<th style="text-align: right;">OMM_EMM_pct_diff</th>
+<th style="text-align: right;">lwr_EMM</th>
+<th style="text-align: right;">upr_EMM</th>
+<th style="text-align: right;">EMM_CI_width</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">fish</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">25.75000</td>
+<td style="text-align: right;">25.95034</td>
+<td style="text-align: right;">14.6</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: right;">27.98352</td>
+<td style="text-align: right;">24.19259</td>
+<td style="text-align: right;">3.790934</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fish</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">30.93333</td>
+<td style="text-align: right;">30.03823</td>
+<td style="text-align: right;">15.6</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">32.55836</td>
+<td style="text-align: right;">27.88020</td>
+<td style="text-align: right;">4.678168</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">fish</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">31.15000</td>
+<td style="text-align: right;">30.70872</td>
+<td style="text-align: right;">17.7</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">33.66886</td>
+<td style="text-align: right;">28.22702</td>
+<td style="text-align: right;">5.441832</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">fish</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">32.33333</td>
+<td style="text-align: right;">32.93172</td>
+<td style="text-align: right;">19.0</td>
+<td style="text-align: right;">-1.8</td>
+<td style="text-align: right;">36.35469</td>
+<td style="text-align: right;">30.09786</td>
+<td style="text-align: right;">6.256834</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">soy</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">34.63333</td>
+<td style="text-align: right;">32.78166</td>
+<td style="text-align: right;">17.2</td>
+<td style="text-align: right;">5.6</td>
+<td style="text-align: right;">35.83639</td>
+<td style="text-align: right;">30.20681</td>
+<td style="text-align: right;">5.629573</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">soy</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">39.63333</td>
+<td style="text-align: right;">39.58730</td>
+<td style="text-align: right;">20.4</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">44.04318</td>
+<td style="text-align: right;">35.95019</td>
+<td style="text-align: right;">8.092997</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">soy</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">39.23333</td>
+<td style="text-align: right;">40.76017</td>
+<td style="text-align: right;">21.8</td>
+<td style="text-align: right;">-3.7</td>
+<td style="text-align: right;">45.69176</td>
+<td style="text-align: right;">36.78942</td>
+<td style="text-align: right;">8.902343</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">soy</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">42.90000</td>
+<td style="text-align: right;">44.77162</td>
+<td style="text-align: right;">30.6</td>
+<td style="text-align: right;">-4.2</td>
+<td style="text-align: right;">52.64817</td>
+<td style="text-align: right;">38.94515</td>
+<td style="text-align: right;">13.703024</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">skim</td>
+<td style="text-align: left;">9</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">35.40000</td>
+<td style="text-align: right;">36.09727</td>
+<td style="text-align: right;">19.1</td>
+<td style="text-align: right;">-1.9</td>
+<td style="text-align: right;">39.86363</td>
+<td style="text-align: right;">32.98118</td>
+<td style="text-align: right;">6.882447</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">skim</td>
+<td style="text-align: left;">12</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">43.46667</td>
+<td style="text-align: right;">44.52619</td>
+<td style="text-align: right;">23.3</td>
+<td style="text-align: right;">-2.4</td>
+<td style="text-align: right;">50.30224</td>
+<td style="text-align: right;">39.94000</td>
+<td style="text-align: right;">10.362244</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">skim</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">50.45000</td>
+<td style="text-align: right;">46.01547</td>
+<td style="text-align: right;">26.8</td>
+<td style="text-align: right;">9.6</td>
+<td style="text-align: right;">53.00407</td>
+<td style="text-align: right;">40.65509</td>
+<td style="text-align: right;">12.348975</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">skim</td>
+<td style="text-align: left;">18</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">59.80000</td>
+<td style="text-align: right;">51.19373</td>
+<td style="text-align: right;">35.6</td>
+<td style="text-align: right;">16.8</td>
+<td style="text-align: right;">61.88076</td>
+<td style="text-align: right;">43.65446</td>
+<td style="text-align: right;">18.226302</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The EMMs vs OMMs tend to differ more for smaller sample sizes (n). The confidence intervals also tend to be wider for the <code>lm</code> predictions on the lower sample size conditions in the experiment, and these tend to correlate with the difference between the OMM (ordinary marginal mean) and the EMM (estimated marginal mean), as the table above shows.</p>
 <p>EMMs worked well for us. The application of a linear model (and a linearizing transformation of the response scale) allows for the balanced <em>reference grid</em> to get balanced estimated means for each effect. This process produced more balanced estimated means than the ordinary means taken from the grouped-by factor levels.</p>
 <p>Given the good fit of the model, I would trust these EMMs more than the ordinary grouped-by means. Plus, the linear model gives us confidence intervals for each estimated marginal effect, to which statistical analysis can be applied.</p>
 </section>
@@ -1027,6 +1231,9 @@ Oehlert, Gary W. 2010. <em>A First Course in Design and Analysis of Experiments<
 </div>
 <div id="ref-Searle1980" class="csl-entry" role="listitem">
 S. R. Searle, F. M. Speed, and G. A. Milliken. 1980. <span>“Population Marginal Means in the Linear Model: An Alternative to Least Squares Means.”</span> <em>The American Statistician</em> 34 (4): 216–21. <a href="https://doi.org/10.1080/00031305.1980.10483031">https://doi.org/10.1080/00031305.1980.10483031</a>.
+</div>
+<div id="ref-Sanderson2023" class="csl-entry" role="listitem">
+Steven P. Sanderson II, MPH. 2023. <span>“Unlocking the Power of Prediction Intervals in r: A Practical Guide.”</span> Steve’s Data Tips; Tricks. <a href="https://www.spsanderson.com/steveondata/posts/2023-11-13/index.html">https://www.spsanderson.com/steveondata/posts/2023-11-13/index.html</a>.
 </div>
 </div>
 

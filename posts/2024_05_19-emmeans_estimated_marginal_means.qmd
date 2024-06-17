@@ -8,8 +8,8 @@ categories:
   - experimental analysis
   - unbalanced DoE
   - causal inference
-bibliography: 2024_05_19-emmeans_estimated_marginal_means/2024_05_19-emmeans_estimated_marginal_means.bib
-image: "2024_05_19-emmeans_estimated_marginal_means/2024_05_19-emmeans_diff_plot.png"
+bibliography: "2024_05_19-emmeans_estimated_marginal_means.bib"
+image: "2024_05_19-emmeans_estimated_marginal_means_dir/2024_05_19-emmeans_diff_plot.png"
 format:
   html:
     df-print: kable
@@ -19,7 +19,9 @@ execute:
 editor_options: 
   chunk_output_type: inline
 ---
-![The diet of pigs contributes to their rate of growth and macromolecular composition. Photo reproduced here from m_takahashi under CC BY-ND 2.0 Deed Attribution-NoDerivs 2.0 Generic](2024_05_19-emmeans_estimated_marginal_means/2024_05_19-emmeans_estimated_marginal_means_pigs_cc.jpg)
+<!-- improved plot, added table illustrating EMM OMM differences -->
+
+![The diet of pigs contributes to their rate of growth and macromolecular composition. Photo reproduced here from m_takahashi under CC BY-ND 2.0 Deed Attribution-NoDerivs 2.0 Generic](2024_05_19-emmeans_estimated_marginal_means_dir/2024_05_19-emmeans_estimated_marginal_means_pigs_cc.jpg)
 
 ```{r, setup, echo = FALSE, message = FALSE}
 knitr::opts_chunk$set(echo = TRUE)  # set default chunk option to print the code that generated that output
@@ -241,7 +243,7 @@ combined_omm_emm_data <- pigs %>%
   summarize("conc" = mean(conc), .by = c("percent", "source")) %>%
   bind_rows(
     bind_cols(RG,
-              inverse(predict(mod4, newdata = RG, interval = "prediction", level = 0.95)) %>%
+              inverse(predict(mod4, newdata = RG, interval = "confidence", level = 0.95)) %>%
                 as_tibble() %>%
                 dplyr::rename("conc" = fit)
               ),
@@ -251,30 +253,39 @@ combined_omm_emm_data <- pigs %>%
   left_join(pigs_sample_n, by = c("percent", "source"))
 ```
 
+As seen in the above code, I can also use the `predict()` function to calculate confidence intervals for the marginal means. To do this, I need to specify the `interva` argument, which can take two values: `"confidence"` and `"prediction"` [@Sanderson2023].
+
+A confidence interval is the range of values within which we are confident that the true mean of the population will fall. A prediction interval is the range of values within which we are confident that the true value of a new observation will fall. Thus, for comparing the EMM to the OMM, a confidence interval is appropriate because we are comparing means, not individual observations.
+
 ```{r}
 combined_omm_emm_plot <- combined_omm_emm_data %>%
   ggplot(aes(y = conc, x = percent, color = source, linetype = analysis,
-             group = interaction(source, analysis))) +
-  geom_line() +
+             #
+             )) +
+  geom_line(aes(group = interaction(source, analysis))) +
   geom_point(aes(size = n)) +
   geom_errorbar(aes(ymin = upr, ymax = lwr),
-                width = 0.1, alpha = 0.25) +
+                width = 0.1, alpha = 0.5) +
   scale_color_viridis_d(option = "D", end = 0.8) +
   scale_size_continuous(range = c(2,4.5)) +
+  facet_wrap(~ source) +
   labs(subtitle = "Overlay of EMM and ordinary means analysis",
        y = "response, free plasma leucine (µg/mL)",
        x = "percent of source protein in diet (%)",
-       size = "sample n")
+       size = "sample n",
+       caption = "Error bars are for EMMs.")
 combined_omm_emm_plot
 ```
 
 ```{r, eval = FALSE, include = FALSE}
-ggsave("2024_05_19-emmeans_estimated_marginal_means/2024_05_19-emmeans_diff_plot.png",
+ggsave("2024_05_19-emmeans_estimated_marginal_means_dir/2024_05_19-emmeans_diff_plot.png",
        combined_omm_emm_plot,
        width = 5, height = 4, dpi = 320)
 ```
 
 Overlaying the data using some custom code to tidy up the combining of both EMM and OMM data into one plottable frame shows how the ordinary marginal (_i.e._ grouped) means deviate from the Estimated Marginal Means when there are fewer individual observations (n = 1 for soy @ 18% and n = 1 for skim @ 18%, which happens to deviate the farthest). Those low-n observations are displayed as smaller dots, whereas the other conditions have 2 or 3, which get plotted as larger dots.
+
+Note that where the ordinary marginal means diverge away from the estimated marginal means, the EMM confidence interval is also wide, ultimately leading to the ordinary mean being within the confidence interval. This observation shows that the model (and its predictions) are consistent with the data. These confidence intervals are not calculated when doing ordinary means analysis.
 
 ```{r}
 combined_omm_emm_data %>%
