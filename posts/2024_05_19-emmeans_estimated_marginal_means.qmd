@@ -253,15 +253,13 @@ combined_omm_emm_data <- pigs %>%
   left_join(pigs_sample_n, by = c("percent", "source"))
 ```
 
-As seen in the above code, I can also use the `predict()` function to calculate confidence intervals for the marginal means. To do this, I need to specify the `interva` argument, which can take two values: `"confidence"` and `"prediction"` [@Sanderson2023].
+As seen in the above code, I can also use the `predict()` function to calculate confidence intervals for the marginal means. To do this, I need to specify the `interval` argument, which can take two values: `"confidence"` and `"prediction"` [@Sanderson2023].
 
 A confidence interval is the range of values within which we are confident that the true mean of the population will fall. A prediction interval is the range of values within which we are confident that the true value of a new observation will fall. Thus, for comparing the EMM to the OMM, a confidence interval is appropriate because we are comparing means, not individual observations.
 
 ```{r}
 combined_omm_emm_plot <- combined_omm_emm_data %>%
-  ggplot(aes(y = conc, x = percent, color = source, linetype = analysis,
-             #
-             )) +
+  ggplot(aes(y = conc, x = percent, color = source, linetype = analysis)) +
   geom_line(aes(group = interaction(source, analysis))) +
   geom_point(aes(size = n)) +
   geom_errorbar(aes(ymin = upr, ymax = lwr),

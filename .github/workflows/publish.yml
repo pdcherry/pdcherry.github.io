@@ -35,12 +35,16 @@ jobs:
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
 
-      - name: Render
-        uses: quarto-dev/quarto-actions/render@v2
+# suspect we don't need render
+#      - name: Render
+#        uses: quarto-dev/quarto-actions/render@v2
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
-        
+
+# see deplication of upload-artifact
+# https://github.com/actions/upload-artifact/
+# from https://fosstodon.org/@Lluis_Revilla/112631326807334501
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
