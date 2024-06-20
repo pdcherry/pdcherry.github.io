@@ -36,6 +36,8 @@ jobs:
         uses: quarto-dev/quarto-actions/setup@v2
 
 # suspect we don't need render
+# success. If render is local, gh action render is not necessary
+# https://github.com/pdcherry/pdcherry.github.io/actions/runs/9602247063
 #      - name: Render
 #        uses: quarto-dev/quarto-actions/render@v2
         
