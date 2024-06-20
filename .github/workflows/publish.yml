@@ -31,9 +31,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
-      - name: Set up Quarto
-        uses: quarto-dev/quarto-actions/setup@v2
+
+# test if we don't need Quarto installed      
+#      - name: Set up Quarto
+#        uses: quarto-dev/quarto-actions/setup@v2
 
 # suspect we don't need render
 # success. If render is local, gh action render is not necessary
