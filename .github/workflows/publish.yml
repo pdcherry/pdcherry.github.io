@@ -32,7 +32,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-# test if we don't need Quarto installed      
+# test if we don't need Quarto installed
+# success, we don't even need qaurto
+# https://github.com/pdcherry/pdcherry.github.io/actions/runs/9602362182
 #      - name: Set up Quarto
 #        uses: quarto-dev/quarto-actions/setup@v2
 
