@@ -25,7 +25,7 @@ Patrick is a PhD scientist skilled in bioinformatics, biological data science, d
 #### Résumé and CV
 [View CV in browser](Patrick-Cherry-resume.md)
 
-[{{< fa file-pdf >}} Download a resume in pdf](Patrick-Cherry-resume.pdf)
+[{{< fa file-pdf >}} Download resume as pdf](Patrick-Cherry-resume.pdf)
 
 [Resume and CV git repo](https://github.com/pdcherry/cherry-cv-public)
 

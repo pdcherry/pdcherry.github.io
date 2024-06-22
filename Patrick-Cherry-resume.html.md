@@ -114,7 +114,7 @@ University of Colorado School of Medicine
 
 Aurora/Denver, Colorado
 
-2019 - 2013
+May 2019 - Aug 2013
 
 - Ph.D. in Molecular Biology. Advisor: Jay Hesselberth, PhD
 - Thesis: RNA terminus chemistry impact decay events that target *HAC1* mRNA during the Unfolded Protein Response
@@ -127,7 +127,7 @@ Hendrix College
 
 Conway, Arkansas
 
-2013 - 2009
+May 2013 - Aug 2009
 
 - Biochemistry and Molecular Biology, with Distinction. Advisor: Andres Caro, PhD
 - Senior Capstone Project showing key stress response gene expression changes to oxidative stress in liver cells
@@ -152,7 +152,7 @@ Twist Bioscience
 
 South San Francisco, California
 
-2024 - 2021
+Apr 2024 - Nov 2021
 
 - Invented and introduced multiple new products to market yielding $1M+ in new revenue as _Tech Lead_, including: *Pan-cancer cfDNA* (v1 & v2), *CNV Controls*, *RNA Fusion Controls*, *Fragmentome Controls*, and RNA-seq
 - Answered biological and business questions with [DoE](https://pdcherry.github.io/posts/2024_04_05-DoE_design_of_experiment.html) and data analysis using `R` and the libraries: `dplyr`, `dbplyr`, `DBI`, `purrr`, `ggplot2`, `Bioconductor`, [`DEseq2`](https://pdcherry.github.io/posts/2024_01_03-GTEX_RNA_seq_liver.html), [`seurat`](https://pdcherry.github.io/posts/2024_01_22-scRNA-seq.html), [`tidymodels`](https://pdcherry.github.io/posts/2024_02_10-SF_tree_classification.html), `glm`, `nls`, `lme4`, [`AlgDesign`](https://pdcherry.github.io/posts/2024_04_05-DoE_design_of_experiment.html), and more
@@ -168,7 +168,7 @@ Twist Bioscience
 
 South San Francisco, California
 
-2024 - 2021
+Apr 2024 - Jan 2021
 
 - Tech Lead of Nov. 2021 launch of Twist *Pan-Cancer Reference Standard*, an ISO-13485 synthetic control with 458 variants among 84 cancer-associated genes at six QC'd VAFs, plus a WT control, earning +$1M in revenue in year 1
 - Identified and optimized compatible ddPCR assays using web scraping in `R` with `rvest` for cfDNA quality control
@@ -184,7 +184,7 @@ Zymergen, Inc.
 
 Emeryville, California
 
-2021 - 2019
+Jan 2021 - Apr 2019
 
 - Boosted *NGS Core* genotyping success by 45% using DoE experimentation, data-driven decision-making, and teaching; Guided demanding and diverse internal customers on complex NGS experiments
 - Built and disseminated `Rmarkdown` notebook for autonomous NGS data exploration
@@ -210,7 +210,7 @@ University of Colorado School of Medicine
 
 Aurora/Denver, Colorado
 
-2019 - 2014
+May 2019 - May 2014
 
 - Wrote, revised, & published two academic papers on RNA repair & yeast genetics
 - Engineered and characterized *genetic bypass of essential genes* in budding yeast; on-boarded CRISPR/*Cas9* for efficient and precise gene knock-in and scarless knock-out
@@ -226,7 +226,7 @@ Lab of Dr. Andres Caro, Hendrix College
 
 Conway, Arkansas
 
-2013 - 2012
+Jan 2013 - Jan 2012
 
 
 
@@ -238,7 +238,7 @@ Lab of Dr. Michael Shiloh, UT Southwestern Medical Center
 
 Dallas, Texas
 
-2012 - 2012
+Jan 2012 - Jan 2012
 
 
 
@@ -250,7 +250,7 @@ Lab of Dr. Joy Sturtevant, Louisiana Health Sciences Center
 
 New Orleans, Louisiana
 
-2011 - 2010
+Jan 2011 - Jan 2010
 
 
 
@@ -271,9 +271,9 @@ Twist Bioscience
 
 South San Francisco, California
 
-3/7/23
+Mar 2023
 
-- US 63/317,466
+- US 63-317,466
 
 
 
@@ -283,7 +283,7 @@ Twist Bioscience
 
 South San Francisco, California
 
-11/12/21
+Nov 2021
 
 - US Prov. Pat. Ref No 823.102
 
@@ -295,7 +295,7 @@ Twist Bioscience
 
 South San Francisco, California
 
-4/9/21
+Apr 2021
 
 - US Prov. Pat. Ref No 823.101
 - Configuration and fabrication of synthetic DNA & RNA reference standards and synthetic variant sequences
@@ -308,7 +308,7 @@ Zymergen, Inc.
 
 Emeryville, California
 
-3/25/21
+Mar 2021
 
 - US 2021_0087586 A1
 - Demonstration of novel counterselection mechanism in non-model *Bacillus* microbe for genetic modification
@@ -333,7 +333,7 @@ Twist Bioscience [Product Sheet](https://www.twistbioscience.com/resources/produ
 
 South San Francisco, California
 
-1/4/24
+Jan 2024
 
 - Patrick Cherry, Lydia Bonar, & Mike Bocek
 
@@ -345,7 +345,7 @@ Twist Bioscience
 
 South San Francisco, California
 
-4/22/22
+Apr 2022
 
 - Patrick Cherry & Mike Bocek
 
@@ -357,7 +357,7 @@ South San Francisco, California
 
 South San Francisco, California
 
-12/21/21
+Dec 2021
 
 - Patrick Cherry & Mike Bocek
 
@@ -369,7 +369,7 @@ South San Francisco, California
 
 Aurora/Denver, Colorado
 
-3/19/19
+Mar 2019
 
 - Cherry, P., Peach, S., & Hesselberth, J.
 
@@ -381,7 +381,7 @@ Aurora/Denver, Colorado
 
 Aurora/Denver, Colorado
 
-12/6/17
+Dec 2017
 
 - Cherry, P., White, L., York, K., & Hesselberth, J.
 
@@ -404,7 +404,7 @@ I give audience-centered presentations by adapting on the fly and over time to t
 
 Orlando, Florida
 
-2/6/24
+Feb 2024
 
 - Lydia Bonar, _Patrick Cherry_, Michael Bocek, Shawn Gorda, Derek Murphy, and Esteban Toro
 
@@ -416,7 +416,7 @@ Orlando, Florida
 
 Madrid, Spain
 
-11/19/23
+Nov 2023
 
 - Tina Han, Tong Liu, Michael Bocek, _Patrick Cherry_, Shawn Gorda, Nairi Pezeshkian, Dan Nasko, Po-Yuan Tung, Derek Murphy, and Esteban Toro
 
@@ -424,11 +424,11 @@ Madrid, Spain
 
 ### High sensitivity detection of specific ultra low-frequency somatic mutations for minimal residual disease (MRD) monitoring
 
-[American Association for Cancer Researchers](https://aacrjournals.org/cancerres/article/83/7_Supplement/6608/721948/Abstract-6608-High-sensitivity-detection-of), [Twist Bioscience](https://www.twistbioscience.com/resources/poster/high-sensitivity-detection-specific-ultra-low-frequency-somatic-mutations-mrd)
+[American Association for Cancer Researchers](https://aacrjournals.org/cancerres/article/83-7_Supplement/6608-721948/Abstract-6608-High-sensitivity-detection-of), [Twist Bioscience](https://www.twistbioscience.com/resources/poster/high-sensitivity-detection-specific-ultra-low-frequency-somatic-mutations-mrd)
 
 Orlando, Florida
 
-4/19/23
+Apr 2023
 
 - Tong Liu, Michael Bocek, _Patrick Cherry_, Shawn Gorda, Jean Challacombe, Derek Murphy and Esteban Toro
 
@@ -436,11 +436,11 @@ Orlando, Florida
 
 ### An end-to-end workflow for accurate methylation detection
 
-[American Association for Cancer Researchers](https://aacrjournals.org/cancerres/article/83/7_Supplement/6009/721811/Abstract-6009-An-end-to-end-workflow-for-improved), [Twist Bioscience](https://www.twistbioscience.com/resources/poster/end-end-workflow-accurate-methylation-detection)
+[American Association for Cancer Researchers](https://aacrjournals.org/cancerres/article/83-7_Supplement/6009-721811/Abstract-6009-An-end-to-end-workflow-for-improved), [Twist Bioscience](https://www.twistbioscience.com/resources/poster/end-end-workflow-accurate-methylation-detection)
 
 Orlando, Florida
 
-4/19/23
+Apr 2023
 
 - Lydia Bonar, Kristin Butcher, Michael Bocek, Holly Corbitt, Bryan Hoglund, Cibelle Nassif, _Patrick Cherry_, Derek Murphy, Jean Challacombe, Esteban Toro
 
@@ -448,11 +448,11 @@ Orlando, Florida
 
 ### Twist pan-cancer synthetic RNA fusion control for assay development
 
-[American Association for Cancer Researchers](https://aacrjournals.org/cancerres/article/83/7_Supplement/247/723555/Abstract-247-Twist-pan-cancer-synthetic-RNA-fusion), [Twist Bioscience](https://www.twistbioscience.com/resources/poster/twist-pan-cancer-synthetic-rna-fusion-control-assay-development)
+[American Association for Cancer Researchers](https://aacrjournals.org/cancerres/article/83-7_Supplement/247-723555/Abstract-247-Twist-pan-cancer-synthetic-RNA-fusion), [Twist Bioscience](https://www.twistbioscience.com/resources/poster/twist-pan-cancer-synthetic-rna-fusion-control-assay-development)
 
 Orlando, Florida
 
-4/16/23
+Apr 2023
 
 - Patrick Cherry, Jason Corwin, Yu Cai, Kit Fuhrman, Jean Challacombe, Derek Murphy, Esteban Toro
 
@@ -464,7 +464,7 @@ Colorado RNA Club
 
 Boulder, Colorado
 
-4/10/23
+Apr 2023
 
 
 
@@ -476,7 +476,7 @@ Boulder, Colorado
 
 Hollywood, Florida
 
-2/7/23
+Feb 2023
 
 - Jason Corwin, _Patrick Cherry_, Shawn Gorda, Michael Bocek, Jean Challacombe, Derek Murphy, Esteban Toro
 
@@ -488,7 +488,7 @@ Hollywood, Florida
 
 Hollywood, Florida
 
-2/7/23
+Feb 2023
 
 - Kristin Butcher, Michael Bocek, _Patrick Cherry_, Jean Challacombe, Esteban Toro
 
@@ -500,7 +500,7 @@ Hollywood, Florida
 
 Vienna, Austria
 
-5/26/22
+May 2022
 
 - Michael Bocek, Lydia Bonar, Jean Challacombe, Richard Gantt, _Patrick Cherry_, Rebecca Liao, Derek Murphy and Esteban Toro
 
@@ -512,7 +512,7 @@ Vienna, Austria
 
 New Orleans, Louisiana
 
-4/12/22
+Apr 2022
 
 
 
@@ -524,7 +524,7 @@ Twist Automation Group Meeting
 
 South San Francisco, CA
 
-4/5/22
+Apr 2022
 
 
 
@@ -536,7 +536,7 @@ Twist R&D Symposium
 
 South San Francisco, CA
 
-3/17/22
+Mar 2022
 
 
 
@@ -548,7 +548,7 @@ Twist R&D Meeting
 
 South San Francisco, CA
 
-2/15/22
+Feb 2022
 
 
 
@@ -560,7 +560,7 @@ Twist R&D Meeting
 
 South San Francisco, CA
 
-7/13/21
+Jul 2021
 
 
 
@@ -572,7 +572,7 @@ Colorado RNA Club
 
 Boulder, Colorado
 
-4/10/21
+Apr 2021
 
 
 
@@ -584,7 +584,7 @@ Z-Tech Talk
 
 Emeryville, CA
 
-6/16/20
+Jun 2020
 
 
 
@@ -596,7 +596,7 @@ Data Science Talk
 
 Emeryville, CA
 
-4/20/20
+Apr 2020
 
 
 
@@ -608,7 +608,7 @@ NGS Technical Talk Series
 
 Emeryville, CA
 
-3/27/20
+Mar 2020
 
 
 
@@ -620,7 +620,7 @@ Thesis Defense Seminar
 
 Aurora, Colorado
 
-1/18/19
+Jan 2019
 
 
 
@@ -632,7 +632,7 @@ Rocky Mountain Yeast Meeting Poster
 
 Fort Collins, Colorado
 
-1/11/19
+Jan 2019
 
 
 
@@ -644,7 +644,7 @@ Bolie Scholar Talk, Molecular Biology Program Retreat
 
 Winter Park, CO
 
-10/27/18
+Oct 2018
 
 
 
@@ -656,7 +656,7 @@ Rocky Mountain Yeast Meeting Poster
 
 Golden, Colorado
 
-1/8/18
+Jan 2018
 
 
 
@@ -668,7 +668,7 @@ Molecular Biology Program Update Talk
 
 Aurora, Colorado
 
-10/29/17
+Oct 2017
 
 
 
@@ -680,7 +680,7 @@ CSHL: mRNA Processing Meeting Talk
 
 Cold Spring Harbor, New York
 
-8/24/17
+Aug 2017
 
 
 
@@ -692,7 +692,7 @@ Rocky Mountain Yeast Meeting Poster
 
 Boulder, Colorado
 
-1/9/17
+Jan 2017
 
 
 
@@ -704,7 +704,7 @@ RNA Club Talk
 
 Boulder, Colorado
 
-12/6/16
+Dec 2016
 
 
 
@@ -716,7 +716,7 @@ Molecular Biology Program Update Talk
 
 Aurora, Colorado
 
-10/28/16
+Oct 2016
 
 
 
@@ -728,7 +728,7 @@ Rocky Mountain Yeast Meeting Poster
 
 Fort Collins, Colorado
 
-1/8/16
+Jan 2016
 
 
 
@@ -740,7 +740,7 @@ RNA Stability Meeting
 
 Estes Park, Colorado
 
-6/2/15
+Jun 2015
 
 
 
@@ -752,7 +752,7 @@ Molecular Biology Program Update Talk
 
 Aurora, Colorado
 
-2/8/15
+Feb 2015
 
 
 
@@ -764,7 +764,7 @@ Rocky Mountain Yeast Meeting Poster
 
 Aurora, Colorado
 
-1/9/15
+Jan 2015
 
 
 
@@ -776,7 +776,7 @@ Rocky Mountain Yeast Meeting Poster
 
 Boulder, Colorado
 
-1/10/14
+Jan 2014
 
 
 
@@ -788,7 +788,7 @@ Senior Undergraduate Capstone Research Talk
 
 Conway, Arkansas
 
-2013
+Jan 2013
 
 
 
@@ -810,7 +810,7 @@ Twist Bioscience
 
 South San Francisco, California
 
-2024 - 2022
+Jan 2024 - Jan 2022
 
 
 
@@ -822,7 +822,7 @@ Twist Bioscience
 
 South San Francisco, California
 
-2024 - 2021
+Jan 2024 - Jan 2021
 
 
 
@@ -834,7 +834,7 @@ Twist Bioscience
 
 South San Francisco, California
 
-2022 - 2021
+Jan 2022 - Jan 2021
 
 
 
@@ -846,7 +846,7 @@ Zymergen, Inc.
 
 Emeryville, California
 
-2021 - 2020
+Jan 2021 - Jan 2020
 
 
 
@@ -858,7 +858,7 @@ University of Colorado School of Medicine
 
 Aurora/Denver, Colorado
 
-2017
+Jan 2017
 
 
 
@@ -870,7 +870,7 @@ University of Colorado School of Medicine
 
 Aurora/Denver, Colorado
 
-2016
+Jan 2016
 
 
 
@@ -882,7 +882,7 @@ University of Colorado School of Medicine
 
 Aurora/Denver, Colorado
 
-2016 - 2014
+Jan 2016 - Jan 2014
 
 
 
@@ -894,7 +894,7 @@ University of Colorado School of Medicine
 
 Aurora/Denver, Colorado
 
-2015
+Jan 2015
 
 
 
