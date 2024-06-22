@@ -109,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Frameshift - How I run and deploy this Quarto blog">
 <meta property="og:description" content="">
-<meta property="og:image" content="2023_12_29-How_I_host_quarto_blog.jpg">
+<meta property="og:image" content="2023_12_29-How_I_host_quarto_blog/2023_12_29-How_I_host_quarto_blog.jpg">
 <meta property="og:site_name" content="Frameshift">
 </head>
 
@@ -211,7 +211,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#why-do-i-want-to-blog" id="toc-why-do-i-want-to-blog" class="nav-link active" data-scroll-target="#why-do-i-want-to-blog">Why do I want to blog?</a></li>
   <li><a href="#introduction-to-self-hosted-blogging" id="toc-introduction-to-self-hosted-blogging" class="nav-link" data-scroll-target="#introduction-to-self-hosted-blogging">Introduction to self-hosted blogging</a></li>
   <li><a href="#why-quarto" id="toc-why-quarto" class="nav-link" data-scroll-target="#why-quarto">Why Quarto</a></li>
-  <li><a href="#deploying-without-weirdness-the-road-less-trodden" id="toc-deploying-without-weirdness-the-road-less-trodden" class="nav-link" data-scroll-target="#deploying-without-weirdness-the-road-less-trodden">Deploying without weirdness (The road less trodden)</a>
+  <li><a href="#sec-road-less-trodden" id="toc-sec-road-less-trodden" class="nav-link" data-scroll-target="#sec-road-less-trodden">Deploying without weirdness (The road less trodden)</a>
   <ul class="collapse">
   <li><a href="#rolling-your-own" id="toc-rolling-your-own" class="nav-link" data-scroll-target="#rolling-your-own">Rolling your own</a></li>
   </ul></li>
@@ -229,7 +229,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>I started a blog! Isn’t that grand!?</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2023_12_29-How_I_host_quarto_blog.jpg" class="img-fluid figure-img"></p>
+<p><img src="2023_12_29-How_I_host_quarto_blog/2023_12_29-How_I_host_quarto_blog.jpg" class="img-fluid figure-img"></p>
 <figcaption>Rolling my own</figcaption>
 </figure>
 </div>
@@ -262,8 +262,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>I plan on posting lots of analysis and code, and the outputs.</strong> I have been, on occasion, posting these analyses to my github project repos, like for <a href="https://github.com/pdcherry/statistics">statistics</a>, <a href="https://github.com/pdcherry/scRNAseq-vignettes">scRNA-seq</a>, or <a href="https://github.com/pdcherry/GTEX-RNA-seq-liver">bulk RNA-seq</a>. Having a proper blog will be a great home to host all these posts together, and their future posts I can even tag them, so readers who are interested in one type can keep focused on posts of that topic.</p>
 <p><strong><a href="https://quarto.org/">Quarto</a> is the next generation of scientific publishing systems</strong>, following-up where R Markdown left off. Quarto natively renders to HTML, PDF, MS Word, ePub (all by <em>first</em> passing through Pandoc, one of the most widely-supported markdown systems). And Quarto natively supports running Python, R, Julia, and Observable JS code, because yes, contrary to popular belief, I can code in Python. (Also, I may mess around with Observable JS in the future; it sounds nice for dashboards and interactive web data explorations.)</p>
 </section>
-<section id="deploying-without-weirdness-the-road-less-trodden" class="level2">
-<h2 class="anchored" data-anchor-id="deploying-without-weirdness-the-road-less-trodden">Deploying without weirdness (The road less trodden)</h2>
+<section id="sec-road-less-trodden" class="level2">
+<h2 class="anchored" data-anchor-id="sec-road-less-trodden">Deploying without weirdness (The road less trodden)</h2>
 <p>But, it turns out, <a href="https://quarto.org/docs/websites/website-blog.html">Quarto’s own recommended</a> implementation of a “Quarto Blog” involves some weird git and deploy mechanics. Quarto recommends either rendering the HTML locally and pushing it to git (using the <code>quarto publish</code> shell command), or setting up a GitHub action.</p>
 <ul>
 <li>The “render HTML locally and push” option is not optimal, because it makes for a very large git repo with large changes for even small updates, all of which are generated programmatically from the Quarto code.</li>
@@ -303,7 +303,30 @@ Since June of 2024, I have made some changes to render and deploy
 </section>
 <section id="sec-update-render-deploy" class="level2">
 <h2 class="anchored" data-anchor-id="sec-update-render-deploy">2024-06-22 Update on workings of render and deploy</h2>
-<p>In June of 2024, I was reviewing the <code>.github/workflows</code> files and the logs of the GitHub actions, and…</p>
+<p>In June of 2024, I was reviewing the <code>.github/workflows</code> files and the logs of the GitHub actions, and realized that I was doing <em>none</em> of the publish and deploy paths I had described above (<a href="#sec-road-less-trodden" class="quarto-xref">Section&nbsp;4</a>).</p>
+<ul>
+<li>In contrast to bullet point 1, I <em>am</em> rendering the HTML locally (by virtue of the bash <code>quarto render</code> command, which outputs the HTML site artifact to the <code>/docs</code> directory). Then, this version of the repository gets committed to git, and ultimately pushed to GitHub. <strong>Thus, I am checking programmatically generated / rendered content into git</strong>, in contrast to my previous plan.
+<ul>
+<li><div class="quarto-figure quarto-figure-left">
+<figure class="figure">
+<p><img src="2023_12_29-How_I_host_quarto_blog/2024_06_22-gh_repo_languages.png" class="img-fluid figure-img" style="width:40.0%"></p>
+<figcaption>Screen capture of GitHub repository languages breakdown</figcaption>
+</figure>
+</div></li>
+</ul></li>
+<li>In contrast to bullet point 2, I do commit the HTML to git (including the main / HEAD branch).</li>
+<li>I am following bullet point 3. No notes to past Patrick; even with more experience, I still can’t imagine installing reticulate to a virtual machine on a compute note just to publish the next version of a blog.</li>
+</ul>
+<p>My GitHub <code>publish.yml</code> action workflow is very sparse due to entirely local execution and rendering, far more sparse than <a href="https://quarto.org/docs/publishing/github-pages.html">whatever Quarto has recommended</a>. For example, the <code>publish.yml</code> of this blog doesn’t even install / activate quarto on the compute node, because no quarto rendering processes are needed.</p>
+<p>While it is inelegant (and against best practice of avoiding committing programmatically-generated code), I find committing the HTML very simple, and so I go with this. (This decision may not be best for everyone else.) I don’t use the <code>quarto publish</code> command or a different branch for the HTML.</p>
+<ul>
+<li>Pro: This keeps it simple (one command to publish to the web), and it also keeps the published version aligned with the GitHub-hosted <code>main</code> branch: each push represents a publication event.</li>
+<li>Con: In order to store or back-up an intermediate piece of writing or analysis, I have to keep the start of the .qmd file labeled as “XXXX-XX-XX”; those files are excluded from the render, which I enforce as with the line of code <code>render: - "!*xxxx_xx_xx*"</code> in the <code>_quarto.yml</code> file.
+<ul>
+<li>I’m a little cagey about putting unfinished work in publicly-visible git repositories anyway, so these files are typically very close to being ready for publication. (I rely on local backups, like using Apple’s OS X Time Machine and Proton Drive to back up works-in-progress, as well as other, independent, and private GitHub repos on a project-specific basis.)</li>
+</ul></li>
+</ul>
+<p>So it works! This process get the job done on a good enough basis for me, and has stood up to numerous updates to the blog, including new analysis posts with packages that were novel to me at the time. What a nice win for streamlined science communication.</p>
 
 
 </section>
