@@ -59,6 +59,11 @@ But, it turns out, [Quarto's own recommended](https://quarto.org/docs/websites/w
  - The `quarto publish` shell command creates a new branch of the repo to contain the HTML pages (still checking HTML into git), but this branch is never supposed to be merged with the main/HEAD branch. (Furthermore, it cannot be merged, because it is not descended from the main branch, and contains no copies of files in it main branch.)
  - The last option, which is [Quarto's recommended Github Action](https://quarto.org/docs/publishing/github-pages.html#publish-command), still carries out code execution in the Action, requiring a fully copy of the R environment that solves for all possible code/projects ever run. I got many failures on installing `reticulate` to the docker image just so I could say `print('Hello, world')` using Python. Even more annoyingly, `Rmarkdown` was required to evaluate some code chunks. Both `reticulate` and `Rmarkdown` are notoriously difficult and long to install to a new environment.
 
+::: {.callout-note}
+## Since June of 2024, I have made some changes to render and deploy
+As of June 22, 2024, I realized that the specifics were different than I described in this section. The following section (@sec-update-render-deploy) for details on the update.
+:::
+
 [Ian Taylor notes this in his blog post about GitHub actions](https://www.ianmtaylor.net/posts/2022/deploy-quarto-to-github-pages/). So, similarly to Ian, I added `execute: freeze: auto` lines to this blogs _quarto.yml so that 100% of Quarto would be pre-executed locally on my machine, and only if it changed. And those pre-rendered results are committed to git. Thus, this allows for the Github Action to be very sparse, only requiring an installation of Quarto on the shell PATH. From there, Quarto renders the HTML from the frozen quarto documents, and deploys it to Github Pages with an artifact transfer. The GitHub action takes ~ 45 seconds to deploy the site, and my locally run render takes less than 10 seconds. Nice!
 
 ### Rolling your own
@@ -71,5 +76,20 @@ print("Hello, world")
 ```{python warning = FALSE}
 print('Hello, world')
 ```
+
+## 2024-06-22 Update on workings of render and deploy {#sec-update-render-deploy}
+In June of 2024, I was reviewing the `.github/workflows` files and the logs of the GitHub actions, and...
+
+
+
+
+
+
+
+
+
+
+
+
 
 
