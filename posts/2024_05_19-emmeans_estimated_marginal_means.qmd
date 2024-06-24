@@ -65,7 +65,6 @@ library(tidyverse) |> suppressMessages()  # dplyr, ggplot2, etc.
 theme_set(theme_light())    # set default themes for ggplot in this doc to add contrast
 library(broom)              # help tidy display and compare of model summary stats
 library(emmeans)            # ~~The estimated marginal means package~~
-library(patchwork)          # for combining plots
 library(modelbased)         # https://easystats.github.io/modelbased/articles/estimate_means.html
 ```
 
