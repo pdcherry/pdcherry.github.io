@@ -75,21 +75,21 @@ Contact {#contact}
 --------------------------------------------------------------------------------
 
 
- - {{< fa envelope >}} pcherry [at] pm dot me
- - {{< fa phone >}} upon request
- - {{< fa suitcase >}} Senior Scientist | Genomics
- - {{< fa building >}} Twist Bioscience
- - {{< fa map >}} San Francisco, California
- - {{< fa globe-americas >}} [pdcherry.github.io](https://pdcherry.github.io)
- - {{< fa brands github >}} [github.com/pdcherry](https://github.com/pdcherry)
- - {{< fa brands linkedin >}} [linkedin.com/in/p-cherry](https://www.linkedin.com/in/p-cherry)
- - {{< fa id-card >}} United States Citizen
+ - {{< fa envelope >}}&nbsp;pcherry [at] pm dot me
+ - {{< fa phone >}}&nbsp;upon request
+ - {{< fa suitcase >}}&nbsp;Senior Scientist | Genomics
+ - {{< fa building >}}&nbsp;Twist Bioscience
+ - {{< fa map >}}&nbsp;San Francisco, California
+ - {{< fa globe-americas >}}&nbsp;[pdcherry.github.io](https://pdcherry.github.io)
+ - {{< fa brands github >}}&nbsp;[github.com/pdcherry](https://github.com/pdcherry)
+ - {{< fa brands linkedin >}}&nbsp;[linkedin.com/in/p-cherry](https://www.linkedin.com/in/p-cherry)
+ - {{< fa id-card >}}&nbsp;United States Citizen
 
 
 
 :::::: {.disclaimer}
 
-Last updated on 2024-06-22.
+Last updated on 2024-07-01.
 
 Data-driven résumé made in R using Quarto.
 ::::::
