@@ -342,9 +342,7 @@ legend {
 
 // justify body paragraphs only when screen is 800 px or wider
 @media only screen and (min-width: 800px){
-  body{
-    text-align: justify;
-  }
+  body {text-align: justify;}
 }
 // do not justify the following
 nav{text-align: start;}
