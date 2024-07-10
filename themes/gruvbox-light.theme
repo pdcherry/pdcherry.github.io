@@ -1,17 +1,4 @@
 {
-    "_comments": [
-        "Last update: Sep 17, 2020 (revision 2)",
-        "This file has been converted from: https://github.com/morhetz/gruvbox"
-    ],
-    "metadata" : {
-        "copyright": [
-            "SPDX-FileCopyrightText: 2017 Pavel Pertsev <morhetz@gmail.com>",
-            "SPDX-FileCopyrightText: 2020 Frederik Banning <laubblaeser@live.com>"
-        ],
-        "license": "SPDX-License-Identifier: MIT",
-        "name" : "gruvbox Light", 
-        "revision" : 2
-    },
     "text-styles": {
         "Normal" : {
             "text-color" : "#3c3836",

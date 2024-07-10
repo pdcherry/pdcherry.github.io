@@ -49,20 +49,21 @@ out_path <- fs::path(here(), "posts", "2024_06_20-CITE-seq")
 file_prefix <- "CITE-seq"
 data_dir <- fs::path("~/", "pdcherry_github_data", "CITE-seq_data", "GSE100866")
 ```
-```{r}
-fs::dir_ls(data_dir) |> fs::path_file()
-```
 
 ```{r}
 path(out_path, file_prefix)
 ```
 
-```{r eval = FALSE}
+```{r eval = FALSE, include = FALSE}
 #| eval: FALSE
 source("CITE-seq_data_fetch.R")
 ```
 ```{r}
 cat(readLines(fs::path(out_path, "CITE-seq_data_fetch.R")), sep = "\n")
+```
+
+```{r}
+fs::dir_ls(data_dir) |> fs::path_file()
 ```
 
 ## Read in data

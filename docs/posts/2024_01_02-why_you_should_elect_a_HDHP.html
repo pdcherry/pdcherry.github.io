@@ -109,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Frameshift - Why you should elect a high-deductible health plan">
 <meta property="og:description" content="">
-<meta property="og:image" content="2024_01_02-misunderstood_HSA_spider.png">
+<meta property="og:image" content="2024_01_02-why_you_should_elect_a_HDHP/2024_01_02-misunderstood_HSA_spider.png">
 <meta property="og:site_name" content="Frameshift">
 </head>
 
@@ -234,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_01_02-misunderstood_HSA_spider.png" class="img-fluid figure-img"></p>
+<p><img src="2024_01_02-why_you_should_elect_a_HDHP/2024_01_02-misunderstood_HSA_spider.png" class="img-fluid figure-img"></p>
 <figcaption>The Misunderstood Spider of the annual enrollment process just wants to cuddle.</figcaption>
 </figure>
 </div>
@@ -276,8 +276,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="but-what-if-i-have-an-expensive-year" class="level2">
 <h2 class="anchored" data-anchor-id="but-what-if-i-have-an-expensive-year">But what if I have an expensive year?</h2>
-<p>My 2020, among other ongoing medical events: <img src=".png" class="img-fluid" alt="X-ray of aracture of the left radial head, annotated in red"> <img src=".png" class="img-fluid" alt="Another X-ray view of a fractured radial head"></p>
-<p>You can have a bad year, but it won’t be as bad as it may seem at first: - $28k billed - $12k allowed by insurance - $3.5k is what I had to pay</p>
+<p>My 2020, among other ongoing medical events:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="2024_01_02-why_you_should_elect_a_HDHP/2024_01_02-2020_bad_year_x_rays.png" class="img-fluid figure-img"></p>
+<figcaption>Left: an X-ray of a fracture of the left radial head, annotated in red; right: Another X-ray view of a fractured radial head</figcaption>
+</figure>
+</div>
+<p>You can have a bad year, but it won’t be as bad as it may seem at first:</p>
+<ul>
+<li>$28k billed</li>
+<li>$12k allowed by insurance</li>
+<li>$3.5k is what I had to pay</li>
+</ul>
 </section>
 <section id="an-example-2023-comparative-cost-model" class="level2">
 <h2 class="anchored" data-anchor-id="an-example-2023-comparative-cost-model">An example 2023 comparative cost model</h2>
@@ -297,26 +308,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>hdhp_premium <span class="ot">&lt;-</span> <span class="dv">0</span></span>
 <span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>hdhp_co_insurance <span class="ot">&lt;-</span> .<span class="dv">9</span></span>
 <span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>health_spending_model <span class="ot">&lt;-</span> <span class="cf">function</span>(raw_expenditure, deductible, co_insurance, oop_max, emp_contribution, premium){</span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  actual_expenditure <span class="ot">&lt;-</span> <span class="fu">if_else</span>(</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    raw_expenditure <span class="sc">&lt;=</span> deductible, raw_expenditure, <span class="fu">if_else</span>(</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      (deductible <span class="sc">+</span> ((raw_expenditure <span class="sc">-</span> deductible) <span class="sc">*</span> co_insurance) ) <span class="sc">&gt;=</span> oop_max, oop_max,</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>        (deductible <span class="sc">+</span> ((raw_expenditure <span class="sc">-</span> deductible) <span class="sc">*</span> co_insurance) )</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>      )</span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>    )  <span class="sc">+</span> emp_contribution <span class="sc">+</span> premium</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(actual_expenditure)</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>costsdf <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10000</span>, <span class="dv">50</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"raw_expenditure"</span> <span class="ot">=</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"PPO"</span> <span class="ot">=</span> <span class="fu">health_spending_model</span>(raw_expenditure, ppo_deductible, ppo_co_insurance, ppo_oop_max,</span>
-<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>                                       ppo_employer_contributes, ppo_premium),</span>
-<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>         <span class="st">"HDHP"</span> <span class="ot">=</span> <span class="fu">health_spending_model</span>(raw_expenditure, hdhp_deductible, hdhp_co_insurance, hdhp_oop_max,</span>
-<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>                                       hdhp_employer_contributes, hdhp_premium)) <span class="sc">%&gt;%</span></span>
-<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"PPO"</span>, <span class="st">"HDHP"</span>), <span class="at">values_to =</span> <span class="st">"your_cost"</span>, <span class="at">names_to =</span> <span class="st">"plan_type"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>health_spending_model <span class="ot">&lt;-</span> <span class="cf">function</span>(raw_expenditure,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>                                  deductible,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                                  co_insurance,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>                                  oop_max,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>                                  emp_contribution,</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>                                  premium){</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  actual_expenditure <span class="ot">&lt;-</span> <span class="fu">if_else</span>(</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    raw_expenditure <span class="sc">&lt;=</span> deductible, raw_expenditure, <span class="fu">if_else</span>(</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>      (deductible <span class="sc">+</span> ((raw_expenditure <span class="sc">-</span> deductible) <span class="sc">*</span> co_insurance) ) <span class="sc">&gt;=</span> oop_max, oop_max,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>        (deductible <span class="sc">+</span> ((raw_expenditure <span class="sc">-</span> deductible) <span class="sc">*</span> co_insurance) )</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>    )  <span class="sc">+</span> emp_contribution <span class="sc">+</span> premium</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(actual_expenditure)</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>costsdf <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">10000</span>, <span class="dv">50</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"raw_expenditure"</span> <span class="ot">=</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"PPO"</span> <span class="ot">=</span> <span class="fu">health_spending_model</span>(raw_expenditure, ppo_deductible, ppo_co_insurance, ppo_oop_max,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>                                       ppo_employer_contributes, ppo_premium),</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>         <span class="st">"HDHP"</span> <span class="ot">=</span> <span class="fu">health_spending_model</span>(raw_expenditure, hdhp_deductible, hdhp_co_insurance, hdhp_oop_max,</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>                                       hdhp_employer_contributes, hdhp_premium)) <span class="sc">%&gt;%</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"PPO"</span>, <span class="st">"HDHP"</span>), <span class="at">values_to =</span> <span class="st">"your_cost"</span>, <span class="at">names_to =</span> <span class="st">"plan_type"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="plot-cost-model" class="level4">
@@ -342,7 +358,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p><em>Assumes 100% in-network providers, co-insurances are 90% of total accepted expenditure.</em></p>
-<p>The HDHP is actually less expensive than PPO until &gt;$11,000 of raw expense. Because both plans have 90% co-insurance1, the amount paid by each is similar when under the OOP Max.</p>
+<p>The HDHP is actually less expensive than PPO until &gt;$11,000 of raw expense. Because both plans have 90% co-insurance, the amount paid by each is similar when under the OOP Max.</p>
 <p>HDHP costs 11.1% more than PPO until reaching the deductible.</p>
 <p>Because the OOP Max for the HDHP is lower than the HSA contribution (from the employer), there is no medical expense scenario when this model keeps less than $350 at the end of the year.</p>
 </section>
@@ -356,28 +372,32 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><em>CA, NJ, and AL tax HSA contributions; NH and TN tax earnings.</em></p>
 <ul>
 <li>No “use it or lose it”— it’s your money.</li>
-<li>Treated like a 401K account: pre-tax1, interest-earning, investable.</li>
+<li>Treated like a 401K account: pre-tax, interest-earning, able to be invested in stocks, <em>etc</em>.</li>
 <li>Not tied to your employer: your HSA goes with you, can be rolled over into another HSA (like 401K)
 <ul>
 <li>$4,150 individual contribution limit; $8,300 contribution family limit (2024 IRS limits)</li>
-<li>Employer may contribute some or most of that, as a benefit</li>
-<li>If 55 or over, extra $1,000/year “catch-up”</li>
+<li>Employer may contribute some or most of that, as an employee benefit.</li>
+<li>If 55 or over, extra $1,000/year “catch-up” contributions are permitted</li>
 </ul></li>
-<li>Interest/investment growth is tax-free.
+<li>Interest/investment growth is tax-free..
 <ul>
 <li><em>CA, NJ, and AL tax HSA contributions; NH and TN tax earnings.</em></li>
 </ul></li>
-<li>At retirement age, can withdraw and use for any reason, but taxed as income (like IRA).</li>
-<li>If used for qualifying medical expenses, neither the principal nor the growth is ever taxed!1</li>
+<li>At retirement age, can withdraw and use for any reason, but taxed as income (with no penalty) (like traditional IRA).
+<ul>
+<li>Withdrawal after retirement age decreases the number of tax advantages from 3 to 2.</li>
+</ul></li>
+<li>If used for qualifying medical expenses, neither the principal nor the growth is ever taxed!</li>
 </ul>
 </section>
 <section id="multi-year-thinking" class="level2">
 <h2 class="anchored" data-anchor-id="multi-year-thinking">Multi-Year Thinking</h2>
-<p>We’ve been taught to think in annual cycles, and to over-value downside risk. Think about the upside benefit of a light year: one year in which I spend only half of my premium savings + employer contribution “stake” can cover the downside risk of years when I spend more. PPO premiums are sunk costs—you’ll never see that money again.</p>
-<p>Multiply your contribution (not your employer’s contribution) by your tax bracket—that’s free money. Your employer’s contribution is free money.</p>
-<p><em>1CA, NJ, and AL tax HSA contributions; NH and TN tax earnings.</em> <em><a href="https://www.irs.gov/publications/p969#en_US_2022_publink1000204094">IRS Publication 969</a></em></p>
+<p>We’ve been taught to think in annual cycles, and to over-value downside risk. Think about the upside benefit of a light year: one year in which I spend only half of my premium savings + employer contribution “stake” can cover the downside risk of years when I spend more. PPO premiums are sunk costs—you will never see that money again.</p>
+<p>Multiply your contribution (not your employer’s contribution) by your tax bracket—that is free money (in that it would have been taxed at that marginal rate if it were instead kept in your paycheck).</p>
+<p>Your employer’s contribution is free money.</p>
+<p><em>CA, NJ, and AL tax HSA contributions; NH and TN tax earnings.</em> <em><a href="https://www.irs.gov/publications/p969#en_US_2022_publink1000204094">IRS Publication 969</a></em></p>
 <p>If you meet your deductible in 2024, pack all your annual checkups into the end of 2024 and the beginning of 2026, and look to have a light year in 2025.</p>
-<p>Banking your receipts: you can claim your HSA reimbursements at any time, so you can “bank up” your reimbursable expenses across years, allowing your money to grow tax-free in the HSA, but leaving you the option to reimburse yourself tax-free for multiple years worth of expenses at any time.</p>
+<p>Banking your receipts: you can claim your HSA reimbursements at any time, so you can “bank up” your reimbursable expenses across years, allowing your money to grow tax-free in the HSA, but leaving you the option to reimburse yourself tax-free for multiple years worth of expenses at any time. No reason or justification is required; just keep the receipts and records of when each was withdrawn from the HSA in case the IRS asks to see.</p>
 <p><em><a href="https://www.irs.gov/publications/p969#en_US_2022_publink1000204094">IRS Publication 969</a></em></p>
 </section>
 <section id="qualifying-to-contribute-to-an-hsa" class="level2">
@@ -392,7 +412,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="disqualifications" class="level4">
 <h4 class="anchored" data-anchor-id="disqualifications">Disqualifications</h4>
 <ul>
-<li>You must NOT be covered by a disqualifying health plan (like another plan) (except for dental, vision, and other specific exceptions).</li>
+<li>You must NOT be covered by a disqualifying health plan (like another plan) (except for dental, vision, and other specific exceptions).
+<ul>
+<li>To be disqualified, you must be actively covered, not just eligible to get coverage (say, during open enrollment).</li>
+</ul></li>
 <li>You must NOT be enrolled in medicare.</li>
 <li>You must NOT be claimed as a dependent on someone else’s tax filing.</li>
 </ul>
@@ -401,7 +424,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="the-fine-print-things-to-watch-out-for" class="level2">
 <h2 class="anchored" data-anchor-id="the-fine-print-things-to-watch-out-for">The fine print: things to watch out for</h2>
 <ul>
-<li>You are responsible for record-keeping—IRS can audit, so you need records for at least 3 years, probably 6
+<li>You are responsible for record-keeping—IRS can audit, so you need records for at least 3 years, probably 6 (<a href="https://www.irs.gov/businesses/small-businesses-self-employed/irs-audits#far-back">IRS page on audits</a>)
 <ul>
 <li>taxes + 20% penalty due for any money withdrawn that you can’t prove was “qualified”</li>
 <li>count years from when you withdrew from the HSA, not when the medical expense happened</li>

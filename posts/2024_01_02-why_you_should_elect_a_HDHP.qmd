@@ -5,7 +5,7 @@ date: "2024/01/02"
 categories:
   - finance
   - healthcare
-image: "2024_01_02-misunderstood_HSA_spider.png"
+image: "2024_01_02-why_you_should_elect_a_HDHP/2024_01_02-misunderstood_HSA_spider.png"
 execute:
   freeze: true
 ---
@@ -14,7 +14,7 @@ library(tidyverse)
 theme_set(theme_light())
 ```
 
-![The Misunderstood Spider of the annual enrollment process just wants to cuddle.](2024_01_02-misunderstood_HSA_spider.png)
+![The Misunderstood Spider of the annual enrollment process just wants to cuddle.](2024_01_02-why_you_should_elect_a_HDHP/2024_01_02-misunderstood_HSA_spider.png)
 
 # Disclaimer
 This is employee-to-employee advice. I do not work for or represent the Human Resources, Benefits, Finance, or Legal teams. I have no stake in the health plan you elect. I am not a lawyer; I am not a financial advisor; I am not a medical professional. I am in no way qualified to advise you, and any decisions you make based on the content I am presenting remain your own decisions and responsibility. Your mileage may vary. Investing carries risk. Past performance is no guarantee of future performance. This presentation is furnished as is, without warranty of the presentation whatsoever, whether express, implied, or statutory, including, but not limited to, any warranty of merchantability or fitness for a particular purpose or any warranty that the contents of this presentation are error-free. If you have received this presentation in error, please notify the presenter and delete the content from your brain immediately. Side effects may include nausea, dizziness, and drowsiness.
@@ -49,9 +49,11 @@ What we haven’t been conditioned to think about is: premiums as a function of 
 ## But what if I have an expensive year?
 
 My 2020, among other ongoing medical events:
-![X-ray of aracture of the left radial head, annotated in red]() ![Another X-ray view of a fractured radial head]()
+
+![Left: an X-ray of a fracture of the left radial head, annotated in red; right: Another X-ray view of a fractured radial head](2024_01_02-why_you_should_elect_a_HDHP/2024_01_02-2020_bad_year_x_rays.png)
 
 You can have a bad year, but it won't be as bad as it may seem at first:
+
  - \$28k billed
  - \$12k allowed by insurance
  - \$3.5k is what I had to pay
@@ -73,7 +75,12 @@ hdhp_employer_contributes <- -3850
 hdhp_premium <- 0
 hdhp_co_insurance <- .9
 
-health_spending_model <- function(raw_expenditure, deductible, co_insurance, oop_max, emp_contribution, premium){
+health_spending_model <- function(raw_expenditure,
+                                  deductible,
+                                  co_insurance,
+                                  oop_max,
+                                  emp_contribution,
+                                  premium){
   
   actual_expenditure <- if_else(
     raw_expenditure <= deductible, raw_expenditure, if_else(
@@ -112,7 +119,7 @@ costsdf %>%
 
 _Assumes 100% in-network providers, co-insurances are 90% of total accepted expenditure._
 
-The HDHP is actually less expensive than PPO until >$11,000 of raw expense. Because both plans have 90% co-insurance1, the amount paid by each is similar when under the OOP Max.
+The HDHP is actually less expensive than PPO until >$11,000 of raw expense. Because both plans have 90% co-insurance, the amount paid by each is similar when under the OOP Max.
 
 HDHP costs 11.1% more than PPO until reaching the deductible.
 
@@ -126,27 +133,30 @@ Because the OOP Max for the HDHP is lower than the HSA contribution (from the em
 _CA, NJ, and AL tax HSA contributions; NH and TN tax earnings._
 
  - No “use it or lose it”— it’s your money.
- - Treated like a 401K account: pre-tax1, interest-earning, investable.
+ - Treated like a 401K account: pre-tax, interest-earning, able to be invested in stocks, *etc*.
  - Not tied to your employer: your HSA goes with you, can be rolled over into another HSA (like 401K)
    - \$4,150 individual contribution limit; \$8,300 contribution family limit (2024 IRS limits)
-   - Employer may contribute some or most of that, as a benefit
-   - If 55 or over, extra $1,000/year “catch-up”
- - Interest/investment growth is tax-free.
+   - Employer may contribute some or most of that, as an employee benefit.
+   - If 55 or over, extra $1,000/year “catch-up” contributions are permitted
+ - Interest/investment growth is tax-free..
    - _CA, NJ, and AL tax HSA contributions; NH and TN tax earnings._
- - At retirement age, can withdraw and use for any reason, but taxed as income (like IRA).
- - If used for qualifying medical expenses, neither the principal nor the growth is ever taxed!1
+ - At retirement age, can withdraw and use for any reason, but taxed as income (with no penalty) (like traditional IRA).
+   - Withdrawal after retirement age decreases the number of tax advantages from 3 to 2.
+ - If used for qualifying medical expenses, neither the principal nor the growth is ever taxed!
 
 ## Multi-Year Thinking
-We’ve been taught to think in annual cycles, and to over-value downside risk. Think about the upside benefit of a light year: one year in which I spend only half of my premium savings + employer contribution “stake” can cover the downside risk of years when I spend more. PPO premiums are sunk costs—you’ll never see that money again.
+We’ve been taught to think in annual cycles, and to over-value downside risk. Think about the upside benefit of a light year: one year in which I spend only half of my premium savings + employer contribution “stake” can cover the downside risk of years when I spend more. PPO premiums are sunk costs—you will never see that money again.
 
-Multiply your contribution (not your employer’s contribution) by your tax bracket—that’s free money. Your employer’s contribution is free money.
+Multiply your contribution (not your employer’s contribution) by your tax bracket—that is free money (in that it would have been taxed at that marginal rate if it were instead kept in your paycheck).
 
-_1CA, NJ, and AL tax HSA contributions; NH and TN tax earnings._
+Your employer’s contribution is free money.
+
+_CA, NJ, and AL tax HSA contributions; NH and TN tax earnings._
 _[IRS Publication 969](https://www.irs.gov/publications/p969#en_US_2022_publink1000204094)_
 
 If you meet your deductible in 2024, pack all your annual checkups into the end of 2024 and the beginning of 2026, and look to have a light year in 2025.
 
-Banking your receipts: you can claim your HSA reimbursements at any time, so you can “bank up” your reimbursable expenses across years, allowing your money to grow tax-free in the HSA, but leaving you the option to reimburse yourself tax-free for multiple years worth of expenses at any time.
+Banking your receipts: you can claim your HSA reimbursements at any time, so you can “bank up” your reimbursable expenses across years, allowing your money to grow tax-free in the HSA, but leaving you the option to reimburse yourself tax-free for multiple years worth of expenses at any time. No reason or justification is required; just keep the receipts and records of when each was withdrawn from the HSA in case the IRS asks to see.
 
 _[IRS Publication 969](https://www.irs.gov/publications/p969#en_US_2022_publink1000204094)_
 
@@ -158,11 +168,12 @@ _[IRS Publication 969](https://www.irs.gov/publications/p969#en_US_2022_publink1
 
 #### Disqualifications
  - You must NOT be covered by a disqualifying health plan (like another plan) (except for dental, vision, and other specific exceptions).
+   - To be disqualified, you must be actively covered, not just eligible to get coverage (say, during open enrollment).
  - You must NOT be enrolled in medicare.
  - You must NOT be claimed as a dependent on someone else’s tax filing.
 
 ## The fine print: things to watch out for
- - You are responsible for record-keeping—IRS can audit, so you need records for at least 3 years, probably 6
+ - You are responsible for record-keeping—IRS can audit, so you need records for at least 3 years, probably 6 ([IRS page on audits](https://www.irs.gov/businesses/small-businesses-self-employed/irs-audits#far-back))
    - taxes + 20% penalty due for any money withdrawn that you can’t prove was “qualified”
    - count years from when you withdrew from the HSA, not when the medical expense happened
  - The State of California (among others) taxes contributions, interest, and capital gains of HSAs. (Employers document this on W-2; state vs. federal taxable incomes will be different.)
