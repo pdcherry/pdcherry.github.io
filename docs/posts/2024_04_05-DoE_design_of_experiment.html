@@ -160,7 +160,7 @@ window.Quarto = {
 <link rel="stylesheet" href="../styles.css">
 <meta property="og:title" content="Frameshift - DoE: Design of Experiment">
 <meta property="og:description" content="">
-<meta property="og:image" content="2024_04_05-DoE_architecture_imperfect_grid.jpg">
+<meta property="og:image" content="2024_04_05-DoE_design_of_experiment/2024_04_05-DoE_architecture_imperfect_grid.jpg">
 <meta property="og:site_name" content="Frameshift">
 </head>
 
@@ -286,7 +286,7 @@ window.Quarto = {
 
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="2024_04_05-DoE_architecture_imperfect_grid.jpg" class="img-fluid figure-img"></p>
+<p><img src="2024_04_05-DoE_design_of_experiment/2024_04_05-DoE_architecture_imperfect_grid.jpg" class="img-fluid figure-img"></p>
 <figcaption>DoE experiments can make conclusions that are greater than the sum of its parts, through thoughtful designs. Much like an architectural facade, DoEs often employ a grid of conditions that do not perfectly sample every possible combination. Image credit: seier+seier on Flickr under CC</figcaption>
 </figure>
 </div>
@@ -311,7 +311,7 @@ window.Quarto = {
 <li><em>Background variable</em>: Also called a <em>lurking variable</em>, it is a variable that the experimenter is not aware exists or affects the outcome of the experiment. Due to this lack of awareness, it is not controlled. In a well-planned experiment, lurking variables should balance out in effect so as not to impact the conclusion of the experiment.</li>
 <li><em>Dependent variable</em>: Also called a <em>response variable</em>, it is the outcome or output measured from the experiment. An experiment can have multiple dependent variables, but it is more typical to analyze for one of these variables at a time.</li>
 <li><em>Replicate</em>: additional runs of the same experiment (same treatment, same controls, etc.). Replicates help to understand the within-condition variability of outcomes, and decide if enough evidence is present to conclude the independent variable is <em>causing</em> a change in the response variable.</li>
-<li><em>Confounded factors</em>: <em>Confounding</em> is a relationship of two or more factors to each other. Two or more factors are confounded when they are <em>auto-correlated</em> in the design – that is, when the levels / values of each factor co-occur throughout the experiment –to the exclusion of other combinations of levels of those factors. In this situation, it is impossible to provide evidence for which factor causes any observed change in the response variable. (Some analyses will emit an error or a warning when confounding or autocorrelation of independent variable occurs.)</li>
+<li><em>Confounded factors</em>: <em>Confounding</em> is a relationship of two or more factors to each other. Two or more factors are confounded when they are <em>auto-correlated</em> in the design—that is, when the levels / values of each factor co-occur throughout the experiment—to the exclusion of other combinations of levels of those factors. In this situation, it is impossible to provide evidence for which factor causes any observed change in the response variable. (Some analyses will emit an error or a warning when confounding or autocorrelation of independent variable occurs.)</li>
 <li><em>Biased factor</em>: <em>Bias</em> in another relationship between experimental factors. Bias occurs when an experimenter makes a change to an independent variable at the precise time when changes in a lurking variable also occur. This is effectively confounding with a lurking variable, but because lurking variables are not always known or measured, the situation can go undetected, which can lead to erroneous conclusions. For this reason, it can be good to measure suspected lurking variables <em>even if they are not controlled</em> for retrospective analysis of bias.</li>
 <li><em>Experimental error</em>: the difference between the measured response for a condition and the long-run average of that condition. In this definition, error is a statistical measure, and not literally a “mistake” or “inaccuracy,” as synonyms for error suggest. Experimental error is expected (to some degree) because background or lurking variables can subtly influence outcomes or measurements.</li>
 <li><em>Randomization</em>: the random assignment of conditions to a particular sample of an experiment, which leads to the likely reduction of experimental error.</li>
@@ -342,7 +342,7 @@ window.Quarto = {
 </section>
 <section id="doe-with-blocking-for-multiple-operators" class="level2">
 <h2 class="anchored" data-anchor-id="doe-with-blocking-for-multiple-operators">DoE with blocking for multiple operators</h2>
-<p>I will block for the operators carrying out library prep, because operator is a known source of variation that is not relevant to understanding the effect of TE panel, RNA input mass, or concentration on performance. (For example, my direct report is better at target enrichment than I am–she gets better fold-80 scores and off-target percentages than me routinely. But we’re here to study <em>the panels</em>, not the operators, and we need to share the work.)</p>
+<p>I will block for the operators carrying out library prep, because operator is a known source of variation that is not relevant to understanding the effect of TE panel, RNA input mass, or concentration on performance. (For example, my direct report is better at target enrichment than I am—she gets better fold-80 scores and off-target percentages than me routinely. But we’re here to study <em>the panels</em>, not the operators, and we need to share the work.)</p>
 <p>Blocking is the non-random assignment of samples to groups to minimize differences in the sample composition between the groups such that any effect of the grouping can be determined by the model and ignored (modeled out quantitatively and precisely).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>panels <span class="ot">&lt;-</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"TE Panel A"</span>, <span class="st">"TE Panel V"</span>, <span class="st">"TE Panel C"</span>, <span class="st">"Whole Transcriptome"</span>))</span>

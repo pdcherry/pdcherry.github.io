@@ -6,9 +6,10 @@ categories:
   - data
   - code
   - experimental analysis
+  - DoE
   - unbalanced DoE
   - causal inference
-bibliography: "2024_05_19-emmeans_estimated_marginal_means.bib"
+bibliography: "2024_05_19-emmeans_estimated_marginal_means_dir/2024_05_19-emmeans_estimated_marginal_means.bib"
 image: "2024_05_19-emmeans_estimated_marginal_means_dir/2024_05_19-emmeans_diff_plot.png"
 format:
   html:

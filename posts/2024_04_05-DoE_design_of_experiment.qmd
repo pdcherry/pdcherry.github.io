@@ -6,9 +6,9 @@ categories:
   - DoE
   - design of experiment
   - code
-image: "2024_04_05-DoE_architecture_imperfect_grid.jpg"
-bibliography: 2024_04_05-DoE_design_of_experiment.bib
-from: markdown+tex_math_single_backslash
+bibliography: "2024_04_05-DoE_design_of_experiment/2024_04_05-DoE_design_of_experiment.bib"
+image: "2024_04_05-DoE_design_of_experiment/2024_04_05-DoE_architecture_imperfect_grid.jpg"
+#from: markdown+tex_math_single_backslash
 format:
   html:
     df-print: paged
@@ -18,7 +18,7 @@ execute:
 editor_options: 
   chunk_output_type: inline
 ---
-![DoE experiments can make conclusions that are greater than the sum of its parts, through thoughtful designs. Much like an architectural facade, DoEs often employ a grid of conditions that do not perfectly sample every possible combination. Image credit: seier+seier on Flickr under CC](2024_04_05-DoE_architecture_imperfect_grid.jpg)
+![DoE experiments can make conclusions that are greater than the sum of its parts, through thoughtful designs. Much like an architectural facade, DoEs often employ a grid of conditions that do not perfectly sample every possible combination. Image credit: seier+seier on Flickr under CC](2024_04_05-DoE_design_of_experiment/2024_04_05-DoE_architecture_imperfect_grid.jpg)
 
 > To consult the statistician after an experiment is finished is often merely to ask him to conduct a post mortem examination. He can perhaps say what the experiment died of.
 > — Ronald A. Fisher
