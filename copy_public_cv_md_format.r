@@ -10,6 +10,6 @@ print(R.version$v)
 ## Copy the most recently rendered to github md version
 if(system.file(package='fs') != ""){
   fs::file_copy(path = "~/cherry-cv-public/Patrick-Cherry-resume.html.md",
-                new_path = "./Patrick-Cherry-resume.md",
+                new_path = "./Patrick-Cherry-cv.md",
                 overwrite = TRUE)
 }

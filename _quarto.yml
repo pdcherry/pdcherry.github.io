@@ -1,7 +1,7 @@
 project:
   type: website
   output-dir: docs
-  pre-render: copy_public_resume_md_format.r
+  pre-render: copy_public_cv_md_format.r
   post-render: copy_public_resume_pdf_format.r
   render:
     - "*.qmd"
@@ -14,7 +14,7 @@ website:
     right:
       - about.qmd
       - text: CV
-        href: Patrick-Cherry-resume.md
+        href: Patrick-Cherry-cv.md
       - icon: github
         href: https://github.com/pdcherry
       - icon: mastodon

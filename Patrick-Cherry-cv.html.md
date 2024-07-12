@@ -31,6 +31,7 @@ execute:
 
 
 
+
 [{{< fa file-pdf >}} Download resume version as pdf](Patrick-Cherry-resume.pdf)
 
 
