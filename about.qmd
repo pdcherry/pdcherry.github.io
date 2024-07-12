@@ -23,7 +23,7 @@ Patrick invents products and procedures for manipulating DNA, RNA, and their seq
 Patrick is a PhD scientist skilled in bioinformatics, biological data science, data visualization, statistical modeling, next-generation sequencing (NGS), and tool-building. Patrick has coded reproducible and rigorous pipelines for high-throughput experimental designs and genomic analyses, launched best-in-class oncology reference standards, and invented new molecular methods for DNA and microbe manipulation. Originally trained in Molecular Biology, Patrick is interested in taking his knowledge and practice of data science / bioinformatics to the next level.
 
 #### Résumé and CV
-[View CV in browser](Patrick-Cherry-resume.md)
+[View CV in browser](Patrick-Cherry-cv.md)
 
 [{{< fa file-pdf >}} Download resume as pdf](Patrick-Cherry-resume.pdf)
 
