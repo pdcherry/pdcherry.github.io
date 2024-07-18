@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/2024_07_15-CNV_TE_panel_analysis.html",
       "/posts/2024_06_20-CITE-seq_analysis_PoC.html",
       "/posts/2024_05_19-emmeans_estimated_marginal_means.html",
       "/posts/2024_04_05-DoE_design_of_experiment.html",

@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.40">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Patrick Cherry">
+<meta name="dcterms.date" content="2024-07-15">
+
+<title>Frameshift – Copy-number-variant (CNV) TE Panel Analysis</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Frameshift - Copy-number-variant (CNV) TE Panel Analysis">
+<meta property="og:description" content="">
+<meta property="og:image" content="2024_07_15-CNV_TE_panel_analysis/2024_07_15-CNV_TE_cnv_level_dist.png">
+<meta property="og:site_name" content="Frameshift">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Frameshift</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../Patrick-Cherry-cv.html"> 
+<span class="menu-text">CV</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pdcherry"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://fosstodon.org/@pcherry"> <i class="bi bi-mastodon" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://pixelfed.social/pcherry"> <i class="bi bi-instagram" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://www.linkedin.com/in/p-cherry/"> <i class="bi bi-linkedin" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">Copy-number-variant (CNV) TE Panel Analysis</h1>
+                                <div class="quarto-categories">
+                <div class="quarto-category">data</div>
+                <div class="quarto-category">code</div>
+                <div class="quarto-category">target enrichment</div>
+                <div class="quarto-category">CNV</div>
+                <div class="quarto-category">next generation sequencing</div>
+                <div class="quarto-category">genetics</div>
+                <div class="quarto-category">genomics</div>
+              </div>
+                  </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Patrick Cherry </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">July 15, 2024</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#summary" id="toc-summary" class="nav-link active" data-scroll-target="#summary">Summary</a></li>
+  <li><a href="#procedure" id="toc-procedure" class="nav-link" data-scroll-target="#procedure">Procedure</a>
+  <ul class="collapse">
+  <li><a href="#exploratory-checks" id="toc-exploratory-checks" class="nav-link" data-scroll-target="#exploratory-checks">Exploratory &amp; Checks</a>
+  <ul class="collapse">
+  <li><a href="#how-many-are-cnsl-vs.-non-cnsl" id="toc-how-many-are-cnsl-vs.-non-cnsl" class="nav-link" data-scroll-target="#how-many-are-cnsl-vs.-non-cnsl">How many are CNSL vs.&nbsp;non-CNSL</a></li>
+  <li><a href="#check-id-uniqueness" id="toc-check-id-uniqueness" class="nav-link" data-scroll-target="#check-id-uniqueness">Check id uniqueness</a></li>
+  <li><a href="#distributions-of-probe-counts" id="toc-distributions-of-probe-counts" class="nav-link" data-scroll-target="#distributions-of-probe-counts">Distributions of probe counts</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#normalize-probe-coverage" id="toc-normalize-probe-coverage" class="nav-link" data-scroll-target="#normalize-probe-coverage">Normalize probe coverage</a>
+  <ul class="collapse">
+  <li><a href="#normalize-probe-coverage-withing-samples-first" id="toc-normalize-probe-coverage-withing-samples-first" class="nav-link" data-scroll-target="#normalize-probe-coverage-withing-samples-first">Normalize probe coverage withing samples (first)</a></li>
+  <li><a href="#normalize-probe-coverage-per-probe-across-samples-second" id="toc-normalize-probe-coverage-per-probe-across-samples-second" class="nav-link" data-scroll-target="#normalize-probe-coverage-per-probe-across-samples-second">Normalize probe coverage per probe across samples (second)</a></li>
+  <li><a href="#pivot-2x-normalized-data-to-long-format" id="toc-pivot-2x-normalized-data-to-long-format" class="nav-link" data-scroll-target="#pivot-2x-normalized-data-to-long-format">Pivot 2x normalized data to long format</a>
+  <ul class="collapse">
+  <li><a href="#identify-bad-probes" id="toc-identify-bad-probes" class="nav-link" data-scroll-target="#identify-bad-probes">Identify bad probes</a></li>
+  <li><a href="#filter-out-bad-probes" id="toc-filter-out-bad-probes" class="nav-link" data-scroll-target="#filter-out-bad-probes">Filter out bad probes</a></li>
+  </ul></li>
+  <li><a href="#convert-coverage-to-integer-cnv-levels" id="toc-convert-coverage-to-integer-cnv-levels" class="nav-link" data-scroll-target="#convert-coverage-to-integer-cnv-levels">Convert coverage to integer CNV levels</a></li>
+  <li><a href="#analyze-to-detect-copy-number-variations-unsing-rle" id="toc-analyze-to-detect-copy-number-variations-unsing-rle" class="nav-link" data-scroll-target="#analyze-to-detect-copy-number-variations-unsing-rle">Analyze to detect copy number variations (unsing rle)</a>
+  <ul class="collapse">
+  <li><a href="#run-rle-cnv-detection" id="toc-run-rle-cnv-detection" class="nav-link" data-scroll-target="#run-rle-cnv-detection">Run rle CNV detection</a></li>
+  <li><a href="#analyze-the-analysis" id="toc-analyze-the-analysis" class="nav-link" data-scroll-target="#analyze-the-analysis">Analyze the analysis</a></li>
+  <li><a href="#global-analysis-of-ethnicities" id="toc-global-analysis-of-ethnicities" class="nav-link" data-scroll-target="#global-analysis-of-ethnicities">Global analysis of ethnicities</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<section id="summary" class="level1">
+<h1>Summary</h1>
+<p>In this hypothetical exercise, a recently characterized disorder called under study is “CNV-emia”, an genetic disease showing autosomal recessive inheritance of mutations in the “CNSL” gene. The deletion/duplication breakpoints can vary from sample to sample (see table below), and it has been hypothesized that the breakpoints correspond with ethnicity. The breakpoint positions are known from the literature.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Del/Dup index</th>
+<th>5´ breakpoint</th>
+<th>3´ breakpoint</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>CNSL_probe_32</td>
+<td>CNSL_probe_38</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>CNSL_probe_27</td>
+<td>CNSL_probe_34</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>CNSL_probe_20</td>
+<td>CNSL_probe_40</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>CNSL_probe_10</td>
+<td>CNSL_probe_40</td>
+</tr>
+</tbody>
+</table>
+<p>Three probes with off-trend uniformity are CNSL_5, CNSL_23, and CNSL_46. I would recommend these probes be re-designed for better uniformity of capture and lower off-target.</p>
+<p>The CNV calling and statistical analysis indicated that, significantly, the duplication vs.&nbsp;deletion of a CNV helps predict ethnicity. While the hypothesized probe intervals were not statistically significant in the model, the control data show that the method has high precision. In the CNSL region, ethnicity A has a CNV frequency of 3.2%, followed by B with a frequency of 1.0%, followed lastly by C with a frequency of 0.8%; in terms of CNV type, A is 1.8x more likely to have a deletion than a duplication, B is heavily biased toward deletions, and C is exclusively deletions (n = 21). Due to interval overlap of many hypothesized breakpoints, the model is partly confounded because the probe CNV calls are not fully independent.</p>
+<p>In order to predict the unknown ethnicity of another set of data, I would train a classifier machine-learning model, such as a random forest classifier, a logistic model, or a K-nearest neighbors model, on the data in this analysis. Best practice is to separate training, validation, and test data. Once trained, parameters optimized, and predictions reasonably accurate, I would apply the model to the unknown data.</p>
+</section>
+<section id="procedure" class="level1">
+<h1>Procedure</h1>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rlang)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(here)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(patchwork)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(valr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(flextable)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mclogit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(data_dir, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">"id"</span> <span class="ot">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>New names:
+• `` -&gt; `...1`</code></pre>
+</div>
+</div>
+<section id="exploratory-checks" class="level2">
+<h2 class="anchored" data-anchor-id="exploratory-checks">Exploratory &amp; Checks</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(data) <span class="sc">%&gt;%</span> <span class="fu">str_detect</span>(<span class="st">"probe"</span>) <span class="sc">%&gt;%</span> <span class="fu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 100</code></pre>
+</div>
+</div>
+<section id="how-many-are-cnsl-vs.-non-cnsl" class="level3">
+<h3 class="anchored" data-anchor-id="how-many-are-cnsl-vs.-non-cnsl">How many are CNSL vs.&nbsp;non-CNSL</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(data) <span class="sc">%&gt;%</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="fu">str_detect</span>(value, <span class="st">"probe"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"probe_type"</span> <span class="ot">=</span> <span class="fu">case_when</span>(<span class="fu">str_detect</span>(value, <span class="st">"non_CNSL_probe_"</span>) <span class="sc">~</span> <span class="st">"non-CNSL"</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>                                  <span class="fu">str_detect</span>(value, <span class="st">"CNSL_probe_"</span>) <span class="sc">~</span> <span class="st">"CNSL"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>                                  <span class="cn">TRUE</span> <span class="sc">~</span> <span class="cn">NA</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(probe_type)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">probe_type</th>
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CNSL</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">non-CNSL</td>
+<td style="text-align: right;">50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+<section id="check-id-uniqueness" class="level3">
+<h3 class="anchored" data-anchor-id="check-id-uniqueness">Check id uniqueness</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(data);</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">10000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">count</span>(<span class="fu">count</span>(data, id, <span class="at">name =</span> <span class="st">"num_occurences"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">10000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>All ids are unique.</p>
+<p>Ethnicities are not balanced in the experiment.</p>
+</section>
+<section id="distributions-of-probe-counts" class="level3">
+<h3 class="anchored" data-anchor-id="distributions-of-probe-counts">Distributions of probe counts</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>probe_count_hist_facet <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"CNSL_probe"</span>), <span class="at">values_to =</span> <span class="st">"counts"</span>, <span class="at">names_to =</span> <span class="st">"probe"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(counts, <span class="at">fill =</span> ethnicity)) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> probe)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>probe_count_hist_facet <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_blank</span>(), <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2024_07_15-CNV_TE_panel_analysis_files/figure-html/Distributions of probe counts-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">paste0</span>(<span class="st">"file_prefix"</span>, <span class="st">"_"</span>, <span class="st">"probe_count_hist_facet"</span>, <span class="st">".png"</span>), probe_count_hist_facet,</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">dpi =</span> <span class="dv">320</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+</section>
+<section id="normalize-probe-coverage" class="level1">
+<h1>Normalize probe coverage</h1>
+<section id="normalize-probe-coverage-withing-samples-first" class="level3">
+<h3 class="anchored" data-anchor-id="normalize-probe-coverage-withing-samples-first">Normalize probe coverage withing samples (first)</h3>
+<p>So there are 100 probe columns. The only other columns are <code>id</code> and <code>ethnicity</code>. We have 50 CNSL probes (which are hypothesized to contribute to “CNV-emia”, an autosomal recessive disease), and 50 non-CNSL probes in the target enrichment capture.</p>
+<p>“Due to variability of extraction efficiency in the lab and error in the quantification of DNA libraries, each sample has a slightly different average NGS read depth across all probes.”</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>norm_data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rowwise</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute mean coverage for each sample (rowwise)</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"mean_sample_cov"</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">c_across</span>(<span class="fu">contains</span>(<span class="st">"_probe_"</span>))),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>         <span class="st">"n_probes_in_mean"</span> <span class="ot">=</span> <span class="fu">length</span>(<span class="fu">c_across</span>(<span class="fu">contains</span>(<span class="st">"_probe_"</span>)))) <span class="sc">%&gt;%</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(mean_sample_cov, n_probes_in_mean, <span class="at">.after =</span> ethnicity) <span class="sc">%&gt;%</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># compute sample-normalized coverage for each probe</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">contains</span>(<span class="st">"_probe_"</span>),</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>                <span class="at">.fns =</span> <span class="fu">c</span>(<span class="st">"norm_cov"</span> <span class="ot">=</span> <span class="er">~</span> .x <span class="sc">/</span> mean_sample_cov),</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>                <span class="at">.names =</span> <span class="st">"{.fn}_{.col}"</span>),</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">.by =</span> id)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="normalize-probe-coverage-per-probe-across-samples-second" class="level3">
+<h3 class="anchored" data-anchor-id="normalize-probe-coverage-per-probe-across-samples-second">Normalize probe coverage per probe across samples (second)</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>norm_data_filtered <span class="ot">&lt;-</span> norm_data <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(<span class="st">"CNSL_probe_5"</span>, <span class="st">"CNSL_probe_23"</span>, <span class="st">"CNSL_probe_46"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>norm_norm_data <span class="ot">&lt;-</span> norm_data_filtered <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">contains</span>(<span class="st">"norm_cov"</span>),</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">.fns =</span> <span class="fu">c</span>(<span class="st">"norm"</span> <span class="ot">=</span> <span class="er">~</span> .x <span class="sc">/</span> <span class="fu">mean</span>(.x) <span class="co">#,</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>                         <span class="co"># n_samples_in_norm originally here to ensure 10,000 samples per probe were in calc.</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>                         <span class="co">#"n_samples_in_norm" = ~ length(.x)</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>                         ),</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">.names =</span> <span class="st">"{.fn}_{.col}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Normalize to coverage levels empirically seen in nonCNSL probes based on the assumptions of “nonCNSL” regions are CN=2 and ~1 or ~3, respectively. Thus, we can use the coverage data from nonCNSL probes to “calibrate” what a CN=2 sample looks like in this assay, after normalizing these data by sample and probe in the same way we did for the CNSL data.</p>
+</section>
+<section id="pivot-2x-normalized-data-to-long-format" class="level2">
+<h2 class="anchored" data-anchor-id="pivot-2x-normalized-data-to-long-format">Pivot 2x normalized data to long format</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>norm_norm_data_long <span class="ot">&lt;-</span> norm_norm_data <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, ethnicity, <span class="fu">contains</span>(<span class="st">"norm_norm_cov"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"norm_norm_cov"</span>), <span class="at">values_to =</span> <span class="st">"norm_norm_cov"</span>, <span class="at">names_to =</span> <span class="st">"probe"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># create order for probes</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"probe_number"</span> <span class="ot">=</span> <span class="fu">as.integer</span>(<span class="fu">str_extract</span>(probe, <span class="st">"(?&lt;=CNSL_probe_)</span><span class="sc">\\</span><span class="st">d{1,2}"</span>)),</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>         <span class="st">"probe_ordering"</span> <span class="ot">=</span> <span class="fu">if_else</span>(<span class="fu">str_detect</span>(probe, <span class="st">"non_"</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>                                  probe_number <span class="sc">+</span> <span class="dv">50</span>, probe_number)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>  <span class="co"># simplify names for easier plotting</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"probe"</span> <span class="ot">=</span> <span class="fu">str_remove</span>(probe, <span class="st">"norm_norm_cov_"</span>),</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">"probe"</span> <span class="ot">=</span> <span class="fu">str_remove</span>(probe, <span class="st">"probe_"</span>),</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>         <span class="co"># impose integer ordering on probe name strings</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">"probe"</span> <span class="ot">=</span> <span class="fu">fct_reorder</span>(<span class="fu">as_factor</span>(probe), probe_ordering)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>probe_ordering)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="save-2x-normalized-data" class="level4">
+<h4 class="anchored" data-anchor-id="save-2x-normalized-data">Save 2x normalized data</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(norm_norm_data_long, <span class="fu">paste0</span>(file_prefix, <span class="st">"_norm_norm_data_long"</span>, <span class="st">".csv.gz"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="quick-plot-to-check-results" class="level4">
+<h4 class="anchored" data-anchor-id="quick-plot-to-check-results">quick plot to check results</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>norm_norm_count_hist_facet <span class="ot">&lt;-</span> norm_norm_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(norm_norm_cov, <span class="at">fill =</span> ethnicity)) <span class="sc">+</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> .<span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">transform =</span> <span class="st">"log1p"</span>) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">xlim =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="fl">2.5</span>)) <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> probe <span class="sc">+</span> ethnicity) <span class="sc">+</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)),</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">4</span>))</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>norm_norm_count_hist_facet <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_blank</span>(), <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">4</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2024_07_15-CNV_TE_panel_analysis_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">paste0</span>(file_prefix, <span class="st">"_"</span>, <span class="st">"norm_norm_count_hist_facet"</span>, <span class="st">".png"</span>), norm_norm_count_hist_facet,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">dpi =</span> <span class="dv">320</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>copy_n_res <span class="ot">&lt;-</span> <span class="fl">0.17</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>CNSL_30_norm_norm_hist <span class="ot">&lt;-</span> norm_norm_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(probe <span class="sc">==</span> <span class="st">"CNSL_30"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(norm_norm_cov, <span class="at">fill =</span> ethnicity)) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> .<span class="dv">01</span>) <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span> <span class="sc">-</span> copy_n_res, <span class="at">linewidth =</span> .<span class="dv">25</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1</span> <span class="sc">+</span> copy_n_res, <span class="at">linewidth =</span> .<span class="dv">25</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">transform =</span> <span class="st">"log1p"</span>) <span class="sc">+</span></span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#coord_cartesian(xlim = c(0, 2.5)) +</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> probe <span class="sc">+</span> ethnicity)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>CNSL_30_norm_norm_hist</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2024_07_15-CNV_TE_panel_analysis_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">paste0</span>(file_prefix, <span class="st">"_"</span>, <span class="st">"CNSL_30_norm_norm_hist"</span>, <span class="st">".png"</span>), CNSL_30_norm_norm_hist,</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">5</span>, <span class="at">height =</span> <span class="dv">3</span>, <span class="at">dpi =</span> <span class="dv">320</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>norm_norm_cov_lineplot <span class="ot">&lt;-</span> norm_norm_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, ethnicity) <span class="sc">%&gt;%</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice_sample</span>(<span class="at">n =</span> <span class="dv">33</span>, <span class="at">by =</span> ethnicity) <span class="sc">%&gt;%</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(norm_norm_data_long, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"ethnicity"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">y =</span> norm_norm_cov, <span class="at">x =</span> probe_number, <span class="at">color =</span> ethnicity)) <span class="sc">+</span></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> id, <span class="at">ncol =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">3</span>, <span class="at">margin =</span> <span class="fu">margin</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)),</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">4</span>))</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">paste0</span>(file_prefix, <span class="st">"_"</span>, <span class="st">"norm_norm_cov_lineplot"</span>, <span class="st">".png"</span>), norm_norm_cov_lineplot,</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">5</span>, <span class="at">height =</span> <span class="dv">20</span>, <span class="at">dpi =</span> <span class="dv">320</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>probe_norm_count_hist_facet <span class="ot">&lt;-</span> norm_data <span class="sc">%&gt;%</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"norm_cov"</span>), <span class="at">values_to =</span> <span class="st">"norm_counts"</span>, <span class="at">names_to =</span> <span class="st">"probe"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(norm_counts, <span class="at">fill =</span> ethnicity)) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> probe)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>probe_norm_count_hist_limited_facet <span class="ot">&lt;-</span> norm_data <span class="sc">%&gt;%</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">contains</span>(<span class="st">"norm_cov"</span>), <span class="at">values_to =</span> <span class="st">"norm_counts"</span>, <span class="at">names_to =</span> <span class="st">"probe"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"probe"</span> <span class="ot">=</span> <span class="fu">str_remove</span>(probe, <span class="st">"norm_cov_"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(probe) <span class="sc">%&gt;%</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(probe <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"CNSL_probe_5"</span>, <span class="st">"CNSL_probe_23"</span>, <span class="st">"CNSL_probe_46"</span>,</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"CNSL_probe_1"</span>, <span class="st">"CNSL_probe_2"</span>, <span class="st">"non_CNSL_probe_2"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(norm_counts, <span class="at">fill =</span> ethnicity)) <span class="sc">+</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.1</span>) <span class="sc">+</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> probe) <span class="sc">+</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Normalized count histograms"</span>,</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Example set, for demonstration"</span>,</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Sample count (n)"</span>,</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Normalized counts (ratio to mean)"</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>probe_norm_count_hist_limited_facet</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2024_07_15-CNV_TE_panel_analysis_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">paste0</span>(<span class="st">"file_prefix"</span>, <span class="st">"_"</span>, <span class="st">"probe_norm_count_hist_facet"</span>, <span class="st">".png"</span>), probe_norm_count_hist_facet,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">10</span>, <span class="at">height =</span> <span class="dv">10</span>, <span class="at">dpi =</span> <span class="dv">320</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Most of the normalized coverage distributions of probes look great! The per-sample normalization worked well. However, we can see (highlighted specifically here, in the example) some probes that are not behaving well.</p>
+</section>
+<section id="identify-bad-probes" class="level3">
+<h3 class="anchored" data-anchor-id="identify-bad-probes">Identify bad probes</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>probe_eval_df <span class="ot">&lt;-</span> norm_norm_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="fu">across</span>(norm_norm_cov,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.fns =</span> <span class="fu">c</span>(<span class="st">"mean"</span> <span class="ot">=</span> mean,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"sd"</span> <span class="ot">=</span> sd,</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"min"</span> <span class="ot">=</span> min</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>                            <span class="co">#"max" = max</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>                            ),</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>                   <span class="at">.names =</span> <span class="st">"{.fn}_{.col}"</span>),</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>            <span class="co">#"n_samples" = n(),</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">.by =</span> <span class="fu">c</span>(probe, probe_number)) <span class="sc">%&gt;%</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.numeric), <span class="sc">~</span> <span class="fu">signif</span>(.x, <span class="dv">3</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>probe_uniformity_dist_plot <span class="ot">&lt;-</span> probe_eval_df <span class="sc">%&gt;%</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(sd_norm_norm_cov)) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="fl">0.025</span>) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Probe uniformity check"</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Distribution of standard deviations of coverages by probe"</span>,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"number of probes"</span>,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Stadard deviation of coverage"</span>)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>probe_uniformity_dist_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2024_07_15-CNV_TE_panel_analysis_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>So we have three outlier probes with poor uniformity of coverage. Let’s list out what they are.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>probe_eval_df <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(sd_norm_norm_cov)) <span class="sc">%&gt;%</span> <span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">6</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 16%">
+<col style="width: 24%">
+<col style="width: 21%">
+<col style="width: 22%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">probe</th>
+<th style="text-align: right;">probe_number</th>
+<th style="text-align: right;">mean_norm_norm_cov</th>
+<th style="text-align: right;">sd_norm_norm_cov</th>
+<th style="text-align: right;">min_norm_norm_cov</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">CNSL_5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1.010</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CNSL_23</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.512</td>
+<td style="text-align: right;">0.0362</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CNSL_46</td>
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.512</td>
+<td style="text-align: right;">0.0409</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CNSL_32</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.111</td>
+<td style="text-align: right;">0.4350</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CNSL_36</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.108</td>
+<td style="text-align: right;">0.4270</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">non_CNSL_23</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.100</td>
+<td style="text-align: right;">0.6320</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>In this head of the table of uniformity sorted by standard deviation of the probes, the three probes with off-trend uniformity are CNSL_5, CNSL_23, and CNSL_46. I would recommend these probes be re-designed for better uniformity of capture and lower off-target.</p>
+<p>In target enrichment, probes that perform poorly (due to their design / positioning) typically exhibit high rates of off-target reads (not directly observable in this data set) and a high variability in coverage from sample-to-sample (<em>i.e.</em> low uniformity of coverage). This analysis uses a rough measure of uniformity to identify potentially poorly-performing probes.</p>
+</section>
+<section id="filter-out-bad-probes" class="level3">
+<h3 class="anchored" data-anchor-id="filter-out-bad-probes">Filter out bad probes</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>norm_norm_data_long <span class="sc">%&lt;&gt;%</span> <span class="fu">filter</span>(<span class="fu">str_detect</span>(probe, <span class="st">"(?&lt;!non_)(CNSL_5|CNSL_23|CNSL_46)"</span>, <span class="at">negate =</span> <span class="cn">TRUE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="convert-coverage-to-integer-cnv-levels" class="level2">
+<h2 class="anchored" data-anchor-id="convert-coverage-to-integer-cnv-levels">Convert coverage to integer CNV levels</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>nonCNSL_CNV_long <span class="ot">&lt;-</span> norm_norm_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># compute non-CNSL coverage means</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">str_detect</span>(probe, <span class="st">"non"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="st">"mean_nonCNSL_cov"</span> <span class="ot">=</span> <span class="fu">mean</span>(norm_norm_cov),</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>           <span class="st">"sd_nonCNSL_cov"</span> <span class="ot">=</span> <span class="fu">sd</span>(norm_norm_cov),</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>           <span class="st">"n_samples"</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">.by =</span> probe)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>nonCNSL_CNV_long <span class="sc">%&gt;%</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(probe, mean_nonCNSL_cov, n_samples) <span class="sc">%&gt;%</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="st">"mean cov for all non-CNSL probes"</span> <span class="ot">=</span> <span class="fu">mean</span>(mean_nonCNSL_cov),</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"SD cov for all non-CNSL probes"</span> <span class="ot">=</span> <span class="fu">sd</span>(mean_nonCNSL_cov),</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">"min cov"</span> <span class="ot">=</span> <span class="fu">min</span>(mean_nonCNSL_cov),</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">"max cov"</span> <span class="ot">=</span> <span class="fu">max</span>(mean_nonCNSL_cov),</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>            <span class="st">"n probes"</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>            <span class="st">"n samples in each mean"</span> <span class="ot">=</span> <span class="fu">mean</span>(n_samples))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 29%">
+<col style="width: 27%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 8%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">mean cov for all non-CNSL probes</th>
+<th style="text-align: right;">SD cov for all non-CNSL probes</th>
+<th style="text-align: right;">min cov</th>
+<th style="text-align: right;">max cov</th>
+<th style="text-align: right;">n probes</th>
+<th style="text-align: right;">n samples in each mean</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">50</td>
+<td style="text-align: right;">10000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>This analysis shows that all non-CNSL probes have a mean coverage (across the 10,000 samples sequenced) of exactly 1.0 . Thus, to convert these coverage values to CNV values (normalized haploid genomic equivalents), we must multiply by 2. (The standard deviation is so small as to be negligible, and is likely caused by floating point calculation error accumulation. This is supported by the min and max calculations in the next columns of the summary table.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>norm_norm_data_long <span class="sc">%&lt;&gt;%</span> <span class="fu">mutate</span>(<span class="st">"CNV_level"</span> <span class="ot">=</span> norm_norm_cov <span class="sc">*</span> <span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="save-2x-normalized-data-1" class="level4">
+<h4 class="anchored" data-anchor-id="save-2x-normalized-data-1">Save 2x normalized data</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(norm_norm_data_long, <span class="fu">paste0</span>(file_prefix, <span class="st">"_norm_norm_data_long"</span>, <span class="st">".csv.gz"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="analyze-to-detect-copy-number-variations-unsing-rle" class="level2">
+<h2 class="anchored" data-anchor-id="analyze-to-detect-copy-number-variations-unsing-rle">Analyze to detect copy number variations (unsing rle)</h2>
+<p>Run length encoding is a lossless form of compression that encodes a data series as a different series where each consecutive repeated value is recorded as the value and the number of repeats. In R, this is accomplished with the <code>rle</code> function, and the output is a linked pair of lists where the values and number of repeats occupy the same position in their respective lists.</p>
+<p>We can take advantage of run length encoding not for its compression properties, but for its ability to variably call the number of consecutive values. We will use <code>TRUE</code>/<code>FALSE</code> binary values (or <code>Dup</code>, <code>Del</code>, and <code>No CNV</code> values) for whether there is a CNV (deletion or duplication).</p>
+<p>However, because we have eliminated three probes from the analysis, and because the start and stop positions of the CNV will be reported in units of <em><em>list elements</em></em> —not probes—, we have to create a secondary positional order column. This will allow for seamless consecutive CNV calling, and for conversion back to probe number annotations used in the original dataset.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>norm_norm_data_long <span class="sc">%&lt;&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># new code to correct for probe position</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"probe_CNSL_target"</span> <span class="ot">=</span> <span class="fu">str_extract</span>(probe, <span class="st">"(non_)*CNSL"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"continuous_probe_id"</span> <span class="ot">=</span> <span class="fu">row_number</span>() <span class="sc">-</span> <span class="dv">1</span>, <span class="co"># row_number() starts at 1</span></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">.by =</span> <span class="fu">c</span>(id, ethnicity, probe_CNSL_target))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As expected, there should be 50 non-CNSL probes, and 47 CNSL probes.</p>
+<section id="run-rle-cnv-detection" class="level3">
+<h3 class="anchored" data-anchor-id="run-rle-cnv-detection">Run rle CNV detection</h3>
+<section id="make-plot-to-set-threshold-by-eye" class="level4">
+<h4 class="anchored" data-anchor-id="make-plot-to-set-threshold-by-eye">Make plot to set threshold by eye</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>cnv_level_dist_tbl <span class="ot">&lt;-</span> norm_norm_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">"Mean CNV"</span> <span class="ot">=</span> <span class="fu">mean</span>(CNV_level),</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Max CNV"</span> <span class="ot">=</span> <span class="fu">max</span>(CNV_level),</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"Min CNV"</span> <span class="ot">=</span> <span class="fu">min</span>(CNV_level),</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>            <span class="at">.by =</span> <span class="fu">c</span>(id, ethnicity)) <span class="sc">%&gt;%</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># pivot longer for faceted plots</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(<span class="st">"Mean CNV"</span>, <span class="st">"Max CNV"</span>, <span class="st">"Min CNV"</span>),</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">names_to =</span> <span class="st">"Measure"</span>, <span class="at">values_to =</span> <span class="st">"value"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>cnv_call_threshold <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>cnv_level_dist <span class="ot">&lt;-</span> cnv_level_dist_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(value, <span class="at">fill =</span> ethnicity)) <span class="sc">+</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> .<span class="dv">01</span>) <span class="sc">+</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">2</span>, <span class="at">linetype =</span> <span class="st">"dotdash"</span>, <span class="at">linewidth =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">1.33</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fl">2.75</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">linewidth =</span> .<span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">transform =</span> <span class="st">"log10"</span>) <span class="sc">+</span></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> Measure) <span class="sc">+</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># theme(strip.text = element_text(size = 3, margin = margin(0, 0, 0, 0)),</span></span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">#       axis.text = element_text(size = 4)) +</span></span>
+<span id="cb33-13"><a href="#cb33-13" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distributions of CNV means, maxes, &amp; mins by probe"</span>,</span>
+<span id="cb33-14"><a href="#cb33-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">subtitle =</span> <span class="st">"Dashed lines indicate CNV calling thresholds"</span>,</span>
+<span id="cb33-15"><a href="#cb33-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">x =</span> <span class="st">"CNV level"</span>,</span>
+<span id="cb33-16"><a href="#cb33-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> <span class="st">"Count (number of samples) (log scale)"</span>)</span>
+<span id="cb33-17"><a href="#cb33-17" aria-hidden="true" tabindex="-1"></a>cnv_level_dist</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2024_07_15-CNV_TE_panel_analysis_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The above plot shows the distribution of CNV levels in samples, and puts the distribution in the context of manually (by eye) setting thresholds of a Deletion (low) or a Duplication (high).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggsave</span>(<span class="fu">paste0</span>(file_prefix, <span class="st">"_"</span>, <span class="st">"cnv_level_dist"</span>, <span class="st">".png"</span>), cnv_level_dist,</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>       <span class="at">width =</span> <span class="dv">8</span>, <span class="at">height =</span> <span class="dv">5</span>, <span class="at">dpi =</span> <span class="dv">320</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="apply-thresholds-in-rle-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="apply-thresholds-in-rle-analysis">Apply thresholds in rle analysis</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>cnv_rle <span class="ot">&lt;-</span> <span class="cf">function</span>(sub_df, lower_thresh, upper_thresh){</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># check that thresholds are valid</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span>(lower_thresh <span class="sc">&gt;</span> upper_thresh) <span class="fu">stop</span>(<span class="st">"Error: lower CNV threshold, `lower_thresh`, must be less than the upper CNV threshold, `upper_thresh`."</span>)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>  sub_df_cnv_calls <span class="ot">&lt;-</span> sub_df <span class="sc">%&gt;%</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="st">"CNV_call"</span> <span class="ot">=</span> <span class="fu">case_when</span>(CNV_level <span class="sc">&lt;=</span> lower_thresh <span class="sc">~</span> <span class="st">"Deletion"</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>                                  CNV_level <span class="sc">&gt;=</span> upper_thresh <span class="sc">~</span> <span class="st">"Duplication"</span>,</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>                                  <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"No CNV"</span>))</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>  df_rle <span class="ot">&lt;-</span> <span class="fu">bind_cols</span>(</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rle_lengths"</span> <span class="ot">=</span> <span class="fu">rle</span>(sub_df_cnv_calls<span class="sc">$</span>CNV_call)[[<span class="dv">1</span>]],</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    <span class="st">"rle_values"</span> <span class="ot">=</span> <span class="fu">rle</span>(sub_df_cnv_calls<span class="sc">$</span>CNV_call)[[<span class="dv">2</span>]]</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="st">"start_pos"</span> <span class="ot">=</span> <span class="fu">as.integer</span>(<span class="fu">lag</span>(<span class="fu">cumsum</span>(rle_lengths))) <span class="sc">+</span> <span class="dv">1</span>,</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>           <span class="st">"end_pos"</span> <span class="ot">=</span> <span class="fu">as.integer</span>(<span class="fu">cumsum</span>(rle_lengths))) <span class="sc">%&gt;%</span></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">replace_na</span>(<span class="fu">list</span>(<span class="st">"start_pos"</span> <span class="ot">=</span> <span class="dv">0</span>))</span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df_rle)</span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>cnv_rle <span class="ot">&lt;-</span> norm_norm_data_long <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">nest</span>(<span class="at">.by =</span> <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"ethnicity"</span>, <span class="st">"probe_CNSL_target"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"rle_result"</span> <span class="ot">=</span> <span class="fu">map</span>(data, <span class="sc">~</span> <span class="fu">cnv_rle</span>(.x, <span class="at">lower_thresh =</span> <span class="fl">1.33</span>, <span class="at">upper_thresh =</span> <span class="fl">2.75</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span>data) <span class="sc">%&gt;%</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unnest</span>(<span class="fu">c</span>(rle_result)) <span class="sc">%&gt;%</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"CNV_call_length"</span> <span class="ot">=</span> <span class="fu">as.integer</span>(end_pos <span class="sc">-</span> start_pos))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>cnv_rle_hits <span class="ot">&lt;-</span> cnv_rle <span class="sc">%&gt;%</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rle_values <span class="sc">!=</span> <span class="st">"No CNV"</span> <span class="sc">&amp;</span> CNV_call_length <span class="sc">&gt;=</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="analyze-the-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="analyze-the-analysis">Analyze the analysis</h3>
+<p>In the hits, are there any samples with more than one CNV call?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>cnv_rle_hits <span class="sc">%&gt;%</span> <span class="fu">count</span>(id, <span class="at">name =</span> <span class="st">"number CNV contigs"</span>) <span class="sc">%&gt;%</span> <span class="fu">count</span>(<span class="st">`</span><span class="at">number CNV contigs</span><span class="st">`</span>, <span class="at">name =</span> <span class="st">"number of samples"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">number CNV contigs</th>
+<th style="text-align: right;">number of samples</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">206</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>In this rle analysis using the above thresholds, 206 samples have one CNV detected, 8 samples have 2 CNVs called, and 1 sample has 3.</p>
+<p>How many CNVs are too short to make the cut?</p>
+<p>1359 out of 21,951 total called CNVs have a consecutive length of less than 3 probes</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>(cnv_rl_dist <span class="ot">&lt;-</span> cnv_rle_hits <span class="sc">%&gt;%</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(CNV_call_length)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  ggdist<span class="sc">::</span><span class="fu">stat_dist_pointinterval</span>() <span class="sc">+</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of called CNV run lengths"</span>,</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"sample count"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2024_07_15-CNV_TE_panel_analysis_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The above QC plot shows the distribution of the consecutive length of the called CNV regions. We see the median length is 6, with a standard deviation of 5.8; the distribution is skewed to the left, with some potential groupings of CNV run lengths.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>cnv_rl_dist <span class="sc">+</span> <span class="fu">facet_wrap</span>(<span class="sc">~</span> rle_values)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2024_07_15-CNV_TE_panel_analysis_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The deletions tend to occupy ~ 3 clusters fo lengths, around 6~7 probes, ~19 probes, and ~ 29 probes. The duplications are more clustered around ~5 probes in length.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>cnv_rle_hits <span class="sc">%&gt;%</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(CNV_call_length)) <span class="sc">+</span> <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(ethnicity <span class="sc">~</span> rle_values, <span class="at">scales =</span> <span class="st">"free_y"</span>) <span class="sc">+</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of called CNV run lengths"</span>,</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Faceted by ethnicity and CNV type"</span>,</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"sample count"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2024_07_15-CNV_TE_panel_analysis_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>cnv_rle_hits_tidy_bed <span class="ot">&lt;-</span> cnv_rle <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># keep observations where No CNV is the call, or it's hit based on 4 consecutive probes</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rle_values <span class="sc">==</span> <span class="st">"No CNV"</span> <span class="sc">|</span> CNV_call_length <span class="sc">&gt;=</span> <span class="dv">4</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert start positions to probe number</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(probe_number_lookup_tbl,</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"start_pos"</span> <span class="ot">=</span> <span class="st">"continuous_probe_id"</span>,</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"probe_CNSL_target"</span>),</span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>            <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">""</span>, <span class="st">"_start"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># convert end positions to probe number</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">end_pos =</span> end_pos <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(probe_number_lookup_tbl,</span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"end_pos"</span> <span class="ot">=</span> <span class="st">"continuous_probe_id"</span>,</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"probe_CNSL_target"</span>),</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>            <span class="at">suffix =</span> <span class="fu">c</span>(<span class="st">"_start"</span>, <span class="st">"_end"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>  <span class="co"># prepare dataframe for bed tools (equivalent)</span></span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"chrom"</span> <span class="ot">=</span> probe_CNSL_target, <span class="st">"start"</span> <span class="ot">=</span> probe_number_start, <span class="st">"end"</span> <span class="ot">=</span> probe_number_end)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here we have what looks like evidence we can classify the samples into ethnicity based on the status of the deletion v. duplication, and the run length of the consecutive number of probes affected by each type of genomic aberration.</p>
+<section id="hard-code-hypothesized-breakpoints" class="level4">
+<h4 class="anchored" data-anchor-id="hard-code-hypothesized-breakpoints">Hard-code hypothesized breakpoints</h4>
+<p>Note that bed format specifies that the start position for an interval is zero based and the end position is one-based. So we will have to manually add 1 to the end position of the probes in the hypothesis table.</p>
+<p>Using a R-dataframe-compatible version of <a href="https://bedtools.readthedocs.io/en/latest/content/tools/closest.html">bedtools closest</a> to compute data for breakpoint hypotheses.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># filtering out non-CNSL calls, because they are not in the hypothesis table</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>cnv_rle_closest <span class="ot">&lt;-</span> valr<span class="sc">::</span><span class="fu">bed_closest</span>(<span class="fu">filter</span>(cnv_rle_hits_tidy_bed, chrom <span class="sc">!=</span> <span class="st">"non_CNSL"</span>),</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>                                          breakpoints_bed_df,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>                                          <span class="at">overlap =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(id.x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>cnv_rle_hits_closest <span class="ot">&lt;-</span> cnv_rle_closest <span class="sc">%&gt;%</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="co"># keep only CNV-positives</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(rle_values.x <span class="sc">!=</span> <span class="st">"No CNV"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># tidy up factors and leveling</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ethnicity.x =</span> <span class="fu">as_factor</span>(ethnicity.x),</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">name.y =</span> <span class="fu">as_factor</span>(name.y)) <span class="sc">%&gt;%</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"name.y"</span> <span class="ot">=</span> <span class="fu">fct_relevel</span>(name.y,</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"CNSL_probe_32-CNSL_probe_38"</span>, <span class="st">"CNSL_probe_27-CNSL_probe_34"</span>,</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"CNSL_probe_20-CNSL_probe_40"</span>, <span class="st">"CNSL_probe_10-CNSL_probe_40"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort for priority of keeping one per sample</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(id.x, .dist, <span class="fu">desc</span>(.overlap), name.y) <span class="sc">%&gt;%</span></span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># sort to prioritize lowest distance, highest overlap</span></span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(id.x, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>cnv_rle_closest <span class="sc">%&gt;%</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(id.x) <span class="sc">%&gt;%</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">"mean CNVs per sample"</span> <span class="ot">=</span> <span class="fu">mean</span>(n),</span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"SD CNVs per sample"</span> <span class="ot">=</span> <span class="fu">sd</span>(n))</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>cnv_rle_hits_closest <span class="sc">%&gt;%</span> <span class="fu">count</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell quarto-layout-panel" data-tbl-subcap="[&quot;CNVs called per sample&quot;,&quot;Unique samples with any CNVs&quot;]" data-layout-ncol="2">
+<div class="quarto-layout-row">
+<div class="kable-table quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">mean CNVs per sample</th>
+<th style="text-align: right;">SD CNVs per sample</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">4.382</td>
+<td style="text-align: right;">1.907312</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="kable-table quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
+<table class="caption-top table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">n</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">215</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>215 samples have a CNV called. 891 CNVs were called, meaning on average each positive sample has 4.14 CNVs called.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>cnv_rle_summary <span class="ot">&lt;-</span> cnv_rle_closest <span class="sc">%&gt;%</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># tidy up factors and leveling</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">ethnicity.x =</span> <span class="fu">fct_relevel</span>(<span class="fu">as_factor</span>(ethnicity.x), LETTERS[<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>]),</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">name.y =</span> <span class="fu">as_factor</span>(name.y)) <span class="sc">%&gt;%</span></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"name.y"</span> <span class="ot">=</span> <span class="fu">fct_relevel</span>(name.y,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"CNSL_probe_32-CNSL_probe_38"</span>, <span class="st">"CNSL_probe_27-CNSL_probe_34"</span>,</span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>                                <span class="st">"CNSL_probe_20-CNSL_probe_40"</span>, <span class="st">"CNSL_probe_10-CNSL_probe_40"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">"n"</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>            <span class="st">"mean_CNV_length"</span> <span class="ot">=</span> <span class="fu">mean</span>(CNV_call_length.x),</span>
+<span id="cb46-10"><a href="#cb46-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sd_CNV_length"</span> <span class="ot">=</span> <span class="fu">sd</span>(CNV_call_length.x),</span>
+<span id="cb46-11"><a href="#cb46-11" aria-hidden="true" tabindex="-1"></a>            <span class="st">"mean_overlap"</span> <span class="ot">=</span> <span class="fu">mean</span>(.overlap),</span>
+<span id="cb46-12"><a href="#cb46-12" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sd_overlap"</span> <span class="ot">=</span> <span class="fu">sd</span>(.overlap),</span>
+<span id="cb46-13"><a href="#cb46-13" aria-hidden="true" tabindex="-1"></a>            <span class="st">"mean_distance"</span> <span class="ot">=</span> <span class="fu">mean</span>(<span class="fu">abs</span>(.dist)),</span>
+<span id="cb46-14"><a href="#cb46-14" aria-hidden="true" tabindex="-1"></a>            <span class="st">"sd_distance"</span> <span class="ot">=</span> <span class="fu">sd</span>(<span class="fu">abs</span>(.dist)),</span>
+<span id="cb46-15"><a href="#cb46-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">.by =</span> <span class="fu">c</span>(ethnicity.x, rle_values.x, name.y)) <span class="sc">%&gt;%</span></span>
+<span id="cb46-16"><a href="#cb46-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">where</span>(is.double), <span class="sc">~</span> <span class="fu">signif</span>(.x, <span class="at">digits =</span> <span class="dv">4</span>))) <span class="sc">%&gt;%</span></span>
+<span id="cb46-17"><a href="#cb46-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"percent"</span> <span class="ot">=</span> <span class="fu">signif</span>(<span class="dv">100</span> <span class="sc">*</span> n <span class="sc">/</span> <span class="fu">sum</span>(n), <span class="at">digits =</span> <span class="dv">3</span>),</span>
+<span id="cb46-18"><a href="#cb46-18" aria-hidden="true" tabindex="-1"></a>         <span class="at">.by =</span> <span class="fu">c</span>(ethnicity.x, name.y)) <span class="sc">%&gt;%</span></span>
+<span id="cb46-19"><a href="#cb46-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">relocate</span>(percent, <span class="at">.after =</span> n) <span class="sc">%&gt;%</span></span>
+<span id="cb46-20"><a href="#cb46-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(ethnicity.x, rle_values.x, name.y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>cnv_rle_summary <span class="sc">%&gt;%</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"ethnicity"</span> <span class="ot">=</span> ethnicity.x, <span class="st">"CNV type"</span> <span class="ot">=</span> rle_values.x, <span class="st">"probe name"</span> <span class="ot">=</span> name.y) <span class="sc">%&gt;%</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"probe name"</span> <span class="ot">=</span> <span class="fu">str_remove_all</span>(<span class="st">`</span><span class="at">probe name</span><span class="st">`</span>, <span class="st">"CNSL_probe_"</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(sd_CNV_length, sd_overlap, sd_distance)) <span class="sc">%&gt;%</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">"CNV_length"</span> <span class="ot">=</span> mean_CNV_length, <span class="st">"overlap"</span> <span class="ot">=</span> mean_overlap, <span class="st">"distance"</span> <span class="ot">=</span> mean_distance) <span class="sc">%&gt;%</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">CNV type</span><span class="st">`</span> <span class="sc">!=</span> <span class="st">"No CNV"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<caption>CNV types and loci by ethnicity</caption>
+<colgroup>
+<col style="width: 13%">
+<col style="width: 16%">
+<col style="width: 15%">
+<col style="width: 5%">
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 10%">
+<col style="width: 12%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">ethnicity</th>
+<th style="text-align: left;">CNV type</th>
+<th style="text-align: left;">probe name</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">percent</th>
+<th style="text-align: right;">CNV_length</th>
+<th style="text-align: right;">overlap</th>
+<th style="text-align: right;">distance</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">32-38</td>
+<td style="text-align: right;">112</td>
+<td style="text-align: right;">2.0700</td>
+<td style="text-align: right;">6.491</td>
+<td style="text-align: right;">3.527</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">27-34</td>
+<td style="text-align: right;">112</td>
+<td style="text-align: right;">2.0700</td>
+<td style="text-align: right;">6.491</td>
+<td style="text-align: right;">3.964</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">20-40</td>
+<td style="text-align: right;">112</td>
+<td style="text-align: right;">2.0300</td>
+<td style="text-align: right;">6.491</td>
+<td style="text-align: right;">5.491</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">10-40</td>
+<td style="text-align: right;">112</td>
+<td style="text-align: right;">2.0300</td>
+<td style="text-align: right;">6.491</td>
+<td style="text-align: right;">5.491</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">Duplication</td>
+<td style="text-align: left;">32-38</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">1.1500</td>
+<td style="text-align: right;">5.097</td>
+<td style="text-align: right;">2.629</td>
+<td style="text-align: right;">0.37100</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">Duplication</td>
+<td style="text-align: left;">27-34</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">1.1500</td>
+<td style="text-align: right;">5.097</td>
+<td style="text-align: right;">2.694</td>
+<td style="text-align: right;">0.08065</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">Duplication</td>
+<td style="text-align: left;">20-40</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">1.1300</td>
+<td style="text-align: right;">5.097</td>
+<td style="text-align: right;">4.097</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">Duplication</td>
+<td style="text-align: left;">10-40</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">1.1300</td>
+<td style="text-align: right;">5.097</td>
+<td style="text-align: right;">4.097</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">32-38</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">1.0100</td>
+<td style="text-align: right;">17.250</td>
+<td style="text-align: right;">6.357</td>
+<td style="text-align: right;">0.14290</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">27-34</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">1.0100</td>
+<td style="text-align: right;">16.830</td>
+<td style="text-align: right;">6.897</td>
+<td style="text-align: right;">0.06897</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">20-40</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">0.9600</td>
+<td style="text-align: right;">16.830</td>
+<td style="text-align: right;">16.720</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">10-40</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">0.9600</td>
+<td style="text-align: right;">16.830</td>
+<td style="text-align: right;">16.720</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">Duplication</td>
+<td style="text-align: left;">32-38</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.0359</td>
+<td style="text-align: right;">4.000</td>
+<td style="text-align: right;">2.000</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">Duplication</td>
+<td style="text-align: left;">27-34</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.0348</td>
+<td style="text-align: right;">4.000</td>
+<td style="text-align: right;">3.000</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">Duplication</td>
+<td style="text-align: left;">20-40</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.0331</td>
+<td style="text-align: right;">4.000</td>
+<td style="text-align: right;">3.000</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">Duplication</td>
+<td style="text-align: left;">10-40</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.0331</td>
+<td style="text-align: right;">4.000</td>
+<td style="text-align: right;">3.000</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">32-38</td>
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">0.5980</td>
+<td style="text-align: right;">19.800</td>
+<td style="text-align: right;">5.200</td>
+<td style="text-align: right;">0.26670</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">27-34</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">0.7470</td>
+<td style="text-align: right;">17.680</td>
+<td style="text-align: right;">5.000</td>
+<td style="text-align: right;">1.05300</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">20-40</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">0.8040</td>
+<td style="text-align: right;">16.670</td>
+<td style="text-align: right;">11.140</td>
+<td style="text-align: right;">0.38100</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: left;">10-40</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">0.7950</td>
+<td style="text-align: right;">16.670</td>
+<td style="text-align: right;">16.240</td>
+<td style="text-align: right;">0.00000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(cnv_rle_summary, <span class="fu">paste0</span>(file_prefix, <span class="st">"_"</span>, <span class="st">"cnv_rle_global_summary.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="statistical-analysis" class="level4">
+<h4 class="anchored" data-anchor-id="statistical-analysis">Statistical analysis</h4>
+<p>We need to model the evidence in the data (CNVs, which locus they’re in) to predict ethnicity. Ethnicity has 3 levels, CNVs have 3 (or 2 when omitting no CNV), and locus has 4 levels, so we need a multinomial logit models, which is what <a href="https://melff.github.io/mclogit/reference/mblogit.html"><code>mclogit</code></a> provides.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(probes_mblogit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+mblogit(formula = ethnicity.x ~ name.y + rle_values.x, data = ., 
+    weights = n)
+
+Equation for B vs A:
+                                  Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)                       -1.38520    0.20791  -6.662 2.69e-11 ***
+name.yCNSL_probe_27-CNSL_probe_34  0.03364    0.29053   0.116    0.908    
+name.yCNSL_probe_20-CNSL_probe_40  0.03364    0.29053   0.116    0.908    
+name.yCNSL_probe_10-CNSL_probe_40  0.03364    0.29053   0.116    0.908    
+rle_values.xDuplication           -2.76727    0.51474  -5.376 7.62e-08 ***
+
+Equation for C vs A:
+                                  Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)                        -2.0102     0.2748  -7.314 2.59e-13 ***
+name.yCNSL_probe_27-CNSL_probe_34   0.2361     0.3701   0.638    0.524    
+name.yCNSL_probe_20-CNSL_probe_40   0.3362     0.3633   0.925    0.355    
+name.yCNSL_probe_10-CNSL_probe_40   0.3362     0.3633   0.925    0.355    
+rle_values.xDuplication           -16.8589   706.1172  -0.024    0.981    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Approximate residual Deviance: 1076 
+Number of Fisher scoring iterations:  14 
+Number of observations:  891 </code></pre>
+</div>
+</div>
+</section>
+<section id="interpretation-of-cnv-data-against-hypothesized-breakpoints" class="level4">
+<h4 class="anchored" data-anchor-id="interpretation-of-cnv-data-against-hypothesized-breakpoints">Interpretation of CNV data against hypothesized breakpoints</h4>
+<p><em>Ethnicity A</em> has CNVs in the CNSL region detected 3.2% of the time. When there is a CNV, 2.07% are Deletions in the either of the CNSL_probe_27-CNSL_probe_34 or CNSL_probe_32-CNSL_probe_38 regions, and 1.13% are Duplications, primarily in the CNSL_probe_20-CNSL_probe_40 region. Because CNSL_probe_10-CNSL_probe_40 is a superset of all other regions, we can conclude from the counts / frequencies being the same for all four hypothesized regions that these CNVs are occurring over the narrowest possible interpretation.</p>
+<p><em>Ethnicity B</em> has CNVs in the CNSL region detected 1% of the time. When there is a CNV, 0.96% of the time it’s a Deletion in CNSL_probe_20-CNSL_probe_40, and 0.0331% of the time (n = 1) it’s a Duplication with overlap for both CNSL_probe_27-CNSL_probe_34 and CNSL_probe_32-CNSL_probe_38.</p>
+<p><em>Ethnicity C</em> has CNVs in the CNSL region detected 0.8% of the time. When there is a CNV, it’s a Deletion in CNSL_probe_10-CNSL_probe_40 that occurs 0.795% of samples, with a mean overlap of 16.24 probes.</p>
+</section>
+</section>
+<section id="global-analysis-of-ethnicities" class="level3">
+<h3 class="anchored" data-anchor-id="global-analysis-of-ethnicities">Global analysis of ethnicities</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>cnv_rle_global_counts <span class="ot">&lt;-</span> cnv_rle_hits_tidy_bed <span class="sc">%&gt;%</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">rename</span>(<span class="st">"probe_CNSL_target"</span> <span class="ot">=</span> chrom) <span class="sc">%&gt;%</span></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(ethnicity, probe_CNSL_target, rle_values) <span class="sc">%&gt;%</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"percent"</span> <span class="ot">=</span> <span class="fu">signif</span>(n <span class="sc">/</span> <span class="fu">sum</span>(n) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">3</span>),</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">.by =</span> <span class="fu">c</span>(ethnicity, probe_CNSL_target))</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>cnv_rle_global_counts</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="kable-table">
+<table class="caption-top table table-sm table-striped small">
+<caption>CNV types and counts by ethnicity</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">ethnicity</th>
+<th style="text-align: left;">probe_CNSL_target</th>
+<th style="text-align: left;">rle_values</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">percent</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">CNSL</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: right;">112</td>
+<td style="text-align: right;">2.0300</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">CNSL</td>
+<td style="text-align: left;">Duplication</td>
+<td style="text-align: right;">62</td>
+<td style="text-align: right;">1.1300</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">CNSL</td>
+<td style="text-align: left;">No CNV</td>
+<td style="text-align: right;">5330</td>
+<td style="text-align: right;">96.8000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">A</td>
+<td style="text-align: left;">non_CNSL</td>
+<td style="text-align: left;">No CNV</td>
+<td style="text-align: right;">4992</td>
+<td style="text-align: right;">100.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">CNSL</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">0.9600</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">CNSL</td>
+<td style="text-align: left;">Duplication</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.0331</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">CNSL</td>
+<td style="text-align: left;">No CNV</td>
+<td style="text-align: right;">2991</td>
+<td style="text-align: right;">99.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">B</td>
+<td style="text-align: left;">non_CNSL</td>
+<td style="text-align: left;">No CNV</td>
+<td style="text-align: right;">2551</td>
+<td style="text-align: right;">100.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">CNSL</td>
+<td style="text-align: left;">Deletion</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">0.7950</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">CNSL</td>
+<td style="text-align: left;">No CNV</td>
+<td style="text-align: right;">2620</td>
+<td style="text-align: right;">99.2000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">C</td>
+<td style="text-align: left;">non_CNSL</td>
+<td style="text-align: left;">No CNV</td>
+<td style="text-align: right;">2490</td>
+<td style="text-align: right;">100.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<p>The above control table shows that, for all ethnicities, 100% of non-CNSL probes are <strong>not</strong> detected as having a CNV. Thus, based on these control data and our threshold settings, we can expect a false-positive rate (Type I error) very close to zero.</p>
+<p>In the CNSL region, ethnicity A has a CNV frequency of 3.2%, followed by B with a frequency of 1.0%, followed lastly by C with a frequency of 0.8%; in terms of CNV type, A is 1.8x more likely to have a deletion than a duplication, B is heavily biased toward deletions, and C is exclusively deletions (n = 21).</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+    const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+    const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+    let newTheme = '';
+    if(darkModeDefault) {
+      newTheme = isAlternate ? baseTheme : alternateTheme;
+    } else {
+      newTheme = isAlternate ? alternateTheme : baseTheme;
+    }
+    const changeGiscusTheme = () => {
+      // From: https://github.com/giscus/giscus/issues/336
+      const sendMessage = (message) => {
+        const iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe) return;
+        iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+      }
+      sendMessage({
+        setConfig: {
+          theme: newTheme
+        }
+      });
+    }
+    const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+    if (isGiscussLoaded) {
+      changeGiscusTheme();
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  const darkModeDefault = false;
+  let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+    toggleGiscusIfUsed(toAlternate, darkModeDefault);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } else {
+    toggleColorMode(false);
+  }
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<script src="https://utteranc.es/client.js" repo="pdcherry/blogComments" issue-term="pathname" theme="github-light" crossorigin="anonymous" async="">
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+<p>Copyright 2024, Patrick Cherry <a rel="me" href="https://fosstodon.org/@pcherry">@pcherry@fosstodon.org</a> or <a rel="me" href="https://genomic.social/@pcherry">@pcherry@genomic.social</a></p>
+</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+</body></html>
