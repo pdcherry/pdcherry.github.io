@@ -1,0 +1,41 @@
+---
+title: "Comparing datafram libraries"
+author: "Patrick Cherry"
+date: "July 12, 2024"
+categories:
+  - code
+  - data
+  - R
+  - Python
+  - SQL
+image: ""
+format:
+  html:
+    df-print: kable
+execute:
+  freeze: TRUE
+  echo: TRUE
+editor_options: 
+  chunk_output_type: inline
+---
+
+## Intro
+
+
+## This experiment
+
+## Comparison of dataframe libraries
+
+#### Retreive the data
+
+### `dplyr`
+
+### `data.table`
+
+### `collapse`
+
+### `pandas`
+
+### `polars`
+
+### `duckdb` / SQL
