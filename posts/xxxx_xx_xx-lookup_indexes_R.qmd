@@ -1,0 +1,37 @@
+---
+title: "Look up indexes in R"
+author: "Patrick Cherry"
+date: "2024-07-30"
+categories:
+  - data
+  - code
+  - R
+image: 
+format:
+  html:
+    df-print: kable
+execute:
+  freeze: TRUE
+  echo: TRUE
+editor_options: 
+  chunk_output_type: inline
+---
+All vectors can have names!
+
+```{r}
+alpha_index <- 1:26
+alpha_index
+```
+
+```{r}
+names(alpha_index) <- LETTERS
+alpha_index
+```
+
+Values are on bottom, names are on top. Functionally, this is similar to a dictionary from python.
+
+```{r}
+alpha_index[c("D", "A", "N")]
+```
+
+

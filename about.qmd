@@ -7,7 +7,7 @@ about:
     - icon: github
       href: https://github.com/pdcherry
     - icon: mastodon
-      href: https://genomic.social/@pcherry
+      href: https://fosstodon.org/@pcherry
     - icon: instagram
       href: https://pixelfed.social/pcherry
     - icon: linkedin
