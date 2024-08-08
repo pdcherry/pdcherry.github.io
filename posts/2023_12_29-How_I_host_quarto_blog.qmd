@@ -83,7 +83,7 @@ In June of 2024, I was reviewing the `.github/workflows` files and the logs of t
  - In contrast to bullet point 1, I *am* rendering the HTML locally (by virtue of the bash `quarto render` command, which outputs the HTML site artifact to the `/docs` directory). Then, this version of the repository gets committed to git, and ultimately pushed to GitHub. __Thus, I am checking programmatically generated / rendered content into git__, in contrast to my previous plan.
    - ![Screen capture of GitHub repository languages breakdown](2023_12_29-How_I_host_quarto_blog/2024_06_22-gh_repo_languages.png){width=40% fig-align="left"}
  - In contrast to bullet point 2, I do commit the HTML to git (including the main / HEAD branch).
- - I am following bullet point 3. No notes to past Patrick; even with more experience, I still can't imagine installing reticulate to a virtual machine on a compute note just to publish the next version of a blog.
+ - I am following bullet point 3. No notes to past Patrick; even with more experience, I still can't imagine installing reticulate to a virtual machine on a compute node just to publish the next version of a blog.
 
 My GitHub `publish.yml` action workflow is very sparse due to entirely local execution and rendering, far more sparse than [whatever Quarto has recommended](https://quarto.org/docs/publishing/github-pages.html). For example, the `publish.yml` of this blog doesn't even install / activate quarto on the compute node, because no quarto rendering processes are needed.
 
