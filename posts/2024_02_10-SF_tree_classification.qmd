@@ -89,8 +89,53 @@ Instead of using `glimpse()`, I'm using R's native `t()`, or transpose, to print
 
 ## Species
 ```{r}
-sftrees %>% count(species, sort = TRUE) %>% head(20)
+sftrees %>% count(species, sort = TRUE) %>%
+  mutate("rank" = row_number()) %>% head(20)
 ```
+
+```{r}
+sftrees %>% count(species, sort = TRUE, name = "n_observations") %>%
+  count(n_observations, name = "n_tree_species") %>%
+  head(10)
+```
+
+```{r}
+col_plot_tree_species <- sftrees %>%
+  count(species) %>%
+  filter(n >= 400) %>%
+  mutate("species" = fct_rev(fct_infreq(as_factor(species), w = n))) %>%
+  ggplot(aes(y = n, x = species, fill = species)) +
+  geom_col() +
+  scale_fill_viridis_d(option = "D", begin = 0.1, end = 0.7, na.value = "grey50") +
+  coord_flip() +
+  labs(y = "Number of trees", x = "Species") +
+  theme(legend.position = "none",
+        axis.text.y = element_text(size = 4))
+col_plot_tree_species
+```
+
+From this distribution of tree species with 400 or more trees, we can see some species data quality issues. The observation "trees(s)::" for `species` is the most abundant classification, which really isn't a classification at all. The 26th most common species observation is "::", so no data at all.
+
+In this San Francisco data, the most common tree is the Sycamore: London Plane (*Platanus x hispanica*) with 11557. I personally like the Cherry Plum tree (*Prunus cerasifera*), which is 7th with 6716 trees. Interestingly, there are lots of Southern Magnolia trees (*Magnolia grandiflora*), in 8th place with 6285.
+
+Also interestingly, there are 67 tree species with one individual in the data set. And 44 species with just 2 individuals. There are lots of lone or near-lone tree species in San Francisco.
+
+### What about tree family?
+We could perhaps call the tree family, or 'spp' based on the final word in the `species` data column.
+
+A lot of common species names end in "tree", so I will accommodate that by writing a special regex that will pull the next to last word if the last word is "tree". Also, some trees are 
+
+```{r}
+sftrees %>%
+  mutate("tree_family" = str_extract(species, "(\\w+(?=\\s(T|t)ree))|(\\w+)$")) %>%
+  # use above regex to get next to last word when last word is tree
+  # also, don't keep "tree" text, because some species are coded as both with
+  # and without tree at the end; this regex collapses those irregularities
+  count(tree_family, sort = TRUE) %>%
+  mutate("rank" = row_number()) %>% head(50)
+```
+
+Based on pseudo-"family" classification, the Box tree is the most common tree family observed, followed by the Plane, and then Fig, "Xmas," Magnolia, Cheery, Plum, Myrtle, Strawberry, Gum, and Pear families of trees.
 
 ## plot_size
 ```{r}
