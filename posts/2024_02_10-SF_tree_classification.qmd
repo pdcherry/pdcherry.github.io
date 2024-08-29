@@ -240,7 +240,7 @@ tune_wf <- workflow() %>%
 ```
 
 ## Train-test some model hyperparameters
-```{r}
+```{r, eval = FALSE, include = TRUE}
 set.seed(234)
 trees_folds <- vfold_cv(trees_train)
 
@@ -252,12 +252,20 @@ tune_res <- tune_grid(
   grid = 20)
 ```
 
+```{r, eval = FALSE, include = FALSE}
+saveRDS(tune_res, "../../pdcherry_github_data/2024_02_10-SF_tree_class/2024_02_10-SF_tree_class_tune_res.rds")
+```
+
+```{r, eval = TRUE, include = FALSE}
+tune_res <- readRDS("../../pdcherry_github_data/2024_02_10-SF_tree_class/2024_02_10-SF_tree_class_tune_res.rds")
+```
+
 ### view results
 ```{r}
-tune_res %>% select_best("accuracy")
+show_best(tune_res, metric = "accuracy")
 ```
 ```{r}
-tune_res %>% select_best("roc_auc")
+show_best(tune_res, metric = "roc_auc")
 ```
 
 ```{r}
@@ -305,7 +313,7 @@ rf_grid <- grid_regular(mtry(range = c(10, 30)),
 nrow(rf_grid)
 ```
 
-```{r}
+```{r, eval = FALSE}
 set.seed(456)
 doParallel::registerDoParallel()
 tune_reg_res <- tune_grid(tune_wf,
@@ -313,12 +321,20 @@ tune_reg_res <- tune_grid(tune_wf,
                           grid = rf_grid)
 ```
 
+```{r, eval = FALSE, include = FALSE}
+saveRDS(tune_reg_res, "../../pdcherry_github_data/2024_02_10-SF_tree_class/2024_02_10-SF_tree_class_tune_reg_res.rds")
+```
+
+```{r, eval = TRUE, include = FALSE}
+tune_reg_res <- readRDS("../../pdcherry_github_data/2024_02_10-SF_tree_class/2024_02_10-SF_tree_class_tune_reg_res.rds")
+```
+
 ### view results
 ```{r}
-tune_reg_res %>% select_best("accuracy")
+tune_reg_res %>% select_best(metric = "accuracy")
 ```
 ```{r}
-tune_reg_res %>% select_best("roc_auc")
+tune_reg_res %>% select_best(metric = "roc_auc")
 ```
 
 ```{r}
@@ -350,7 +366,7 @@ Both 2D plots show that the mtry = 15 and min_n = 2 hyperperamater maximize the 
 
 # Finalize the model
 ```{r}
-best_auc <- tune_reg_res %>% select_best("roc_auc")
+best_auc <- tune_reg_res %>% select_best(metric = "roc_auc")
 ```
 
 ```{r}
@@ -361,7 +377,7 @@ final_rf
 
 ## Understand final model
 ```{r}
-final_rf_vip_plot<- final_rf %>%
+final_rf_vip_plot <- final_rf %>%
   set_engine("ranger", importance = "permutation") %>%
   fit(legal_status ~ ., data = select(juiced, -tree_id)) %>%
   vip(geom = "point")
@@ -398,7 +414,7 @@ tree_correct_loc_plot <- final_result_ano %>%
   labs(color = NULL, x = NULL, y = NULL) +
   theme(panel.border = element_blank(),
         legend.position = c(0.1, 0.9), legend.justification = c(0, .5)) +
-  scale_color_viridis_d(option = "C", begin = 0.1, end = 0.7) +
+  scale_color_viridis_d(option = "C", begin = 0.1, end = 0.8) +
   coord_equal()
 tree_correct_loc_plot
 ```
