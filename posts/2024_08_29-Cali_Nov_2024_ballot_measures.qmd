@@ -42,7 +42,14 @@ library(magrittr)               # for enhanced pipes
 
 ![The San Francisco ballot will be a long one this November. View from above of the San Francisco penninsula to the north, including the Bay, the Golden Gate, and some islands and land forms of North Bay.](2024_08_29-Cali_Nov_2024_ballot_measures/SF_flyover.jpg)
 
+::: {.callout-warning}
+This page is incomplete. I have yet to decide on the relative importance of these ballot measures, or provide guidance for voting. That is to come in the coming days.
+:::
+
 ## Introduction
+San Francisco has a big ballot incoming to voters this November, with 25 total ballot measures for voters to decide upon before--or on--election day (10 state measures, and 15 city / county measures of San Francisco). This is less than other *very lengthy* ballots previously sent to voters [@sfvote1993], but still longer than many in recent memory.
+
+Below, I have collated the ballot measure numbers (or letters), titles, descriptions, and some context (in some cases, where available.)
 
 ## State-wide ballot measures
 ```{r}
@@ -71,10 +78,29 @@ unified_state <- state_meta %>%
 unified_state %>%
   kable(format = "html", escape = FALSE)
 ```
-Type is the category of ballot measure from Ballotpedia: BI = Bond issue; CISS = [Initiated state statute](https://ballotpedia.org/Initiated_state_statute); LRCA = [Legislatively referred constitutional amendment](https://ballotpedia.org/Legislatively_referred_constitutional_amendment) [@BP2024] Notes are from [@Calmatters2024].
+Type is the category of ballot measure from Ballotpedia: BI = [Bond issue](https://ballotpedia.org/Bond_issue); CISS = [Initiated state statute](https://ballotpedia.org/Initiated_state_statute); LRCA = [Legislatively referred constitutional amendment](https://ballotpedia.org/Legislatively_referred_constitutional_amendment) [@BP2024] Notes are from [@Calmatters2024].
 
+## San Francisco ballot measures
+```{r}
+#| label: tbl-sf-props
+#| tbl-cap: "Table of San Francisco ballot propositions"
+#| 
+sf_measures <- read_csv(path(og_data_path, "SF_county_measures.csv"),
+                        show_col_types = FALSE)
+
+sf_meas_desc <- read_csv(path(og_data_path, "sf_ballot_meas_2024_desc.csv"),
+                         show_col_types = FALSE)
+
+sf_measures %>%
+  left_join(sf_meas_desc, by = "Title") %>%
+  kable(type = "html", escape = FALSE)
+```
+San Francisco ballot measure information. [@sfgov] 
 
 ## Conclusions
+::: {.callout-warning}
+This page is incomplete. I have yet to decide on the relative importance of these ballot measures, or provide guidance for voting. That is to come in the coming days.
+:::
 
 ## References
 ::: {#refs}
