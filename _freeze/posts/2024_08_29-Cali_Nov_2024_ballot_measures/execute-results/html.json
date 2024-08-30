@@ -1,0 +1,19 @@
+{
+  "hash": "0bb2e7a75254c19fa7f4727a580e49a5",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"San Francisco's November 2024 ballot measure review\"\nauthor: \"Patrick Cherry\"\ndate: \"2024-08-29\"\ncategories:\n  - politics\nimage: \"2024_08_29-Cali_Nov_2024_ballot_measures/2023_07_16-Coit_Tower_Laser_Lombard_St-060.jpg\"\nformat:\n  html:\n    df-print: paged\nexecute:\n  freeze: TRUE\n  echo: FALSE\neditor_options: \n  chunk_output_type: inline\n---\n\n::: {.cell}\n\n:::\n\n\n\n![The San Francisco ballot will be a long one this November. View from Lombard St. in San Francisco of Coit Tower with a special laser light projection up from the top of the tower into the dusk sky.](2024_08_29-Cali_Nov_2024_ballot_measures/2023_07_16-Coit_Tower_Laser_Lombard_St-060.jpg)\n\n# Introduction\n\n\n\n\n::: {.cell}\n\n:::\n\n\n\n\n## Conclusions\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {
+      "include-in-header": [
+        "<link href=\"../site_libs/pagedtable-1.1/css/pagedtable.css\" rel=\"stylesheet\" />\n<script src=\"../site_libs/pagedtable-1.1/js/pagedtable.js\"></script>\n"
+      ]
+    },
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

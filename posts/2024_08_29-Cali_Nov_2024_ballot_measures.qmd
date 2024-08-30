@@ -1,0 +1,48 @@
+---
+title: "San Francisco's November 2024 ballot measure review"
+author: "Patrick Cherry"
+date: "2024-08-29"
+categories:
+  - politics
+image: "2024_08_29-Cali_Nov_2024_ballot_measures/"
+format:
+  html:
+    df-print: paged
+execute:
+  freeze: TRUE
+  echo: FALSE
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+caption_def <- "2024-03-02 SF Political Alignment. by Patrick Cherry"
+exp_imp_path <- "./2024_03_02-SF_political_support_data/"
+```
+
+![The San Francisco ballot will be a long one this November. View from Lombard St. in San Francisco of Coit Tower with a special laser light projection up from the top of the tower into the dusk sky.]()
+
+# Introduction
+
+
+```{r, setup, echo = FALSE, message = FALSE}
+library(readr)                  # for reading and writing csvs
+library(fs)                     # for filesystem navigation in R
+library(dplyr)                  # for dataframe manipulation
+#library(tidyr)                  # for munging and tidying data
+#library(purrr)                  # for functional programming on vectors
+#library(googlesheets4)          # for importing data directly from google sheets
+library(kableExtra)             # for pretty html tables
+library(DT)                     # for scrollable, filterable tables
+#library(corrr)                  # for tidy correlation matrices
+#library(nomclust)               # for nominal hierarchical clustering
+library(stringr)                # for efficient string manipulation
+library(magrittr)               # for enhanced pipes
+#library(forcats)                # for factor manipulation
+#library(ggplot2)                # for additional plotting features
+#theme_set(theme_bw())           # set the default ggplot theme to be clear & cartooney
+```
+
+
+## Conclusions
+
