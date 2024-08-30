@@ -1,10 +1,12 @@
 ---
-title: "San Francisco's November 2024 ballot measure review"
+title: "San Francisco's November 2024 ballot review"
 author: "Patrick Cherry"
 date: "2024-08-29"
 categories:
   - politics
-image: "2024_08_29-Cali_Nov_2024_ballot_measures/"
+  - opinions
+image: "2024_08_29-Cali_Nov_2024_ballot_measures/SF_flyover.jpg"
+bibliography: "2024_08_29-Cali_Nov_2024_ballot_measures/2024_08_29-Cali_Nov_2024_ballot.bib"
 format:
   html:
     df-print: paged
@@ -14,35 +16,66 @@ execute:
 editor_options: 
   chunk_output_type: inline
 ---
-
 ```{r}
-caption_def <- "2024-03-02 SF Political Alignment. by Patrick Cherry"
-exp_imp_path <- "./2024_03_02-SF_political_support_data/"
+caption_def <- "2024-08-29 SF ballot measure review. by Patrick Cherry"
+exp_imp_path <- "./2024_08_29-Cali_Nov_2024_ballot_measures/"
+og_data_path <- "../../pdcherry_github_data/2024_08_29-Cali_Nov_2024_ballot_measures/"
 ```
-
-![The San Francisco ballot will be a long one this November. View from Lombard St. in San Francisco of Coit Tower with a special laser light projection up from the top of the tower into the dusk sky.]()
-
-# Introduction
-
-
-```{r, setup, echo = FALSE, message = FALSE}
+```{r setup, echo = FALSE, message = FALSE, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE) # set default to not echo code
 library(readr)                  # for reading and writing csvs
 library(fs)                     # for filesystem navigation in R
 library(dplyr)                  # for dataframe manipulation
+library(kableExtra)             # for pretty html tables
+library(DT)                     # for scrollable, filterable tables
+library(stringr)                # for efficient string manipulation
+library(magrittr)               # for enhanced pipes
 #library(tidyr)                  # for munging and tidying data
 #library(purrr)                  # for functional programming on vectors
 #library(googlesheets4)          # for importing data directly from google sheets
-library(kableExtra)             # for pretty html tables
-library(DT)                     # for scrollable, filterable tables
 #library(corrr)                  # for tidy correlation matrices
 #library(nomclust)               # for nominal hierarchical clustering
-library(stringr)                # for efficient string manipulation
-library(magrittr)               # for enhanced pipes
 #library(forcats)                # for factor manipulation
 #library(ggplot2)                # for additional plotting features
 #theme_set(theme_bw())           # set the default ggplot theme to be clear & cartooney
 ```
 
+![The San Francisco ballot will be a long one this November. View from above of the San Francisco penninsula to the north, including the Bay, the Golden Gate, and some islands and land forms of North Bay.](2024_08_29-Cali_Nov_2024_ballot_measures/SF_flyover.jpg)
+
+## Introduction
+
+## State-wide ballot measures
+```{r}
+state_measures <- read_csv(path(og_data_path, "state_ballot_measures.csv"),
+                           show_col_types = FALSE) %>%
+  rename("Notes" = "Description")
+state_meta <- read_csv(path(og_data_path, "Ballotpedia_state_ballot_measures.csv"),
+                       show_col_types = FALSE)
+```
+
+```{r}
+unified_state <- state_meta %>%
+  #select(Title, Type) %>%
+  left_join(state_measures, by = "Title") %>%
+  mutate(prop_number = as.integer(str_extract(Title, "(?<=Proposition\\s)\\d{1,2}"))) %>%
+  arrange(prop_number) %>%
+  select(!prop_number) %>%
+  relocate(Title) %>%
+  relocate(Name, .after = Title)
+```
+
+```{r}
+#| label: tbl-state-props
+#| tbl-cap: "Table of statewide ballot propositions"
+
+unified_state %>%
+  kable(format = "html", escape = FALSE)
+```
+Type is the category of ballot measure from Ballotpedia: BI = Bond issue; CISS = [Initiated state statute](https://ballotpedia.org/Initiated_state_statute); LRCA = [Legislatively referred constitutional amendment](https://ballotpedia.org/Legislatively_referred_constitutional_amendment) [@BP2024] Notes are from [@Calmatters2024].
+
 
 ## Conclusions
 
+## References
+::: {#refs}
+:::
