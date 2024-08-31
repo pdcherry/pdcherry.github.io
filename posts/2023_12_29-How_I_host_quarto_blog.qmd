@@ -94,3 +94,8 @@ While it is inelegant (and against best practice of avoiding committing programm
    - I'm a little cagey about putting unfinished work in publicly-visible git repositories anyway, so these files are typically very close to being ready for publication. (I rely on local backups, like using Apple's OS X Time Machine and Proton Drive to back up works-in-progress, as well as other, independent, and private GitHub repos on a project-specific basis.)
 
 So it works! This process get the job done on a good enough basis for me, and has stood up to numerous updates to the blog, including new analysis posts with packages that were novel to me at the time. What a nice win for streamlined science communication.
+
+### Update from 2024-08-30
+I encountered the error "`fatal: the remote end hung up unexpectedly`" while trying to execute `git push`. This occurred both in the terminal and in R Studio's nice git GUI. After [searching up the error](https://stackoverflow.com/questions/15240815/git-fatal-the-remote-end-hung-up-unexpectedly), I was able to fix it by running `git config http.postBuffer 524288000` in my git-enabled project directory. All subsequent git pushes have worked.
+
+So it would appear one downside of checking into git the entire website artifact is that the size of the git delta can overwhelm the git http transfer (when not configured specially). Word to the wise.

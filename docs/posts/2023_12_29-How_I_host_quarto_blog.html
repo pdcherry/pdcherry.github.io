@@ -215,7 +215,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#rolling-your-own" id="toc-rolling-your-own" class="nav-link" data-scroll-target="#rolling-your-own">Rolling your own</a></li>
   </ul></li>
-  <li><a href="#sec-update-render-deploy" id="toc-sec-update-render-deploy" class="nav-link" data-scroll-target="#sec-update-render-deploy">2024-06-22 Update on workings of render and deploy</a></li>
+  <li><a href="#sec-update-render-deploy" id="toc-sec-update-render-deploy" class="nav-link" data-scroll-target="#sec-update-render-deploy">2024-06-22 Update on workings of render and deploy</a>
+  <ul class="collapse">
+  <li><a href="#update-from-2024-08-30" id="toc-update-from-2024-08-30" class="nav-link" data-scroll-target="#update-from-2024-08-30">Update from 2024-08-30</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -315,7 +318,7 @@ Since June of 2024, I have made some changes to render and deploy
 </div></li>
 </ul></li>
 <li>In contrast to bullet point 2, I do commit the HTML to git (including the main / HEAD branch).</li>
-<li>I am following bullet point 3. No notes to past Patrick; even with more experience, I still can’t imagine installing reticulate to a virtual machine on a compute note just to publish the next version of a blog.</li>
+<li>I am following bullet point 3. No notes to past Patrick; even with more experience, I still can’t imagine installing reticulate to a virtual machine on a compute node just to publish the next version of a blog.</li>
 </ul>
 <p>My GitHub <code>publish.yml</code> action workflow is very sparse due to entirely local execution and rendering, far more sparse than <a href="https://quarto.org/docs/publishing/github-pages.html">whatever Quarto has recommended</a>. For example, the <code>publish.yml</code> of this blog doesn’t even install / activate quarto on the compute node, because no quarto rendering processes are needed.</p>
 <p>While it is inelegant (and against best practice of avoiding committing programmatically-generated code), I find committing the HTML very simple, and so I go with this. (This decision may not be best for everyone else.) I don’t use the <code>quarto publish</code> command or a different branch for the HTML.</p>
@@ -327,8 +330,13 @@ Since June of 2024, I have made some changes to render and deploy
 </ul></li>
 </ul>
 <p>So it works! This process get the job done on a good enough basis for me, and has stood up to numerous updates to the blog, including new analysis posts with packages that were novel to me at the time. What a nice win for streamlined science communication.</p>
+<section id="update-from-2024-08-30" class="level3">
+<h3 class="anchored" data-anchor-id="update-from-2024-08-30">Update from 2024-08-30</h3>
+<p>I encountered the error “<code>fatal: the remote end hung up unexpectedly</code>” while trying to execute <code>git push</code>. This occurred both in the terminal and in R Studio’s nice git GUI. After <a href="https://stackoverflow.com/questions/15240815/git-fatal-the-remote-end-hung-up-unexpectedly">searching up the error</a>, I was able to fix it by running <code>git config http.postBuffer 524288000</code> in my git-enabled project directory. All subsequent git pushes have worked.</p>
+<p>So it would appear one downside of checking into git the entire website artifact is that the size of the git delta can overwhelm the git http transfer (when not configured specially). Word to the wise.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
