@@ -10,6 +10,7 @@ library(stringr)
 library(fs)
 library(rvest)
 
+# Parameters --------------------------------------------------------------
 filepref <- "2024_10_08-SF_pol_supp"
 filedir <- "posts/2024_10_08-SF_political_support_data"
 
