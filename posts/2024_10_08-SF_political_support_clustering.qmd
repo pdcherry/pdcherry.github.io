@@ -2,6 +2,7 @@
 title: "San Francisco political support clustering"
 author: "Patrick Cherry"
 date: "2024-10-08"
+abstract: "In the spirit of [last March's primary election recommendations analysis](2024_03_02-SF_political_support_data.qmd), by popular demand, I am again running clustering analysis on the ballot measure and political race recommendations by the various political organizations in San Francisco that issue endorsements of issues and candidates. San Francisco (and much of the Bay Area) has a curious political idiosyncrasy where brand-name **R**epublican candidates and issues get so little traction among voters so as to be considered irrelevant."
 categories:
   - politics
 image: "2024_10_08-SF_political_support_data/2022_06_26-Pride_Lasers-057.jpg"
@@ -20,7 +21,7 @@ caption_def <- "2024-10-08 SF Political Alignments. by Patrick Cherry"
 exp_imp_path <- "./2024_10_08-SF_political_support_data/"
 ```
 
-![LGBTQ+ Pride light cannons project down Market Street at the Ferry Building, with a uterus projected onto the clock tower in the background. The ballot this November includes Prob. 3 to protect the right to marriage in the state constitution and Prop. O to protect reproductive health rights and privacy in San Francisco.](2024_10_08-SF_political_support_data/2022_06_26-Pride_Lasers-057.jpg)
+![LGBTQ+ Pride light cannons project down Market Street at the Ferry Building, with a uterus projected onto the clock tower in the background. The ballot this November includes Prob. 3 to protect the right to marriage in the state constitution and Prop. O to protect reproductive health rights and privacy in San Francisco.](2024_10_08-SF_political_support_data/2022_06_26-Pride_Lasers-057-horz_crop.jpg)
 
 # Introduction
 In the spirit of [last March's primary election recommendations analysis](2024_03_02-SF_political_support_data.qmd), by popular demand, I am again running clustering analysis on the ballot measure and political race recommendations by the various political organizations in San Francisco that issue endorsements of issues and candidates.
@@ -34,9 +35,13 @@ The website [sfendorsements.com](https://sfendorsements.com/) has collected and 
 
 Peter Xu [make the code available](https://gitlab.com/peterxu/sf-endorsements), and has has previously made [google sheets](https://docs.google.com/spreadsheets/d/1f3cGgXjI912nA8e1_iTlEhJ7XpxjpSKZdT7wX3ryztg/edit#gid=1545354255) available for the endorsement data, but those are for 2022.
 
-For this analysis, I will scrape the 2024 data, tidy it up, and analyze it.
+For this analysis, I will scrape the November 2024 General Elections data, tidy it up, and analyze it.
 
-```{r, setup, echo = FALSE, message = FALSE}
+::: {.callout-warning}
+This page is incomplete. The San Francisco Chronicle has yet to publish their endorsements and voting recommendations as of 2024-10-09.
+:::
+
+```{r setup, echo = FALSE, message = FALSE}
 library(readr)                  # for reading and writing csvs
 library(fs)                     # for filesystem navigation in R
 library(dplyr)                  # for dataframe manipulation
@@ -56,14 +61,17 @@ theme_set(theme_bw())           # set the default ggplot theme to be clear & car
 
 ## Import and tidy data
 ```{r eval = FALSE}
-source(path(exp_imp_path, "2024_03_02-SF_political_support_scrape_script.R"))
+source(path(exp_imp_path, "2024_10_08-SF_political_support_scrape_script.R"))
 ```
 
 ```{r message = FALSE}
-endorsements_import <- read_csv(path(exp_imp_path,"2024_03_03-props_table.csv"),
+state_measures <- read_csv(path(exp_imp_path,"2024_10_08-SF_pol_supp_state_full.csv"),
+                                show_col_types = FALSE)
+SF_measures <- read_csv(path(exp_imp_path,"2024_10_08-SF_pol_supp_local_full.csv"),
                                 show_col_types = FALSE)
 
-endorsements_tidy <- endorsements_import %>%
+all_measures_tidy <- full_join(state_measures, SF_measures,
+                               by = "Organization") %>%
   mutate(across(everything(), ~ enc2utf8(.x)))
   #pivot_longer(cols = !1, names_to = "names") %>%
   #pivot_wider(id_cols = names, names_from = 1) %>%
@@ -73,32 +81,39 @@ endorsements_tidy <- endorsements_import %>%
 Great, the data are now tidy, where each row is an observation (a political group), and each column is a variable (race / measure).
 
 ```{r include = FALSE, eval = FALSE}
-write_csv(endorsements_tidy, path(exp_imp_path, "2024_03_02-SF_endorsements_tidy.csv"), na = "")
-write_csv(former_endorsements_import, path(exp_imp_path, "2024_03_02-2022_SF_endorsements_import.csv"), na = "")
+write_csv(all_measures_tidy, path(exp_imp_path, "2024_10_08-SF_all_measures_tidy.csv"), na = "")
+#write_csv(former_endorsements_import, path(exp_imp_path, "2024_03_02-2022_SF_endorsements_import.csv"), na = "")
 ```
 
-### What are the propositions?
-```{r}
-#| label: tbl-props
-#| tbl-cap: "Table of proposition names, titles, and descriptive summary"
+## What are the propositions?
+See the [August 29 post on San Francisco’s November 2024 ballot review](2024_08_29-Cali_Nov_2024_ballot_measures.qmd#state-wide-ballot-measures) page for full descriptions of each State-wide and San Francisco ballot measure.
 
-read_csv(path(exp_imp_path, "2024_03_03-2024_ballot_measures_desc.csv"),
-         show_col_types = FALSE) %>%
-  ## replace any non UTF-8 by ''
-  ## non-UTF-8 characters may have been introduced when I was copying text from SF's website
-  mutate(across(everything(), ~ iconv(.x, "UTF-8", "UTF-8",sub=''))) %>%
-  mutate("Prop" = cell_spec(Prop, format = "html", link = link, escape = TRUE)) %>%
-  select (Prop, Title, "Description" = Desc) %>%
-  kable(format = "html", escape = FALSE)
-```
+<!-- ### State measures -->
+<!-- ```{r} -->
+<!-- #| label: tbl-props -->
+<!-- #| tbl-cap: "Table of proposition names, titles, and descriptive summary" -->
+
+<!-- read_csv(path(exp_imp_path, "2024_03_03-2024_ballot_measures_desc.csv"), -->
+<!--          show_col_types = FALSE) %>% -->
+<!--   ## replace any non UTF-8 by '' -->
+<!--   ## non-UTF-8 characters may have been introduced when I was copying text from SF's website -->
+<!--   mutate(across(everything(), ~ iconv(.x, "UTF-8", "UTF-8",sub=''))) %>% -->
+<!--   mutate("Prop" = cell_spec(Prop, format = "html", link = link, escape = TRUE)) %>% -->
+<!--   select (Prop, Title, "Description" = Desc) %>% -->
+<!--   kable(format = "html", escape = FALSE) -->
+<!-- ``` -->
 
 ## Analyze by ballot measures
 ```{r}
 prop_data <-
-  endorsements_tidy %>%
-  select(Organization, contains("Prop")) %>%
+  all_measures_tidy %>%
+  #select(Organization, contains("Prop")) %>%
   mutate(across(!Organization, ~ as_factor(replace_na(.x, "No comment")) )) %>%
   as.data.frame()
+
+prop_data_ordering <- colnames(prop_data)
+  #tibble("colnames" = colnames(prop_data)) %>%
+  #mutate("prop_number" = as.integer(str_extract(colnames, "(?<=Prop )\\d{1,2}")))
 
 rownames(prop_data) <- prop_data$Organization
 prop_data <- select(prop_data, !Organization)
@@ -119,12 +134,17 @@ autocontrast <- aes(colour = after_scale(contrast(fill)))
 ```
 
 ```{r, warning = FALSE}
+#| fig-cap: "Color-coded layout of political organizations' Yes / No / no opinion endorsement of state and local ballot measures"
+#| fig-width: 8
+#| fig-height: 6
+
 prop_yesno <-
-  endorsements_tidy %>%
-  select(Organization, contains("Prop")) %>%
+  all_measures_tidy %>%
+  #select(Organization, contains("Prop")) %>%
   mutate("Organization" = fct_relevel(as_factor(Organization),prop_clust$dend$order.lab)) %>%
   arrange(Organization) %>%
-  pivot_longer(cols = !Organization, names_to = "prop", values_to = "rec")
+  pivot_longer(cols = !Organization, names_to = "prop", values_to = "rec") %>%
+  relocate(any_of(prop_data_ordering))
 
 prop_yesno_plot <- prop_yesno %>%
   ggplot(aes(x = prop, y = fct_rev(Organization), fill = rec)) +
@@ -150,16 +170,15 @@ Clustering is typically a quantitative method, so special accommodations have to
 One weakness of this clustering analysis is that it weights all ballot measures and races as the same. For an individual voter, some topics and races may have more salience or effect, and this analysis cannot take that into account.
 
 ```{r}
+#| fig-cap: "Dendrogram of political organizations' Yes / No / no opinion endorsement of state and local ballot measures"
 #| fig-width: 7
 #| fig-height: 8
 
-dend.plot(prop_clust, main = "Categorical heirarchical clustering based on proposition guidance"); mtext(side = 1,
+dend.plot(
+  prop_clust,
+  main = "Categorical heirarchical clustering based on proposition guidance"); mtext(side = 1,
   line = 2, at = 20, caption_def)
 ```
-
-::: {.callout-note}
-The underlying data have been updated since the original publication. The clustering is meaningfully different than previously displayed.
-:::
 
 Generally speaking, the agglomerative coefficient of a clustering analysis describes the strength of the clustering structure that has been obtained by group average linkage. The coefficient takes values from 0 to 1, and is calculated as the mean of the normalized lengths at which the clusters are formed, _e.g._ the uniformity lengths displayed on the dendrogram. The more evenly and gradually the categories get broken down into different clusters, the closer to 1 the agglomerative coefficient will be.
 
@@ -173,8 +192,9 @@ Very tellingly, we see three broad clusters:
 I can also make a heat map of the clustering distance, or dissimilarity.
 
 ```{r}
-#| fig-width: 7
-#| fig-height: 7
+#| fig-cap: "Heat map of political organizations' Yes / No / no opinion endorsement of state and local ballot measures"
+#| fig-width: 8
+#| fig-height: 8
 
 prop_prox_quant_long <- pivot_longer(prop_prox_quant, !org, names_to = "org2", values_to = "proximity") %>%
   mutate(across(contains("org"), ~ fct_relevel(as_factor(.x),prop_clust$dend$order.lab)  ))
@@ -217,17 +237,6 @@ DT::datatable(select(unq_org_dist_tbl, !c("org_sort_pair_list", "org_sort_pair_c
                          fixedHeight = TRUE))
 ```
 
-<!-- ```{r} -->
-<!-- unq_org_dist_tbl %>% -->
-<!--   filter(str_detect(org_sort_pair_chr, "YIMBY Action") & -->
-<!--            org != org2) %>% -->
-<!--   mutate("non_fil_term" = if_else(org != "YIMBY Action", org, org2)) %>% -->
-<!--   arrange(proximity) %>% -->
-<!--   left_join(endorsements_tidy, by = c("non_fil_term" = "Organization")) %>% -->
-<!--   filter(`Prop A` == "Yes" & `Prop C` == "Yes" & (`Prop E` == "No" | `Prop F` == "No")) %>% -->
-<!--   select(!c("org_sort_pair_list", "org_sort_pair_chr")) -->
-<!-- ``` -->
-
 Some notable large-distance pairs jump out, like:
 
  - Green Party (SF) vs SF Housing Action Coalition (distance = 4.3)
@@ -240,12 +249,17 @@ The least-distant org to the SF Republican Party (aside from itself) is GrowSF (
 ### Remarks on clustering by ballot measure
 We can see from a reasonably well-fitting categorical clustering model that many political organizations have high similarity with the SF Republican Party's positions on ballot measures, despite having "Democratic" in their name. This result supports the idea that an empirical approach can reveal more about the character of an organization that the words in its name.
 
-## Aanlyze by candidate endorsement
+## Aanlyze by National & State candidate endorsements
 ```{r message = FALSE}
-candidates_import <- read_csv(path(exp_imp_path, "2024_03_03-cand_table.csv"),
+national_races <- read_csv(path(exp_imp_path, "2024_10_08-SF_pol_supp_national_races.csv"),
+                                show_col_types = FALSE)
+state_races <- read_csv(path(exp_imp_path, "2024_10_08-SF_pol_supp_state_races.csv"),
+                                show_col_types = FALSE)
+local_SF_races <- read_csv(path(exp_imp_path, "2024_10_08-SF_pol_supp_state_races.csv"),
                                 show_col_types = FALSE)
 
-candidates_tidy <- candidates_import %>%
+candidates_tidy <- full_join(national_races, state_races,
+                             by = "Organization") %>%
   mutate("President" = as.character(President),
          across(everything(), ~ enc2utf8(.x)),
          across(!Organization, ~ as_factor(.x)))
@@ -254,7 +268,7 @@ candidates_tidy <- candidates_import %>%
 Great, the data are now tidy, where each row is an observation (a political group), and each column is a variable (race).
 
 ```{r include = FALSE, eval = FALSE}
-write_csv(candidates_tidy, path(exp_imp_path, "2024_03_02-SF_candidates_tidy.csv"), na = "")
+write_csv(candidates_tidy, path(exp_imp_path, "2024_10_08-SF_candidates_tidy.csv"), na = "")
 ```
 
 ### Who is recommending whom?
