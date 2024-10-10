@@ -41,7 +41,8 @@ For this analysis, I will scrape the November 2024 General Elections data, tidy 
 This page may be incomplete. As of 2024-10-09, endorsement data has yet to be published for a few organizations that have made recommendations in the past (San Francisco Chronicle, San Francisco Examiner, United Educators of San Francisco, ~~SPUR (Planning / Urban Research Association)~~, Tech Workers Voter Guide, San Francisco Parent Action, San Francisco Rising Action, and SF Young Democrats).
 :::
 
-SPUR published their voter guide 2024-10-08.
+ - SPUR published their voter guide 2024-10-08.
+ - Yes on L [let me know](https://sfba.social/@sftransitact/113283728641463168) that Housing Action Coalition now endorses Prop L ((which is true)[https://housingactioncoalition.org/news/november-2024-election-endorsements/#section-sf], as of what date I'm not sure).
 
 ```{r setup, echo = FALSE, message = FALSE}
 library(readr)                  # for reading and writing csvs
@@ -293,7 +294,7 @@ Cluster 1 (on the left in @fig-SF-measure-dendrogram and on the top in @fig-SF-m
 
 In contrast, Cluster 2 (in the middle of the figures) features prominent "No" endorsement for D and F, and high levels of "Yes" support for C and E.
 
-Cluster 3 is fairly dominated by the "No comment" non-endorsements among the SF local ballot measures, but feature prominent "Yes" support for K and L, which contrasts with the varying support for both in clusters 1 and 2. This makes some sense due to the non-partisan interests of measure K (Permanently Closing the Upper Great Highway to Private Vehicles to Establish a Public) and L (Additional Business Tax on Transportation Network Companies and Autonomous Vehicle Businesses to Fund Public Transportation).
+Cluster 3 is fairly dominated by the "No comment" non-endorsements among the SF local ballot measures, but feature prominent "Yes" support for B, G, K, and L, which contrasts with the varying support for both in clusters 1 and 2. This makes some sense due to the non-partisan interests of measure K (Permanently Closing the Upper Great Highway to Private Vehicles to Establish a Public) and L (Additional Business Tax on Transportation Network Companies and Autonomous Vehicle Businesses to Fund Public Transportation).
 
 #### Political organization distance table
 ```{r}
@@ -316,17 +317,11 @@ DT::datatable(select(unq_org_dist_tbl, !c("org_sort_pair_list", "org_sort_pair_c
           options = list(scrollX = TRUE, 
                          paging = TRUE,
                          fixedHeader = TRUE,
-                         fixedHeight = TRUE))
+                         fixedHeight = TRUE,
+                         order = list(list(3, 'asc'))))
 ```
 
-Some notable large-distance pairs jump out, like:
-
- - Green Party (SF) vs SF Housing Action Coalition (distance = 4.3)
- - The Green Party (SF) versus the middle cluster (Sierra Club, YIMBY Action, SF League of Conservation Voters) (distance = 4.11)
- - Harvey Milk LGBTQ Democratic Club vs Chinese American Democratic Club and the United Democratic Club (distance = 2.89)
- - SF Labor Council vs Chinese American Democratic Club (distance = 2.75)
-
-The least-distant org to the SF Republican Party (aside from itself) is GrowSF (distance = 0.238)
+The least-distant org to the SF Republican Party (aside from itself) is Noe Valley Democratic Club (distance = 0.226), followed by Democratic Party (SF) (distance 0.536)
 
 ### Remarks on clustering by ballot measure
 We can see from a reasonably well-fitting categorical clustering model that many political organizations have high similarity with the SF Republican Party's positions on ballot measures, despite having "Democratic" in their name. This result supports the idea that an empirical approach can reveal more about the character of an organization that the words in its name.
@@ -477,7 +472,8 @@ DT::datatable(select(unq_cand_org_dist_tbl, !c("org_sort_pair_list", "org_sort_p
           options = list(scrollX = TRUE,
                          paging = TRUE,
                          fixedHeader = TRUE,
-                         fixedHeight = TRUE))
+                         fixedHeight = TRUE,
+                         order = list(list(3, 'asc'))))
 ```
 
 ### Remarks on clustering by candidate endorsement
