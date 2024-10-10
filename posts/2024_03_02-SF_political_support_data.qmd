@@ -417,6 +417,6 @@ The race endorsements data set contains more options in general, allowing each o
 While the candidate endorsement clustering didn't reveal any surprising similarities (in the author's opinion), it did show how divergent the SF Republican Party and the SF Young Republicans are from the rest of the organizations, in terms of candidate endorsements.
 
 ## Conclusions
-The nominal clustering analysis worked well at identifying similar groups and quanifying relative similarity. One weakness of this clustering analysis is that it weights all ballot measures and races as the same. For an individual voter, some topics and races may have more salience or effect, and this analysis cannot take that into account.
+The nominal clustering analysis worked well at identifying similar groups and quantifying relative similarity. One weakness of this clustering analysis is that it weights all ballot measures and races as the same. For an individual voter, some topics and races may have more salience or effect, and this analysis cannot take that into account.
 
-Broadly, these result support the idea that an empirical approach can reveal more about the character of an organization that the words in its name, and that this analysis is useful for determining action-based political alignment.
+Broadly, these results support the idea that an empirical approach can reveal more about the character of an organization than the words in its name, and that this analysis is useful for determining action-based political alignment.
