@@ -42,7 +42,7 @@ This page may be incomplete. As of 2024-10-09, endorsement data has yet to be pu
 :::
 
  - SPUR published their voter guide 2024-10-08.
- - Yes on L [let me know](https://sfba.social/@sftransitact/113283728641463168) that Housing Action Coalition now endorses Prop L ((which is true)[https://housingactioncoalition.org/news/november-2024-election-endorsements/#section-sf], as of what date I'm not sure).
+ - Yes on L [let me know](https://sfba.social/@sftransitact/113283728641463168) that Housing Action Coalition now endorses Prop L ([which is true](https://housingactioncoalition.org/news/november-2024-election-endorsements/#section-sf), as of what date I'm not sure).
 
 ```{r setup, echo = FALSE, message = FALSE}
 library(readr)                  # for reading and writing csvs
