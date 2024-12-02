@@ -39,6 +39,6 @@ format:
     css: styles.css
     include-in-header:
       - text: |
-          <meta name=/"fediverse:creator/" content=/"@pcherry@fosstodon.org/">
+          <meta name="fediverse:creator" content="@pcherry@fosstodon.org">
 execute:
   freeze: auto
