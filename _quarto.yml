@@ -23,6 +23,8 @@ website:
         href: https://pixelfed.social/pcherry
       - icon: linkedin
         href: https://www.linkedin.com/in/p-cherry/
+#      - icon: "{{< iconify exploding-head >}}"
+#        href: https://bsky.app/profile/pcherry.bsky.social
   page-footer: 
     left: Copyright 2024, Patrick Cherry <a rel="me" href="https://fosstodon.org/@pcherry">&commat;pcherry&commat;fosstodon.org</a> or <a rel="me" href="https://genomic.social/@pcherry">&commat;pcherry&commat;genomic.social</a>
   open-graph: true
@@ -35,5 +37,8 @@ format:
       light: themes/gruvbox-light.theme
       dark: themes/gruvbox-dark.theme
     css: styles.css
+    include-in-header:
+      - text: |
+          <meta name=/"fediverse:creator/" content=/"@pcherry@fosstodon.org/">
 execute:
   freeze: auto
