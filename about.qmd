@@ -12,6 +12,8 @@ about:
       href: https://pixelfed.social/pcherry
     - icon: linkedin
       href: https://www.linkedin.com/in/p-cherry/
+    - text: "{{< iconify fa6-brands:bluesky >}}"
+      href: https://bsky.app/profile/pcherry.bsky.social
 execute:
   freeze: true
 ---

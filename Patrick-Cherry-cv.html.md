@@ -77,8 +77,8 @@ Contact {#contact}
 
  - {{< fa envelope >}}&nbsp;pcherry [at] pm dot me
  - {{< fa phone >}}&nbsp;upon request
- - {{< fa suitcase >}}&nbsp;Senior Scientist | Genomics
- - {{< fa building >}}&nbsp;Twist Bioscience
+ - {{< fa suitcase >}}&nbsp;Senior Scientist | Oncology
+ - {{< fa building >}}&nbsp;BillionToOne
  - {{< fa map >}}&nbsp;San Francisco, California
  - {{< fa globe-americas >}}&nbsp;[pdcherry.github.io](https://pdcherry.github.io)
  - {{< fa brands github >}}&nbsp;[github.com/pdcherry](https://github.com/pdcherry)
