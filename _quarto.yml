@@ -7,9 +7,12 @@ project:
     - "*.qmd"
     - "*.md"
     - "!*xxxx_xx_xx*"
-url: https://pdcherry.github.io
 website:
   title: "Frameshift"
+  description: "A science and miscellaneous blog by Patrick Cherry"
+  favicon: "/files/favicon-512.png"
+  site-url: https://pdcherry.github.io
+  repo-url: https://github.com/pdcherry/pdcherry.github.io
   navbar:
     right:
       - about.qmd
@@ -19,12 +22,15 @@ website:
         href: https://github.com/pdcherry
       - icon: mastodon
         href: https://fosstodon.org/@pcherry
+        rel: me
       - icon: instagram
         href: https://pixelfed.social/pcherry
+        rel: me
       - icon: linkedin
         href: https://www.linkedin.com/in/p-cherry/
-      - text: "{{< iconify fa6-brands:bluesky >}}"
+      - text: "{{< iconify fa6-brands bluesky size=1.1em title='Bluesky' >}}"
         href: https://bsky.app/profile/pcherry.bsky.social
+        rel: me
   page-footer: 
     left: Copyright 2024, Patrick Cherry <a rel="me" href="https://fosstodon.org/@pcherry">&commat;pcherry&commat;fosstodon.org</a> or <a rel="me" href="https://genomic.social/@pcherry">&commat;pcherry&commat;genomic.social</a>
   open-graph: true
