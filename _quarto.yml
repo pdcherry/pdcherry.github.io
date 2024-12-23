@@ -23,9 +23,9 @@ website:
       - icon: mastodon
         href: https://fosstodon.org/@pcherry
         rel: me
-      - icon: instagram
-        href: https://pixelfed.social/pcherry
-        rel: me
+      # - icon: instagram
+      #   href: https://pixelfed.social/pcherry
+      #   rel: me
       - icon: linkedin
         href: https://www.linkedin.com/in/p-cherry/
       - text: "{{< iconify fa6-brands bluesky size=1.1em title='Bluesky' >}}"

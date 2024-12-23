@@ -193,6 +193,12 @@ legend {
 @media only screen and (min-width: 800px){
   body {text-align: justify;}
 }
+
+// add .justify tag
+.justify {
+  text-align: justify !important
+}
+
 // do not justify the following
 nav{text-align: start;}
 h3{text-align: start;}
