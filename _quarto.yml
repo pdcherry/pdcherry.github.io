@@ -31,6 +31,8 @@ website:
       - text: "{{< iconify fa6-brands bluesky size=1.1em title='Bluesky' >}}"
         href: https://bsky.app/profile/pcherry.bsky.social
         rel: me
+      - icon: rss
+        href: index.xml
   page-footer:
     left: Copyright 2024, Patrick Cherry <a rel="me" href="https://fosstodon.org/@pcherry">&commat;pcherry&commat;fosstodon.org</a> or <a rel="me" href="https://genomic.social/@pcherry">&commat;pcherry&commat;genomic.social</a>
   open-graph: true
