@@ -1,0 +1,29 @@
+---
+title: "How my partner & I do 'calendaring'"
+author: "Patrick Cherry"
+date: 2025-01-30
+#abstract: ""
+categories:
+  - relationships
+  - time
+  - time management
+  - calendar
+image: ""
+format:
+  html:
+    df-print: paged
+execute:
+  freeze: TRUE
+  echo: FALSE
+bibliography: "2025_01_30-How_my_partner_and_I_do_calendars/2025_01_30-How_my_partner_and_I_do_calendars.bib"
+editor_options: 
+  chunk_output_type: inline
+---
+
+![.](.jpg)
+
+# Introduction
+
+## References
+::: {#refs}
+:::

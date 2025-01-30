@@ -1,0 +1,93 @@
+---
+title: ""
+author: "Patrick Cherry"
+date: "2025-01-25"
+categories:
+  - news
+  - code
+  - community
+#image: ""
+execute:
+  freeze: true
+---
+```{r setup, include = FALSE, message = FALSE, echo = FALSE}
+library(dplyr)
+library(calendar)
+library(lubridate)
+```
+
+```{r}
+ical_import <- calendar::ic_read("Personal.ics");
+class(ical_import); typeof(ical_import)
+```
+
+### apply gcal colums to ical export
+```{r}
+names_long_bool_vec <- stringr::str_length(colnames(ical_import)) > 70
+long_cols_to_rm <- colnames(ical_import)[names_long_bool_vec]
+
+ical_filtered <- ical_import %>%
+  mutate("start_time_lbd" = lubridate::as_datetime(`DTSTART;TZID=America/Los_Angeles`)) %>%
+  filter(start_time_lbd > lubridate::as_date("2023-12-31")) %>%
+  select(-start_time_lbd) %>%
+  select(#any_of(col_names_reasonable),
+    -any_of(long_cols_to_rm),
+    -contains("X-APPLE"), -starts_with(" "), -starts_with("X-MICROSOFT"),
+    starts_with("DTSTART"),
+         starts_with("DTEND"), starts_with("EXDATE"), contains(";TZID=")) %>%
+  select(where(~ !all(is.na(.))))
+```
+
+```{r}
+colnames(ical_filtered)
+```
+
+```{r}
+calendar::ic_write(ical_filtered, "filtered_Personal.ics")
+# not valid
+#readr::write_csv(ical_filtered, "filtered_Personal.csv", na = "")
+```
+
+# Manually make a csv of the 
+```{r}
+glimpse(ical_filtered)
+```
+
+## fix ical date / times
+```{r}
+"20250126T032014Z"
+```
+
+```{r}
+ical_filtered <- ical_import %>%
+  mutate("start_time_lbd" = lubridate::as_datetime(`DTSTART;TZID=America/Los_Angeles`)) %>%
+  filter(start_time_lbd > lubridate::as_date("2023-12-31")) %>%
+  select(-start_time_lbd) %>%
+  select(any_of(col_names_reasonable), -contains("X-APPLE"), -starts_with(" "), starts_with("DTSTART"),
+         starts_with("DTEND"), starts_with("EXDATE"), contains(";TZID=")) %>%
+  select(where(~ !all(is.na(.)))) %>%
+  mutate(across(.cols = select(contains(";TZID="), DTSTAMP, ),
+                .fns = ~ ))
+glimpse(ical_filtered)
+```
+
+
+```{r}
+ical_filtered <- ical_import %>%
+  mutate("start_time_lbd" = lubridate::as_datetime(`DTSTART;TZID=America/Los_Angeles`)) %>%
+  filter(start_time_lbd > lubridate::as_date("2023-12-31")) %>%
+  select(-start_time_lbd) %>%
+  rename()
+  mutate(
+    "Subject" = SUMMARY
+    "Start Date" = format.Date(as_date(`DTSTART;TZID=America/Los_Angeles`), #05/30/2020
+    "Start Time", #10:00 AM
+    "End Date", #05/30/2020
+    "End Time", #1:00 PM
+    "All Day Event", #bool text (True / False)
+    "Description",
+    "Location",
+    "Private", #True / False
+  .keep = none) 
+```
+
