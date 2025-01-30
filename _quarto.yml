@@ -7,6 +7,8 @@ project:
     - "*.qmd"
     - "*.md"
     - "!*xxxx_xx_xx*"
+execute:
+  freeze: auto
 website:
   title: "Frameshift"
   description: "A blog of indeterminate subject matter and publication frequency from a bioinformatician and data scientist by way of molecular biology."
@@ -48,5 +50,3 @@ format:
     include-in-header:
       - text: |
           <meta name="fediverse:creator" content="@pcherry@fosstodon.org">
-execute:
-  freeze: auto
