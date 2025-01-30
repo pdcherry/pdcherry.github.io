@@ -3527,7 +3527,7 @@ background-color: null;
 font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">count</span>()</span></code></pre></div>
-<div class="cell quarto-layout-panel" data-tbl-subcap="[&quot;CNVs called per sample&quot;,&quot;Unique samples with any CNVs&quot;]" data-layout-ncol="2">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-tbl-subcap="[&quot;CNVs called per sample&quot;,&quot;Unique samples with any CNVs&quot;]">
 <div class="quarto-layout-row">
 <div class="kable-table quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <table class="caption-top table table-sm table-striped small">
