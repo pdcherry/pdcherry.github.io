@@ -22,7 +22,20 @@ editor_options:
 
 ![.](.jpg)
 
-# Introduction
+## Each unhappy calendar is unnhappy in its own way.
+My partner and I are tech-y, and also active. And also organized. We have a variety of hobbies with regularly-occurring events, some of which we share, and some of which we do separately. We are often seen as "the organized" ones when we contribute to events. (I've won multiple awards in various professions for being organized.)
+
+As we began spending more time together, it became a balancing act of time management--where the requirement for precision was ever growing--seemingly by the day. We weren't exacly on a mission to maximized productivity or time well-spend; just merely keeping eachother informed without making our chat so bogged down by events.
+
+This naturally led us a shared calendar, which worked at first.
+
+## Our first attempt
+Initally, we set up a shared calendar, which was one calendar on Google Calendar that we could both edit. What is had in simplicity it lacked in [[[information]]]: we had to "hand label" which events belong to whom, or whether we expected the other person to be a part of it; there was no invitation notification--events just appeared and had to be noticed on their own; 
+
+## Yearning for something better
+
+## Discovering calendars are an un-solved problem
+The [iCalendar](https://icalendar.org/) (Internet Calendaring and Scheduling Core Object) [Specification](https://www.rfc-editor.org/info/rfc5545) is [supposedly] and industry-adopted inter-operable information exchange format for events and planning (namely calendar event entries, to do items, and potentially journalling).
 
 ## References
 ::: {#refs}
