@@ -10,44 +10,7 @@
 <atom:link href="https://pdcherry.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>A blog of indeterminate subject matter and publication frequency from a bioinformatician and data scientist by way of molecular biology.</description>
 <generator>quarto-1.6.39</generator>
-<lastBuildDate>Thu, 30 Jan 2025 08:00:00 GMT</lastBuildDate>
-<item>
-  <title>How my partner &amp; I do ‘calendaring’</title>
-  <dc:creator>Patrick Cherry</dc:creator>
-  <link>https://pdcherry.github.io/posts/2025_01_30-How_my_partner_and_I_do_calendars.html</link>
-  <description><![CDATA[ 
-
-
-
-
-
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="https://pdcherry.github.io/posts/.jpg" class="img-fluid figure-img"></p>
-<figcaption>.</figcaption>
-</figure>
-</div>
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
-<div id="refs">
-
-</div>
-
-
-</section>
-</section>
-
- ]]></description>
-  <category>relationships</category>
-  <category>time</category>
-  <category>time management</category>
-  <category>calendar</category>
-  <guid>https://pdcherry.github.io/posts/2025_01_30-How_my_partner_and_I_do_calendars.html</guid>
-  <pubDate>Thu, 30 Jan 2025 08:00:00 GMT</pubDate>
-  <media:content url="https://pdcherry.github.io/posts" medium="image"/>
-</item>
+<lastBuildDate>Tue, 08 Oct 2024 07:00:00 GMT</lastBuildDate>
 <item>
   <title>San Francisco political support clustering</title>
   <dc:creator>Patrick Cherry</dc:creator>
@@ -3564,7 +3527,7 @@ background-color: null;
 font-style: inherit;">%&gt;%</span> <span class="fu" style="color: #4758AB;
 background-color: null;
 font-style: inherit;">count</span>()</span></code></pre></div>
-<div class="cell quarto-layout-panel" data-tbl-subcap="[&quot;CNVs called per sample&quot;,&quot;Unique samples with any CNVs&quot;]" data-layout-ncol="2">
+<div class="cell quarto-layout-panel" data-layout-ncol="2" data-tbl-subcap="[&quot;CNVs called per sample&quot;,&quot;Unique samples with any CNVs&quot;]">
 <div class="quarto-layout-row">
 <div class="kable-table quarto-layout-cell" style="flex-basis: 50.0%;justify-content: center;">
 <table class="caption-top table table-sm table-striped small">

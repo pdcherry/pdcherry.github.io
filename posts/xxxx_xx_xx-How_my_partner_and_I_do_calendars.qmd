@@ -1,7 +1,7 @@
 ---
 title: "How my partner & I do 'calendaring'"
 author: "Patrick Cherry"
-date: 2025-01-30
+date: 2025-02-06
 #abstract: ""
 categories:
   - relationships
@@ -15,7 +15,7 @@ format:
 execute:
   freeze: TRUE
   echo: FALSE
-bibliography: "2025_01_30-How_my_partner_and_I_do_calendars/2025_01_30-How_my_partner_and_I_do_calendars.bib"
+bibliography: "2025-02-06-How_my_partner_and_I_do_calendars/2025-02-06-How_my_partner_and_I_do_calendars.bib"
 editor_options: 
   chunk_output_type: inline
 ---
