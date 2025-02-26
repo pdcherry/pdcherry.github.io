@@ -51,7 +51,7 @@ jobs:
 # https://github.com/actions/upload-artifact/
 # from https://fosstodon.org/@Lluis_Revilla/112631326807334501
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v3.0.0
         with:
           # Upload quarto render output directory
           path: 'docs'
