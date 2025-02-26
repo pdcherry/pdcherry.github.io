@@ -30,6 +30,8 @@ San Francisco (and much of the Bay Area) has a curious political idiosyncrasy wh
 
 This dynamic causes practically republican organizations to outwardly re-code and re-brand as something—anything—other than GOP. Popular self-descriptions include Moderate or middle-of-the-road Democrat. However, this analysis is motivated by ignoring these pretenses and looking exclusively at indicated issue recommendations / endorsements, and understanding how similar vs. how different each political organization is acting (a behaviorist / empirical approach).
 
+There are [10 state-wide](https://docs.google.com/spreadsheets/d/1R0pUcktE5WIjjFjpKIJX78gutG6Yl3ijqWNA9IjYuXg/edit?gid=0#gid=0) and 15 city / county ballot propositions this November. (This is actually a small decrease from the predicted 14 state-wide ballot propostions that [had the potnetial to go to the voters as of May](https://sfba.social/@alfredtwu/112375912539901957).) This makes for lots of *data points* for clustering and grouping the political organizations based on their recommendations.
+
 ## Notes on approach
 The website [sfendorsements.com](https://sfendorsements.com/) has collected and cataloged many of the city's politically active groups' (often Political Action Committees, or PACs) positions on ballot measures and election races for local positions. I hypothesize that these can be used to deduce the true alignment of these organizations.
 
