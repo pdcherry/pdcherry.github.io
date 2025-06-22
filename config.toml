@@ -43,6 +43,6 @@ unsafe= true
 
 [[params.ananke_socials]]
 name = "mastodon"
-url = "https://fosstodon.org/@pcherry"
+url = "https://hachyderm.io/@pcherry"
 name2 = "pixelfed"
 url2 = "https://pixelfed.social/pcherry"

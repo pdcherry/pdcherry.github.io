@@ -7,7 +7,7 @@ about:
     - icon: github
       href: https://github.com/pdcherry
     - icon: mastodon
-      href: https://fosstodon.org/@pcherry
+      href: https://hachyderm.io/@pcherry
       rel: me
     - text: "{{< iconify fa-brands orcid title='ORCiD' >}}"
       href: https://orcid.org/0000-0001-6421-2035
@@ -55,6 +55,6 @@ Patrick is an avid outdoorsman and indoorsman. Outdoor pursuits include rock cli
 ![](2025_02_16-336.jpg)
 
 ```{=html}
-<a rel="me" href="https://genomic.social/@pcherry"> </a>
+<a rel="me" href="https://hachyderm.io/@pcherry"> </a>
 ```
 :::

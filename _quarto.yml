@@ -23,7 +23,7 @@ website:
       - icon: github
         href: https://github.com/pdcherry
       - icon: mastodon
-        href: https://fosstodon.org/@pcherry
+        href: https://hachyderm.io/@pcherry
         rel: me
       # - icon: instagram
       #   href: https://pixelfed.social/pcherry
@@ -36,7 +36,7 @@ website:
       - icon: rss
         href: index.xml
   page-footer:
-    left: Copyright 2025, Patrick Cherry <a rel="me" href="https://fosstodon.org/@pcherry">&commat;pcherry&commat;fosstodon.org</a> or <a rel="me" href="https://genomic.social/@pcherry">&commat;pcherry&commat;genomic.social</a>
+    left: Copyright 2025, Patrick Cherry <a rel="me" href="https://hachyderm.io/@pcherry">&commat;pcherry&commat;hachyderm.io</a> or <a rel="me" href="https://genomic.social/@pcherry">&commat;pcherry&commat;genomic.social</a>
   open-graph: true
 format:
   html:
