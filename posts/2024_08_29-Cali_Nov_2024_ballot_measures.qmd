@@ -1,0 +1,22 @@
+---
+title: "San Francisco's November 2024 ballot review"
+author: "Patrick Cherry"
+date: "2024-08-29"
+categories:
+  - politics
+  - opinions
+abstract: "San Francisco has a big ballot incoming to voters this November, with 25 total ballot measures for voters to decide upon before election day."
+image: "2024_08_29-Cali_Nov_2024_ballot_measures/SF_flyover.jpg"
+bibliography: "2024_08_29-Cali_Nov_2024_ballot_measures/2024_08_29-Cali_Nov_2024_ballot.bib"
+format:
+  html:
+    df-print: paged
+execute:
+  freeze: TRUE
+  echo: FALSE
+editor_options: 
+  chunk_output_type: inline
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_08_29-cali_nov_2024_ballot_measures" />
+```

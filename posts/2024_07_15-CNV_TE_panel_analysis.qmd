@@ -1,0 +1,27 @@
+---
+title: "Copy-number-variant (CNV) TE Panel Analysis"
+aliases:
+  - https://pcherry.io/posts/2024_07_15-cnv_te_panel_analysis
+author: "Patrick Cherry"
+date: "2024-07-15"
+categories:
+  - data
+  - code
+  - target enrichment
+  - CNV
+  - next generation sequencing
+  - genetics
+  - genomics
+image: "2024_07_15-CNV_TE_panel_analysis/2024_07_15-CNV_TE_cnv_level_dist.png"
+format:
+  html:
+    df-print: kable
+execute:
+  freeze: TRUE
+  echo: TRUE
+editor_options: 
+  chunk_output_type: inline
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_07_15-cnv_te_panel_analysis" />
+```

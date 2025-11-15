@@ -1,0 +1,24 @@
+---
+#title: "Frameshift Homepage"
+#author: "Patrick Cherry"
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: true
+  filter-ui: true
+  feed: true
+page-layout: full
+#title-block-banner: true
+#execute:
+#  freeze: true
+---
+```{=html}
+<a rel="me" href="https://genomic.social/@pcherry"> </a>
+<a rel="me" href="https://fosstodon.org/@pcherry"> </a>
+```
+
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io" />
+```

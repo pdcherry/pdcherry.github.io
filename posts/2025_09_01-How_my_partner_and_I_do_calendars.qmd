@@ -1,0 +1,22 @@
+---
+title: How my partner & I do 'calendaring'
+aliases:
+  - https://pcherry.io/posts/2025_09_01-how_my_partner_and_i_do_calendars
+author: Patrick Cherry
+date: 2025-09-03
+abstract: Misadventures in calendar sharing led me along a systematic test of top calenar providers and showed that standards mean nothing
+categories:
+  - time management
+  - calendar
+  - relationships
+# image: ""
+execute:
+  freeze: TRUE
+  echo: FALSE
+bibliography: 2025_09_01-How_my_partner_and_I_do_calendars/2025_09_01-How_my_partner_and_I_do_calendars.bib
+editor_options: 
+  chunk_output_type: inline
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2025_09_01-how_my_partner_and_i_do_calendars" />
+```

@@ -1,0 +1,17 @@
+---
+title: "How I run and deploy this Quarto blog"
+aliases:
+  - https://pcherry.io/posts/2023_12_29-how_i_host_quarto_blog
+author: "Patrick Cherry"
+date: "2023/12/29"
+categories:
+  - news
+  - code
+  - community
+image: "2023_12_29-How_I_host_quarto_blog/2023_12_29-How_I_host_quarto_blog.jpg"
+execute:
+  freeze: true
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2023_12_29-how_i_host_quarto_blog" />
+```

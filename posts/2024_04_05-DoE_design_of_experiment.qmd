@@ -1,0 +1,25 @@
+---
+title: "DoE: Design of Experiment"
+aliases:
+  - https://pcherry.io/posts/2024_04_05-doe_design_of_experiment
+author: "Patrick Cherry"
+date: "2024-04-05"
+categories:
+  - DoE
+  - design of experiment
+  - code
+bibliography: "2024_04_05-DoE_design_of_experiment/2024_04_05-DoE_design_of_experiment.bib"
+image: "2024_04_05-DoE_design_of_experiment/2024_04_05-DoE_architecture_imperfect_grid.jpg"
+#from: markdown+tex_math_single_backslash
+format:
+  html:
+    df-print: paged
+execute:
+  freeze: TRUE
+  echo: FALSE
+editor_options: 
+  chunk_output_type: inline
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_04_05-doe_design_of_experiment" />
+```

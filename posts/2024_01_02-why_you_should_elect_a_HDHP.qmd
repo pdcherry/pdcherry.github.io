@@ -1,0 +1,16 @@
+---
+title: "Why you should elect a high-deductible health plan"
+aliases:
+  - https://pcherry.io/posts/2024_01_02-why_you_should_elect_a_hdhp
+author: "Patrick Cherry"
+date: "2024/01/02"
+categories:
+  - finance
+  - healthcare
+image: "2024_01_02-why_you_should_elect_a_HDHP/2024_01_02-misunderstood_HSA_spider.png"
+execute:
+  freeze: true
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_01_02-why_you_should_elect_a_hdhp" />
+```

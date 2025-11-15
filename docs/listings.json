@@ -1,0 +1,20 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/2025_09_01-How_my_partner_and_I_do_calendars.html",
+      "/posts/2024_10_08-SF_political_support_clustering.html",
+      "/posts/2024_08_29-Cali_Nov_2024_ballot_measures.html",
+      "/posts/2024_07_15-CNV_TE_panel_analysis.html",
+      "/posts/2024_06_20-CITE-seq_analysis_PoC.html",
+      "/posts/2024_05_19-emmeans_estimated_marginal_means.html",
+      "/posts/2024_04_05-DoE_design_of_experiment.html",
+      "/posts/2024_03_02-SF_political_support_data.html",
+      "/posts/2024_02_10-SF_tree_classification.html",
+      "/posts/2024_01_22-scRNA-seq.html",
+      "/posts/2024_01_03-GTEX_RNA_seq_liver.html",
+      "/posts/2024_01_02-why_you_should_elect_a_HDHP.html",
+      "/posts/2023_12_29-How_I_host_quarto_blog.html"
+    ]
+  }
+]

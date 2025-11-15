@@ -1,0 +1,27 @@
+---
+title: "emmeans: estimated marginal means"
+aliases:
+  - https://pcherry.io/posts/2024_05_19-emmeans_estimated_marginal_means
+author: "Patrick Cherry"
+date: "2024-05-19"
+categories:
+  - data
+  - code
+  - experimental analysis
+  - DoE
+  - unbalanced DoE
+  - causal inference
+bibliography: "2024_05_19-emmeans_estimated_marginal_means_dir/2024_05_19-emmeans_estimated_marginal_means.bib"
+image: "2024_05_19-emmeans_estimated_marginal_means_dir/2024_05_19-emmeans_diff_plot.png"
+format:
+  html:
+    df-print: kable
+execute:
+  freeze: TRUE
+  echo: TRUE
+editor_options: 
+  chunk_output_type: inline
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_05_19-emmeans_estimated_marginal_means" />
+```

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Frameshift</title>
+<link>https://pdcherry.github.io/</link>
+<atom:link href="https://pdcherry.github.io/index.xml" rel="self" type="application/rss+xml"/>
+<description>A blog of indeterminate subject matter and publication frequency from a bioinformatician and data scientist by way of molecular biology.</description>
+<generator>quarto-1.6.39</generator>
+<lastBuildDate>Wed, 03 Sep 2025 07:00:00 GMT</lastBuildDate>
+<item>
+  <title>How my partner &amp; I do ‘calendaring’</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2025_09_01-How_my_partner_and_I_do_calendars.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2025_09_01-how_my_partner_and_i_do_calendars">
+
+
+
+ ]]></description>
+  <category>time management</category>
+  <category>calendar</category>
+  <category>relationships</category>
+  <guid>https://pdcherry.github.io/posts/2025_09_01-How_my_partner_and_I_do_calendars.html</guid>
+  <pubDate>Wed, 03 Sep 2025 07:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>San Francisco political support clustering</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_10_08-SF_political_support_clustering.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url = https://pcherry.io/posts/2024_10_08-sf_political_support_clustering">
+
+
+
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" id="quarto-citation"><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@online{cherry2024,
+  author = {Cherry, Patrick},
+  title = {San {Francisco} Political Support Clustering},
+  date = {2024-10-08},
+  url = {https://pdcherry.github.io/posts/2024_10_08-SF_political_support_clustering.html},
+  langid = {en}
+}
+</code></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-cherry2024" class="csl-entry quarto-appendix-citeas">
+Cherry, Patrick. 2024. <span>“San Francisco Political Support
+Clustering.”</span> October 8, 2024. <a href="https://pdcherry.github.io/posts/2024_10_08-SF_political_support_clustering.html">https://pdcherry.github.io/posts/2024_10_08-SF_political_support_clustering.html</a>.
+</div></div></section></div> ]]></description>
+  <category>politics</category>
+  <guid>https://pdcherry.github.io/posts/2024_10_08-SF_political_support_clustering.html</guid>
+  <pubDate>Tue, 08 Oct 2024 07:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2024_10_08-SF_political_support_data/2022_06_26-Pride_Lasers-057.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>San Francisco’s November 2024 ballot review</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_08_29-Cali_Nov_2024_ballot_measures.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_08_29-cali_nov_2024_ballot_measures">
+
+
+
+ ]]></description>
+  <category>politics</category>
+  <category>opinions</category>
+  <guid>https://pdcherry.github.io/posts/2024_08_29-Cali_Nov_2024_ballot_measures.html</guid>
+  <pubDate>Thu, 29 Aug 2024 07:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2024_08_29-Cali_Nov_2024_ballot_measures/SF_flyover.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Copy-number-variant (CNV) TE Panel Analysis</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_07_15-CNV_TE_panel_analysis.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_07_15-cnv_te_panel_analysis">
+
+
+
+ ]]></description>
+  <category>data</category>
+  <category>code</category>
+  <category>target enrichment</category>
+  <category>CNV</category>
+  <category>next generation sequencing</category>
+  <category>genetics</category>
+  <category>genomics</category>
+  <guid>https://pdcherry.github.io/posts/2024_07_15-CNV_TE_panel_analysis.html</guid>
+  <pubDate>Mon, 15 Jul 2024 07:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2024_07_15-CNV_TE_panel_analysis/2024_07_15-CNV_TE_cnv_level_dist.png" medium="image" type="image/png" height="90" width="144"/>
+</item>
+<item>
+  <title>CITE-seq analysis proof-of-concept</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_06_20-CITE-seq_analysis_PoC.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_06_20-cite-seq_analysis_poc">
+
+
+
+ ]]></description>
+  <category>multi-modal analysis</category>
+  <category>CITE-seq</category>
+  <category>scRNA-seq</category>
+  <category>code</category>
+  <category>data</category>
+  <guid>https://pdcherry.github.io/posts/2024_06_20-CITE-seq_analysis_PoC.html</guid>
+  <pubDate>Thu, 20 Jun 2024 07:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2024_06_20-CITE-seq/tsne_rna_adtClusters.png" medium="image" type="image/png" height="96" width="144"/>
+</item>
+<item>
+  <title>emmeans: estimated marginal means</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_05_19-emmeans_estimated_marginal_means.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_05_19-emmeans_estimated_marginal_means">
+
+
+
+ ]]></description>
+  <category>data</category>
+  <category>code</category>
+  <category>experimental analysis</category>
+  <category>DoE</category>
+  <category>unbalanced DoE</category>
+  <category>causal inference</category>
+  <guid>https://pdcherry.github.io/posts/2024_05_19-emmeans_estimated_marginal_means.html</guid>
+  <pubDate>Sun, 19 May 2024 07:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2024_05_19-emmeans_estimated_marginal_means_dir/2024_05_19-emmeans_diff_plot.png" medium="image" type="image/png" height="115" width="144"/>
+</item>
+<item>
+  <title>DoE: Design of Experiment</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_04_05-DoE_design_of_experiment.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_04_05-doe_design_of_experiment">
+
+
+
+ ]]></description>
+  <category>DoE</category>
+  <category>design of experiment</category>
+  <category>code</category>
+  <guid>https://pdcherry.github.io/posts/2024_04_05-DoE_design_of_experiment.html</guid>
+  <pubDate>Fri, 05 Apr 2024 07:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2024_04_05-DoE_design_of_experiment/2024_04_05-DoE_architecture_imperfect_grid.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>San Francisco political support data shows true alignment</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_03_02-SF_political_support_data.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http="equiv=&quot;refresh&quot;" content="0; url = https://pcherry.io/posts/2024_03_02-sf_political_support_data">
+
+
+
+ ]]></description>
+  <category>politics</category>
+  <guid>https://pdcherry.github.io/posts/2024_03_02-SF_political_support_data.html</guid>
+  <pubDate>Sun, 03 Mar 2024 08:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2024_03_02-SF_political_support_data/2024_03_02-San_Francisco_and_Bay.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>San Francisco tree classification model</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_02_10-SF_tree_classification.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_02_10-sf_tree_classification">
+
+
+
+ ]]></description>
+  <category>data</category>
+  <category>code</category>
+  <category>tree models</category>
+  <guid>https://pdcherry.github.io/posts/2024_02_10-SF_tree_classification.html</guid>
+  <pubDate>Sat, 10 Feb 2024 08:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2024_02_10-SF_tree_classification.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>scRNA-seq Analysis: Messy Mouse Brain</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_01_22-scRNA-seq.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_01_22-scrna-seq">
+
+
+
+ ]]></description>
+  <category>code</category>
+  <category>scRNA-seq</category>
+  <category>RNA-seq</category>
+  <guid>https://pdcherry.github.io/posts/2024_01_22-scRNA-seq.html</guid>
+  <pubDate>Mon, 22 Jan 2024 08:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>GTEX RNA-seq Liver-specific Process and TF Identification</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_01_03-GTEX_RNA_seq_liver.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_01_03-gtex_rna_seq_liver">
+
+
+
+ ]]></description>
+  <category>code</category>
+  <category>RNA-seq</category>
+  <guid>https://pdcherry.github.io/posts/2024_01_03-GTEX_RNA_seq_liver.html</guid>
+  <pubDate>Wed, 03 Jan 2024 08:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2024_01_03-GTEX_RNA_seq_liver/2024_01_03-liver_creative_commons.jpg" medium="image" type="image/jpeg"/>
+</item>
+<item>
+  <title>Why you should elect a high-deductible health plan</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2024_01_02-why_you_should_elect_a_HDHP.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_01_02-why_you_should_elect_a_hdhp">
+
+
+
+ ]]></description>
+  <category>finance</category>
+  <category>healthcare</category>
+  <guid>https://pdcherry.github.io/posts/2024_01_02-why_you_should_elect_a_HDHP.html</guid>
+  <pubDate>Tue, 02 Jan 2024 08:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2024_01_02-why_you_should_elect_a_HDHP/2024_01_02-misunderstood_HSA_spider.png" medium="image" type="image/png" height="96" width="144"/>
+</item>
+<item>
+  <title>How I run and deploy this Quarto blog</title>
+  <dc:creator>Patrick Cherry</dc:creator>
+  <link>https://pdcherry.github.io/posts/2023_12_29-How_I_host_quarto_blog.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2023_12_29-how_i_host_quarto_blog">
+
+
+
+ ]]></description>
+  <category>news</category>
+  <category>code</category>
+  <category>community</category>
+  <guid>https://pdcherry.github.io/posts/2023_12_29-How_I_host_quarto_blog.html</guid>
+  <pubDate>Fri, 29 Dec 2023 08:00:00 GMT</pubDate>
+  <media:content url="https://pdcherry.github.io/posts/2023_12_29-How_I_host_quarto_blog/2023_12_29-How_I_host_quarto_blog.jpg" medium="image" type="image/jpeg"/>
+</item>
+</channel>
+</rss>

@@ -1,0 +1,27 @@
+---
+title: "About"
+image: profile.jpg
+about:
+  template: solana
+  links:
+    - icon: github
+      href: https://github.com/pdcherry
+    - icon: mastodon
+      href: https://hachyderm.io/@pcherry
+      rel: me
+    - text: "{{< iconify fa-brands orcid title='ORCiD' >}}"
+      href: https://orcid.org/0000-0001-6421-2035
+    - icon: instagram
+      href: https://pixelfed.social/pcherry
+      rel: me
+    - icon: linkedin
+      href: https://www.linkedin.com/in/p-cherry/
+    - text: "{{< iconify fa6-brands bluesky title='Bluesky' >}}"
+      href: https://bsky.app/profile/pcherry.bsky.social
+      rel: me
+execute:
+  freeze: true
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/about" />
+```

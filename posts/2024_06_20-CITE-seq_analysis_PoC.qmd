@@ -1,0 +1,23 @@
+---
+title: "CITE-seq analysis proof-of-concept"
+author: "Patrick Cherry"
+date: "June 20, 2024"
+categories:
+  - multi-modal analysis
+  - CITE-seq
+  - scRNA-seq
+  - code
+  - data
+image: "2024_06_20-CITE-seq/tsne_rna_adtClusters.png"
+format:
+  html:
+    df-print: kable
+execute:
+  freeze: TRUE
+  echo: TRUE
+editor_options: 
+  chunk_output_type: inline
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_06_20-cite-seq_analysis_poc" />
+```

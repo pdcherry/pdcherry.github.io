@@ -1,0 +1,45 @@
+project:
+  type: website
+  output-dir: docs
+  pre-render: copy_public_cv_md_format.r
+  post-render: copy_public_resume_pdf_format.r
+  render:
+    - "*.qmd"
+    - "*.md"
+    - "!*xxxx_xx_xx*"
+execute:
+  freeze: auto
+website:
+  title: "Frameshift"
+  description: "A blog of indeterminate subject matter and publication frequency from a bioinformatician and data scientist by way of molecular biology."
+  favicon: "/files/favicon-512.png"
+  site-url: https://pdcherry.github.io
+  repo-url: https://github.com/pdcherry/pdcherry.github.io
+  navbar:
+    right:
+      - about.qmd
+      - text: CV
+        href: Patrick-Cherry-cv.md
+      - icon: github
+        href: https://github.com/pdcherry
+      - icon: mastodon
+        href: https://hachyderm.io/@pcherry
+        rel: me
+      # - icon: instagram
+      #   href: https://pixelfed.social/pcherry
+      #   rel: me
+      - icon: linkedin
+        href: https://www.linkedin.com/in/p-cherry/
+      - text: "{{< iconify fa6-brands bluesky size=1.1em title='Bluesky' >}}"
+        href: https://bsky.app/profile/pcherry.bsky.social
+        rel: me
+      - icon: rss
+        href: index.xml
+  page-footer:
+    left: Copyright 2025, Patrick Cherry <a rel="me" href="https://hachyderm.io/@pcherry">&commat;pcherry&commat;hachyderm.io</a> or <a rel="me" href="https://bsky.app/profile/pcherry.bsky.social">&commat;pcherry&commat;bsky.social</a>
+  open-graph: true
+format:
+  html:
+    include-in-header:
+      - text: |
+          <meta name="fediverse:creator" content="@pcherry@fosstodon.org">

@@ -1,0 +1,16 @@
+---
+title: "scRNA-seq Analysis: Messy Mouse Brain"
+aliases:
+  - https://pcherry.io/posts/2024_01_22-scrna-seq
+author: "Patrick Cherry"
+date: "2024-01-22"
+categories:
+  - code
+  - scRNA-seq
+  - RNA-seq
+execute:
+  freeze: true
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_01_22-scrna-seq" />
+```

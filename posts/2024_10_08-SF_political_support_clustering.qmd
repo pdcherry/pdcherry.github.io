@@ -1,0 +1,28 @@
+---
+title: "San Francisco political support clustering"
+aliases:
+  - https://pcherry.io/posts/2024_10_08-sf_political_support_clustering
+date: "2024-10-08"
+categories:
+  - politics
+image: "2024_10_08-SF_political_support_data/2022_06_26-Pride_Lasers-057.jpg"
+description: | 
+  Clustering analysis on the ballot measure and political race recommendations by the various political organizations in San Francisco
+author:
+  - name: Patrick Cherry
+    url: https://pdcherry.github.io/about.html
+    affiliation: Frameshift Blog
+    affiliation-url: https://pdcherry.github.io/
+citation: TRUE
+format:
+  html:
+    df-print: paged
+execute:
+  freeze: TRUE
+  echo: FALSE
+editor_options: 
+  chunk_output_type: inline
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url = https://pcherry.io/posts/2024_10_08-sf_political_support_clustering" />
+```

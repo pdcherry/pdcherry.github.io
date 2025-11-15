@@ -1,0 +1,17 @@
+---
+title: "GTEX RNA-seq Liver-specific Process and TF Identification"
+aliases:
+  - https://pcherry.io/posts/2024_01_03-gtex_rna_seq_liver
+author: "Patrick Cherry"
+date: "2024-01-03"
+categories:
+  - code
+  - RNA-seq
+abstract: "Use publicly-available GTEX bulk RNA-seq data to identify uniquely expressed genes in liver tissue, as well as pathways analysis and gene ontology enrichment analysis. Also use TFEA_ChIP to identify transcription factors enriched or depleted in the liver given the gene expression data."
+image: "2024_01_03-GTEX_RNA_seq_liver/2024_01_03-liver_creative_commons.jpg"
+execute:
+  freeze: true
+---
+```{=html}
+<meta http-equiv="refresh" content="0; url=https://pcherry.io/posts/2024_01_03-gtex_rna_seq_liver" />
+```

@@ -1,0 +1,48 @@
+>Peripheral sensory neurons
+subtype of: Neurons
+expressed: Gm7271, Fam19a4, Tlx3, Mrgprd, Otoa, Mrgpra3, Cpb1, Isl2, Nppb, Tmem233, Il31ra
+
+>Telencephalon projecting inhibitory neurons
+subtype of: Telencephalon projecting neurons
+expressed: Drd1, Ido1, Lrpprc, Wnt2
+
+>Neurons
+expressed: Gabra6, Cnpy1, Lgi2, Neurod1, Il22, Tbx20, Irx4, Hcrt, Pmch, En1, Npw, Slc6a3, Ucn, Chat, Avp, Sim1, Dgkk, Dlk1, Otp, Fezf1, Gnrh1, Six6, Oxt, H2-DMb2, Rln3, Pdzk1ip1, Pkd1l2, Lbhd2, Ecel1, Tmem215, Gm5741, Foxp2, Slc17a6, Ndnf, Shox2, Ramp3, Gpr101, Barhl1, Tfap2d, Gpc3, Lhx9, Pou4f2, Evx1os, Drd5, Pou4f1, Htr5b, Smim17, Nfatc2, Gbx1, Defa24, Irx2, Fcmr, Ly6d, Tnfrsf13c, Ms4a15, Lmx1a, Ly6g6e, Eomes, Sost, Bhlhe22, Myl4, Vipr1, Gm32647, Trim54, Rgs14, Fezf2, Gm19410, Fermt1, A830009L08Rik, Krt12, Prss23, Gm26644, Lefty1, Drd1, Ido1, Lrpprc, Wnt2, Tmem255b, Bglap, Anxa11, Htr2b, Tm4sf4, ND3, Cckar, P2rx2, Hspb7, Krt19, Gm7271, Fam19a4, Tlx3, Mrgprd, Otoa, Mrgpra3, Cpb1, Isl2, Nppb, Tmem233, Il31ra
+
+>Vascular cells
+expressed: Ecscr, Ly6c1, Scgb3a1
+
+>Astrocytes
+subtype of: Astroependymal cells
+expressed: Timp4, Gfap, Slc6a11, Fam107a, Gdf10, Myoc, Islr, Cbs, Ppp1r3g
+
+>Cholinergic monoaminergic and peptidergic neurons
+subtype of: Neurons
+expressed: Tbx20, Irx4, Hcrt, Pmch, En1, Npw, Slc6a3, Ucn, Chat, Avp, Sim1, Dgkk, Dlk1, Otp, Fezf1, Gnrh1, Six6, Oxt, H2-DMb2, Rln3, Pdzk1ip1, Pkd1l2, Lbhd2, Ecel1, Tmem215
+
+>Cholinergic and monoaminergic neurons
+subtype of: Cholinergic monoaminergic and peptidergic neurons
+expressed: Tbx20, Irx4, Hcrt, Pmch, En1, Npw, Slc6a3, Ucn, Chat
+
+>Di- and mesencephalon neurons
+subtype of: Neurons
+expressed: Gm5741, Foxp2, Slc17a6, Ndnf, Shox2, Ramp3, Gpr101, Barhl1, Tfap2d, Gpc3, Lhx9, Pou4f2, Evx1os, Drd5, Pou4f1, Htr5b, Smim17, Nfatc2, Gbx1
+
+>Astroependymal cells
+subtype of: CNS glia
+expressed: Gdf10, Timp4, Gfap, Slc6a11, Fam107a, Myoc, Islr, Cbs, Ppp1r3g, Folr1, Clic6, E330013P04Rik, Ccdc153, Tnnt3, Cfap126, 1500015O10Rik, Slc26a3, Spp2, Sspo
+
+>Di- and mesencephalon inhibitory neurons
+subtype of: Di- and mesencephalon neurons
+expressed: Smim17, Nfatc2, Gbx1
+
+>Telencephalon projecting neurons
+subtype of: Neurons
+expressed: Bhlhe22, Myl4, Vipr1, Gm32647, Trim54, Rgs14, Fezf2, Gm19410, Fermt1, A830009L08Rik, Krt12, Prss23, Gm26644, Lefty1, Drd1, Ido1, Lrpprc, Wnt2
+
+>Neural crest-like glia
+expressed: Dpt, Spon2, Pdgfra, Cdc20, Fbln2, Catsperz, Ncmap
+
+>CNS glia
+expressed: Gdf10, Timp4, Gfap, Slc6a11, Fam107a, Myoc, Islr, Cbs, Ppp1r3g, Folr1, Clic6, E330013P04Rik, Ccdc153, Tnnt3, Cfap126, 1500015O10Rik, Slc26a3, Spp2, Sspo, Snx33, 2210011C24Rik, Wfdc18, Opalin, Ninj2, Hapln2, Dock5, Klk6, Nkx2-9
+
